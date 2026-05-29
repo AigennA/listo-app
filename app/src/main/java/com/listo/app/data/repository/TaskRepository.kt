@@ -47,6 +47,9 @@ class TaskRepository @Inject constructor(
     suspend fun getTaskById(id: Long): Task? =
         taskDao.getTaskById(id)?.let { enrichWithCategory(it) }
 
+    fun observeTaskById(id: Long): Flow<Task?> =
+        taskDao.observeTaskById(id).map { entity -> entity?.let { enrichWithCategory(it) } }
+
     suspend fun insertTask(task: Task): Long =
         taskDao.insertTask(task.toEntity())
 

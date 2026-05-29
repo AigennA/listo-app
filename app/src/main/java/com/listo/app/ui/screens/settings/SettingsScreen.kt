@@ -1,7 +1,12 @@
 package com.listo.app.ui.screens.settings
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -10,6 +15,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -18,6 +24,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.listo.app.BuildConfig
+import com.listo.app.data.models.AccentColor
+import com.listo.app.data.models.ThemeMode
 import com.listo.app.ui.components.LisToTopBar
 import com.listo.app.ui.navigation.Screen
 import com.listo.app.ui.theme.*
@@ -46,13 +54,16 @@ fun SettingsScreen(
 
             SettingsSectionHeader("Appearance")
 
-            SettingsToggleItem(
-                icon = Icons.Rounded.DarkMode,
-                label = "Dark Mode",
-                subtitle = "Switch between light and dark theme",
-                checked = uiState.isDarkMode,
-                onCheckedChange = viewModel::toggleDarkMode,
-                iconColor = LisPurple
+            ThemeModeSelector(
+                selected = uiState.themeMode,
+                onSelect = viewModel::setThemeMode
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            AccentColorPicker(
+                selected = uiState.accentColor,
+                onSelect = viewModel::setAccentColor
             )
 
             SettingsSectionHeader("Notifications")
@@ -104,6 +115,145 @@ fun SettingsScreen(
             )
 
             Spacer(modifier = Modifier.height(40.dp))
+        }
+    }
+}
+
+@Composable
+private fun ThemeModeSelector(
+    selected: ThemeMode,
+    onSelect: (ThemeMode) -> Unit
+) {
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+        elevation = CardDefaults.cardElevation(0.dp)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    Icons.Rounded.Palette,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(14.dp))
+                Column {
+                    Text("Theme", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
+                    Text(
+                        "Follow system, or force light / dark",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            // Segmented control
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                ThemeMode.entries.forEach { mode ->
+                    val isSelected = mode == selected
+                    val bg by animateColorAsState(
+                        if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent,
+                        label = "segment-bg"
+                    )
+                    val fg by animateColorAsState(
+                        if (isSelected) MaterialTheme.colorScheme.onPrimary
+                        else MaterialTheme.colorScheme.onSurfaceVariant,
+                        label = "segment-fg"
+                    )
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(9.dp))
+                            .background(bg)
+                            .clickable { onSelect(mode) }
+                            .padding(vertical = 10.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = mode.label,
+                            style = MaterialTheme.typography.labelLarge,
+                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+                            color = fg
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun AccentColorPicker(
+    selected: AccentColor,
+    onSelect: (AccentColor) -> Unit
+) {
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+        elevation = CardDefaults.cardElevation(0.dp)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    Icons.Rounded.ColorLens,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(14.dp))
+                Column {
+                    Text("Accent Color", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
+                    Text(
+                        selected.label,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(14.dp)
+            ) {
+                AccentColor.entries.forEach { accent ->
+                    val color = Color(accent.primary)
+                    val isSelected = accent == selected
+                    Box(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape)
+                            .background(color)
+                            .border(
+                                width = if (isSelected) 3.dp else 0.dp,
+                                color = MaterialTheme.colorScheme.onBackground,
+                                shape = CircleShape
+                            )
+                            .clickable { onSelect(accent) },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        if (isSelected) {
+                            Icon(
+                                Icons.Rounded.Check,
+                                contentDescription = "Selected",
+                                tint = Color.White,
+                                modifier = Modifier.size(22.dp)
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }

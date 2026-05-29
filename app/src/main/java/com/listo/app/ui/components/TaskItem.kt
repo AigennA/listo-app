@@ -3,6 +3,7 @@ package com.listo.app.ui.components
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,7 +32,8 @@ fun TaskItem(
     task: Task,
     onToggleComplete: (Task) -> Unit,
     onDelete: (Long) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null
 ) {
     val dismissState = rememberSwipeToDismissBoxState(
         confirmValueChange = { value ->
@@ -63,14 +65,15 @@ fun TaskItem(
             }
         }
     ) {
-        TaskItemContent(task = task, onToggleComplete = onToggleComplete)
+        TaskItemContent(task = task, onToggleComplete = onToggleComplete, onClick = onClick)
     }
 }
 
 @Composable
 private fun TaskItemContent(
     task: Task,
-    onToggleComplete: (Task) -> Unit
+    onToggleComplete: (Task) -> Unit,
+    onClick: (() -> Unit)? = null
 ) {
     val priorityColor = when (task.priority) {
         Priority.LOW    -> PriorityLow
@@ -84,7 +87,9 @@ private fun TaskItemContent(
     }
 
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(if (onClick != null) Modifier.clickable { onClick() } else Modifier),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant

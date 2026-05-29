@@ -16,6 +16,7 @@ import com.listo.app.ui.screens.premium.PremiumScreen
 import com.listo.app.ui.screens.settings.SettingsScreen
 import com.listo.app.ui.screens.splash.SplashScreen
 import com.listo.app.ui.screens.statistics.StatisticsScreen
+import com.listo.app.ui.screens.taskdetail.TaskDetailScreen
 
 @Composable
 fun LisToNavigation() {
@@ -72,6 +73,15 @@ fun LisToNavigation() {
         ) { backStackEntry ->
             val taskId = backStackEntry.arguments?.getLong("taskId")?.takeIf { it != -1L }
             CreateTaskScreen(navController = navController, taskId = taskId)
+        }
+
+        composable(
+            route = Screen.TaskDetail.route,
+            arguments = listOf(
+                navArgument("taskId") { type = NavType.LongType }
+            )
+        ) {
+            TaskDetailScreen(navController = navController)
         }
 
         composable(Screen.Categories.route) {

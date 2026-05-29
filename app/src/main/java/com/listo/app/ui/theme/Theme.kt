@@ -1,25 +1,23 @@
 package com.listo.app.ui.theme
 
 import android.app.Activity
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import com.listo.app.data.models.AccentColor
 
-private val LightColorScheme = lightColorScheme(
-    primary          = LisGreen,
+private fun lightScheme(primary: Color, primaryDark: Color, primaryLight: Color) = lightColorScheme(
+    primary          = primary,
     onPrimary        = LisWhite,
-    primaryContainer = LisGreenLight,
-    onPrimaryContainer = LisGreenDark,
+    primaryContainer = primaryLight,
+    onPrimaryContainer = primaryDark,
 
     secondary          = LisPurple,
     onSecondary        = LisWhite,
@@ -38,11 +36,11 @@ private val LightColorScheme = lightColorScheme(
     error        = LisError,
 )
 
-private val DarkColorScheme = darkColorScheme(
-    primary          = LisGreen,
+private fun darkScheme(primary: Color, primaryDark: Color, primaryLight: Color) = darkColorScheme(
+    primary          = primary,
     onPrimary        = LisDarkBg,
-    primaryContainer = LisGreenDark,
-    onPrimaryContainer = LisGreenLight,
+    primaryContainer = primaryDark,
+    onPrimaryContainer = primaryLight,
 
     secondary          = LisPurple,
     onSecondary        = LisDarkBg,
@@ -64,9 +62,17 @@ private val DarkColorScheme = darkColorScheme(
 @Composable
 fun LisToTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
+    accent: AccentColor = AccentColor.GREEN,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+    val primary      = Color(accent.primary)
+    val primaryDark  = Color(accent.dark)
+    val primaryLight = Color(accent.light)
+    val colorScheme = if (darkTheme) {
+        darkScheme(primary, primaryDark, primaryLight)
+    } else {
+        lightScheme(primary, primaryDark, primaryLight)
+    }
 
     val view = LocalView.current
     if (!view.isInEditMode) {

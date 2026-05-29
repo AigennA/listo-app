@@ -2,6 +2,8 @@ package com.listo.app.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.listo.app.data.models.AccentColor
+import com.listo.app.data.models.ThemeMode
 import com.listo.app.utils.PreferencesManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -9,7 +11,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class SettingsUiState(
-    val isDarkMode: Boolean = false,
+    val themeMode: ThemeMode = ThemeMode.SYSTEM,
+    val accentColor: AccentColor = AccentColor.GREEN,
     val isNotificationsEnabled: Boolean = true,
     val isDailyReminderEnabled: Boolean = false
 )
@@ -20,12 +23,14 @@ class SettingsViewModel @Inject constructor(
 ) : ViewModel() {
 
     val uiState: StateFlow<SettingsUiState> = combine(
-        prefs.isDarkMode,
+        prefs.themeMode,
+        prefs.accentColor,
         prefs.isNotificationsEnabled,
         prefs.isDailyReminderEnabled
-    ) { dark, notif, daily ->
+    ) { theme, accent, notif, daily ->
         SettingsUiState(
-            isDarkMode = dark,
+            themeMode = theme,
+            accentColor = accent,
             isNotificationsEnabled = notif,
             isDailyReminderEnabled = daily
         )
@@ -35,8 +40,12 @@ class SettingsViewModel @Inject constructor(
         initialValue = SettingsUiState()
     )
 
-    fun toggleDarkMode(value: Boolean) {
-        viewModelScope.launch { prefs.setDarkMode(value) }
+    fun setThemeMode(value: ThemeMode) {
+        viewModelScope.launch { prefs.setThemeMode(value) }
+    }
+
+    fun setAccentColor(value: AccentColor) {
+        viewModelScope.launch { prefs.setAccentColor(value) }
     }
 
     fun toggleNotifications(value: Boolean) {

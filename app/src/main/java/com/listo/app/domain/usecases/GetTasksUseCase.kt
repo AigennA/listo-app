@@ -14,4 +14,5 @@ class GetTasksUseCase @Inject constructor(private val repo: TaskRepository) {
     }
     fun pending(): Flow<List<Task>> = repo.getPendingTasks()
     fun completed(): Flow<List<Task>> = repo.getCompletedTasks()
+    fun byId(id: Long): Flow<Task?> = repo.observeTaskById(id)
 }
