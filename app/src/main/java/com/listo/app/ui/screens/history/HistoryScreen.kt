@@ -14,11 +14,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.listo.app.R
 import com.listo.app.data.models.ShoppingList
 import com.listo.app.ui.components.EmptyState
 import com.listo.app.ui.components.LisToTopBar
@@ -36,14 +38,14 @@ fun HistoryScreen(
     var pendingDelete by remember { mutableStateOf<ShoppingList?>(null) }
 
     Scaffold(
-        topBar = { LisToTopBar(title = "History", navController = navController) },
+        topBar = { LisToTopBar(title = stringResource(R.string.history_title), navController = navController) },
         containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         if (uiState.lists.isEmpty() && !uiState.isLoading) {
             Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
                 EmptyState(
-                    title = "No past lists",
-                    subtitle = "Finished shopping lists will appear here",
+                    title = stringResource(R.string.history_empty_title),
+                    subtitle = stringResource(R.string.history_empty_subtitle),
                     icon = {
                         Icon(
                             Icons.Rounded.History,
@@ -75,15 +77,15 @@ fun HistoryScreen(
         AlertDialog(
             onDismissRequest = { pendingDelete = null },
             icon = { Icon(Icons.Rounded.DeleteOutline, contentDescription = null, tint = MaterialTheme.colorScheme.error) },
-            title = { Text("Delete from history?") },
-            text = { Text("\"${list.name}\" will be permanently removed.") },
+            title = { Text(stringResource(R.string.history_delete_title)) },
+            text = { Text(stringResource(R.string.history_delete_msg, list.name)) },
             confirmButton = {
                 TextButton(onClick = {
                     viewModel.deleteList(list.id)
                     pendingDelete = null
-                }) { Text("Delete", color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.Bold) }
+                }) { Text(stringResource(R.string.action_delete), color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.Bold) }
             },
-            dismissButton = { TextButton(onClick = { pendingDelete = null }) { Text("Cancel") } }
+            dismissButton = { TextButton(onClick = { pendingDelete = null }) { Text(stringResource(R.string.action_cancel)) } }
         )
     }
 }
@@ -118,7 +120,7 @@ private fun HistoryCard(
                 Text(list.name, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                 val date = list.archivedAt ?: list.createdAt
                 Text(
-                    text = "${DateUtils.formatDate(date)}  ·  ${list.itemCount} items" +
+                    text = "${DateUtils.formatDate(date)}  ·  ${list.itemCount} ${stringResource(R.string.items_word)}" +
                         if (list.totalPrice > 0.0) "  ·  ${formatPrice(list.totalPrice)}" else "",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant

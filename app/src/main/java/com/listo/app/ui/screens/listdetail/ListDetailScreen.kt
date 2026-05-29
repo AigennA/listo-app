@@ -23,12 +23,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import com.listo.app.R
 import com.listo.app.utils.GroceryCatalog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -58,15 +60,15 @@ fun ListDetailScreen(
     Scaffold(
         topBar = {
             LisToTopBar(
-                title = list?.name ?: "List",
+                title = list?.name ?: stringResource(R.string.detail_default_title),
                 navController = navController,
                 actions = {
                     if (list != null) {
                         IconButton(onClick = { showRename = true }) {
-                            Icon(Icons.Rounded.Edit, contentDescription = "Rename list")
+                            Icon(Icons.Rounded.Edit, contentDescription = stringResource(R.string.detail_rename))
                         }
                         IconButton(onClick = { showDeleteList = true }) {
-                            Icon(Icons.Rounded.DeleteOutline, contentDescription = "Delete list")
+                            Icon(Icons.Rounded.DeleteOutline, contentDescription = stringResource(R.string.detail_delete))
                         }
                     }
                 }
@@ -90,7 +92,7 @@ fun ListDetailScreen(
         }
         if (list == null) {
             Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
-                Text("List not found", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.detail_not_found), color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             return@Scaffold
         }
@@ -121,12 +123,12 @@ fun ListDetailScreen(
                         )
                         Spacer(Modifier.height(12.dp))
                         Text(
-                            "No items yet",
+                            stringResource(R.string.detail_empty_title),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
-                            "Type below to add what you need",
+                            stringResource(R.string.detail_empty_subtitle),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -166,7 +168,7 @@ fun ListDetailScreen(
                     ) {
                         Icon(Icons.Rounded.Check, contentDescription = null)
                         Spacer(Modifier.width(8.dp))
-                        Text("Finish & Save to History", fontWeight = FontWeight.SemiBold)
+                        Text(stringResource(R.string.detail_finish), fontWeight = FontWeight.SemiBold)
                     }
                 }
             }
@@ -185,15 +187,15 @@ fun ListDetailScreen(
         AlertDialog(
             onDismissRequest = { showDeleteList = false },
             icon = { Icon(Icons.Rounded.DeleteOutline, contentDescription = null, tint = MaterialTheme.colorScheme.error) },
-            title = { Text("Delete list?") },
-            text = { Text("\"${list.name}\" and all its items will be removed.") },
+            title = { Text(stringResource(R.string.detail_delete_title)) },
+            text = { Text(stringResource(R.string.detail_delete_msg, list.name)) },
             confirmButton = {
                 TextButton(onClick = {
                     showDeleteList = false
                     viewModel.deleteList { navController.navigateUp() }
-                }) { Text("Delete", color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.Bold) }
+                }) { Text(stringResource(R.string.action_delete), color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.Bold) }
             },
-            dismissButton = { TextButton(onClick = { showDeleteList = false }) { Text("Cancel") } }
+            dismissButton = { TextButton(onClick = { showDeleteList = false }) { Text(stringResource(R.string.action_cancel)) } }
         )
     }
 
@@ -216,13 +218,13 @@ private fun SummaryHeader(state: ListDetailUiState) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "${state.checkedCount} / ${state.itemCount} done",
+                text = stringResource(R.string.detail_done_count, state.checkedCount, state.itemCount),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             if (state.total > 0.0) {
                 Text(
-                    text = "Total: ${formatPrice(state.total)}",
+                    text = stringResource(R.string.detail_total, formatPrice(state.total)),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary
@@ -291,7 +293,7 @@ private fun ShoppingItemRow(
                     .background(MaterialTheme.colorScheme.error),
                 contentAlignment = Alignment.CenterEnd
             ) {
-                Icon(Icons.Rounded.Delete, contentDescription = "Delete", tint = Color.White, modifier = Modifier.padding(end = 20.dp))
+                Icon(Icons.Rounded.Delete, contentDescription = stringResource(R.string.cd_delete), tint = Color.White, modifier = Modifier.padding(end = 20.dp))
             }
         }
     ) {
@@ -310,7 +312,7 @@ private fun ShoppingItemRow(
                 IconButton(onClick = onToggle, modifier = Modifier.size(32.dp)) {
                     Icon(
                         imageVector = if (item.isChecked) Icons.Rounded.CheckCircle else Icons.Rounded.RadioButtonUnchecked,
-                        contentDescription = if (item.isChecked) "Uncheck" else "Check",
+                        contentDescription = if (item.isChecked) stringResource(R.string.cd_uncheck) else stringResource(R.string.cd_check),
                         tint = if (item.isChecked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -429,7 +431,7 @@ private fun AddItemBar(
                         OutlinedTextField(
                             value = quantity,
                             onValueChange = { quantity = it },
-                            placeholder = { Text("Qty (2 kg)") },
+                            placeholder = { Text(stringResource(R.string.qty_hint)) },
                             singleLine = true,
                             modifier = Modifier.weight(1f),
                             shape = RoundedCornerShape(12.dp)
@@ -437,7 +439,7 @@ private fun AddItemBar(
                         OutlinedTextField(
                             value = priceText,
                             onValueChange = { priceText = it.filter { c -> c.isDigit() || c == '.' || c == ',' }.replace(',', '.') },
-                            placeholder = { Text("Price") },
+                            placeholder = { Text(stringResource(R.string.price_label)) },
                             singleLine = true,
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                             modifier = Modifier.weight(1f),
@@ -450,7 +452,7 @@ private fun AddItemBar(
                             modifier = Modifier.horizontalScroll(rememberScrollState()),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            CategoryChoice("None", null, categoryId == null) { categoryId = null }
+                            CategoryChoice(stringResource(R.string.category_none), null, categoryId == null) { categoryId = null }
                             categories.forEach { c ->
                                 CategoryChoice(c.name, c.color.toComposeColor(), categoryId == c.id) { categoryId = c.id }
                             }
@@ -464,14 +466,14 @@ private fun AddItemBar(
                 IconButton(onClick = { expanded = !expanded }) {
                     Icon(
                         if (expanded) Icons.Rounded.ExpandMore else Icons.Rounded.Tune,
-                        contentDescription = "Details",
+                        contentDescription = stringResource(R.string.cd_details),
                         tint = MaterialTheme.colorScheme.primary
                     )
                 }
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
-                    placeholder = { Text("Add item…") },
+                    placeholder = { Text(stringResource(R.string.add_item_hint)) },
                     singleLine = true,
                     modifier = Modifier
                         .weight(1f)
@@ -523,7 +525,7 @@ private fun RenameDialog(initial: String, onConfirm: (String) -> Unit, onDismiss
     var name by remember { mutableStateOf(initial) }
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Rename list", fontWeight = FontWeight.Bold) },
+        title = { Text(stringResource(R.string.detail_rename), fontWeight = FontWeight.Bold) },
         text = {
             OutlinedTextField(
                 value = name,
@@ -538,9 +540,9 @@ private fun RenameDialog(initial: String, onConfirm: (String) -> Unit, onDismiss
                 onClick = { onConfirm(name) },
                 enabled = name.isNotBlank(),
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-            ) { Text("Save") }
+            ) { Text(stringResource(R.string.action_save)) }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } }
     )
 }
 
@@ -558,24 +560,24 @@ private fun EditItemDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Edit item", fontWeight = FontWeight.Bold) },
+        title = { Text(stringResource(R.string.edit_item_title), fontWeight = FontWeight.Bold) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 OutlinedTextField(
                     value = name, onValueChange = { name = it },
-                    label = { Text("Name") }, singleLine = true,
+                    label = { Text(stringResource(R.string.name_label)) }, singleLine = true,
                     shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth()
                 )
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     OutlinedTextField(
                         value = quantity, onValueChange = { quantity = it },
-                        label = { Text("Qty") }, singleLine = true,
+                        label = { Text(stringResource(R.string.qty_label)) }, singleLine = true,
                         shape = RoundedCornerShape(12.dp), modifier = Modifier.weight(1f)
                     )
                     OutlinedTextField(
                         value = priceText,
                         onValueChange = { priceText = it.filter { c -> c.isDigit() || c == '.' || c == ',' }.replace(',', '.') },
-                        label = { Text("Price") }, singleLine = true,
+                        label = { Text(stringResource(R.string.price_label)) }, singleLine = true,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                         shape = RoundedCornerShape(12.dp), modifier = Modifier.weight(1f)
                     )
@@ -585,7 +587,7 @@ private fun EditItemDialog(
                         modifier = Modifier.horizontalScroll(rememberScrollState()),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        CategoryChoice("None", null, categoryId == null) { categoryId = null }
+                        CategoryChoice(stringResource(R.string.category_none), null, categoryId == null) { categoryId = null }
                         categories.forEach { c ->
                             CategoryChoice(c.name, c.color.toComposeColor(), categoryId == c.id) { categoryId = c.id }
                         }
@@ -607,8 +609,8 @@ private fun EditItemDialog(
                 },
                 enabled = name.isNotBlank(),
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-            ) { Text("Save") }
+            ) { Text(stringResource(R.string.action_save)) }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } }
     )
 }

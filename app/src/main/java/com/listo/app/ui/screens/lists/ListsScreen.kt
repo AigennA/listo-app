@@ -18,11 +18,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.listo.app.R
 import com.listo.app.data.models.ShoppingList
 import com.listo.app.ui.components.AdBanner
 import com.listo.app.ui.components.EmptyState
@@ -46,7 +48,7 @@ fun ListsScreen(
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = Color.White,
                 icon = { Icon(Icons.Rounded.Add, contentDescription = null) },
-                text = { Text("New List", fontWeight = FontWeight.SemiBold) }
+                text = { Text(stringResource(R.string.lists_new), fontWeight = FontWeight.SemiBold) }
             )
         },
         bottomBar = {
@@ -65,8 +67,8 @@ fun ListsScreen(
             if (uiState.lists.isEmpty() && !uiState.isLoading) {
                 item {
                     EmptyState(
-                        title = "No shopping lists yet",
-                        subtitle = "Tap New List to start a quick shopping list",
+                        title = stringResource(R.string.lists_empty_title),
+                        subtitle = stringResource(R.string.lists_empty_subtitle),
                         icon = {
                             Icon(
                                 Icons.Rounded.ShoppingCart,
@@ -125,16 +127,16 @@ private fun ListsHeader(navController: NavController) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
-                text = "My Lists",
+                text = stringResource(R.string.lists_title),
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground
             )
         }
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            HeaderIcon(Icons.Rounded.History, "History") { navController.navigate(Screen.History.route) }
-            HeaderIcon(Icons.Rounded.Category, "Categories") { navController.navigate(Screen.Categories.route) }
-            HeaderIcon(Icons.Rounded.Settings, "Settings") { navController.navigate(Screen.Settings.route) }
+            HeaderIcon(Icons.Rounded.History, stringResource(R.string.cd_history)) { navController.navigate(Screen.History.route) }
+            HeaderIcon(Icons.Rounded.Category, stringResource(R.string.cd_categories)) { navController.navigate(Screen.Categories.route) }
+            HeaderIcon(Icons.Rounded.Settings, stringResource(R.string.cd_settings)) { navController.navigate(Screen.Settings.route) }
         }
     }
 }
@@ -226,7 +228,7 @@ private fun ShoppingListCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "${list.checkedCount} / ${list.itemCount} items",
+                    text = stringResource(R.string.lists_items_count, list.checkedCount, list.itemCount),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -253,12 +255,12 @@ private fun CreateListDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         icon = { Icon(Icons.Rounded.ShoppingCart, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
-        title = { Text("New Shopping List", fontWeight = FontWeight.Bold) },
+        title = { Text(stringResource(R.string.lists_new_dialog_title), fontWeight = FontWeight.Bold) },
         text = {
             OutlinedTextField(
                 value = name,
                 onValueChange = onNameChange,
-                placeholder = { Text("e.g. Weekly groceries") },
+                placeholder = { Text(stringResource(R.string.lists_new_hint)) },
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier.fillMaxWidth(),
@@ -272,8 +274,8 @@ private fun CreateListDialog(
                 onClick = onConfirm,
                 enabled = name.isNotBlank(),
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-            ) { Text("Create") }
+            ) { Text(stringResource(R.string.action_create)) }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } }
     )
 }

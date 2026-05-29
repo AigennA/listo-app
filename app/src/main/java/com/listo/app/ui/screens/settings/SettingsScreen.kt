@@ -1,11 +1,15 @@
 package com.listo.app.ui.screens.settings
 
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -18,17 +22,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.listo.app.BuildConfig
+import com.listo.app.R
 import com.listo.app.data.models.AccentColor
 import com.listo.app.data.models.ThemeMode
 import com.listo.app.ui.components.LisToTopBar
 import com.listo.app.ui.theme.*
 import com.listo.app.ui.viewmodel.SettingsViewModel
+import com.listo.app.utils.LocaleHelper
 
 @Composable
 fun SettingsScreen(
@@ -36,9 +44,12 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    var showLanguageDialog by remember { mutableStateOf(false) }
+    val currentLang = remember { LocaleHelper.getLanguage(context) }
 
     Scaffold(
-        topBar = { LisToTopBar(title = "Settings", navController = navController) },
+        topBar = { LisToTopBar(title = stringResource(R.string.settings_title), navController = navController) },
         containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         Column(
@@ -51,7 +62,7 @@ fun SettingsScreen(
         ) {
             Spacer(modifier = Modifier.height(8.dp))
 
-            SettingsSectionHeader("Appearance")
+            SettingsSectionHeader(stringResource(R.string.settings_appearance))
 
             ThemeModeSelector(
                 selected = uiState.themeMode,
@@ -65,12 +76,22 @@ fun SettingsScreen(
                 onSelect = viewModel::setAccentColor
             )
 
-            SettingsSectionHeader("Notifications")
+            Spacer(modifier = Modifier.height(8.dp))
+
+            SettingsClickItem(
+                icon = Icons.Rounded.Language,
+                label = stringResource(R.string.settings_language),
+                subtitle = languageLabel(currentLang),
+                iconColor = MaterialTheme.colorScheme.primary,
+                onClick = { showLanguageDialog = true }
+            )
+
+            SettingsSectionHeader(stringResource(R.string.settings_notifications))
 
             SettingsToggleItem(
                 icon = Icons.Rounded.Notifications,
-                label = "Push Notifications",
-                subtitle = "Receive task reminders",
+                label = stringResource(R.string.settings_push),
+                subtitle = stringResource(R.string.settings_push_sub),
                 checked = uiState.isNotificationsEnabled,
                 onCheckedChange = viewModel::toggleNotifications,
                 iconColor = LisGreen
@@ -78,18 +99,18 @@ fun SettingsScreen(
 
             SettingsToggleItem(
                 icon = Icons.Rounded.Alarm,
-                label = "Daily Reminder",
-                subtitle = "Get a daily productivity summary",
+                label = stringResource(R.string.settings_daily),
+                subtitle = stringResource(R.string.settings_daily_sub),
                 checked = uiState.isDailyReminderEnabled,
                 onCheckedChange = viewModel::toggleDailyReminder,
                 iconColor = Color(0xFF00B894)
             )
 
-            SettingsSectionHeader("About")
+            SettingsSectionHeader(stringResource(R.string.settings_about))
 
             SettingsClickItem(
                 icon = Icons.Rounded.Info,
-                label = "App Version",
+                label = stringResource(R.string.settings_version),
                 subtitle = BuildConfig.VERSION_NAME,
                 iconColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 onClick = {}
@@ -97,8 +118,8 @@ fun SettingsScreen(
 
             SettingsClickItem(
                 icon = Icons.Rounded.PrivacyTip,
-                label = "Privacy Policy",
-                subtitle = "View our privacy policy",
+                label = stringResource(R.string.settings_privacy),
+                subtitle = stringResource(R.string.settings_privacy_sub),
                 iconColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 onClick = {}
             )
@@ -106,6 +127,72 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.height(40.dp))
         }
     }
+
+    if (showLanguageDialog) {
+        LanguageDialog(
+            current = currentLang,
+            onSelect = { lang ->
+                showLanguageDialog = false
+                if (lang != currentLang) {
+                    LocaleHelper.setLanguage(context, lang)
+                    context.findActivity()?.recreate()
+                }
+            },
+            onDismiss = { showLanguageDialog = false }
+        )
+    }
+}
+
+@Composable
+private fun languageLabel(code: String): String = when (code) {
+    "en" -> stringResource(R.string.lang_en)
+    "tr" -> stringResource(R.string.lang_tr)
+    else -> stringResource(R.string.lang_system)
+}
+
+@Composable
+private fun LanguageDialog(
+    current: String,
+    onSelect: (String) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val options = listOf(
+        LocaleHelper.SYSTEM to stringResource(R.string.lang_system),
+        "en" to stringResource(R.string.lang_en),
+        "tr" to stringResource(R.string.lang_tr)
+    )
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = { Icon(Icons.Rounded.Language, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
+        title = { Text(stringResource(R.string.settings_language), fontWeight = FontWeight.Bold) },
+        text = {
+            Column {
+                options.forEach { (code, label) ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp))
+                            .selectable(selected = code == current, onClick = { onSelect(code) })
+                            .padding(vertical = 12.dp, horizontal = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(selected = code == current, onClick = { onSelect(code) })
+                        Spacer(Modifier.width(8.dp))
+                        Text(label, style = MaterialTheme.typography.bodyLarge)
+                    }
+                }
+            }
+        },
+        confirmButton = {},
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } }
+    )
+}
+
+@Composable
+private fun ThemeMode.localized(): String = when (this) {
+    ThemeMode.SYSTEM -> stringResource(R.string.theme_system)
+    ThemeMode.LIGHT -> stringResource(R.string.theme_light)
+    ThemeMode.DARK -> stringResource(R.string.theme_dark)
 }
 
 @Composable
@@ -128,9 +215,9 @@ private fun ThemeModeSelector(
                 )
                 Spacer(modifier = Modifier.width(14.dp))
                 Column {
-                    Text("Theme", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
+                    Text(stringResource(R.string.settings_theme), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
                     Text(
-                        "Follow system, or force light / dark",
+                        stringResource(R.string.settings_theme_sub),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -139,7 +226,6 @@ private fun ThemeModeSelector(
 
             Spacer(modifier = Modifier.height(14.dp))
 
-            // Segmented control
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -169,7 +255,7 @@ private fun ThemeModeSelector(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = mode.label,
+                            text = mode.localized(),
                             style = MaterialTheme.typography.labelLarge,
                             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
                             color = fg
@@ -201,7 +287,7 @@ private fun AccentColorPicker(
                 )
                 Spacer(modifier = Modifier.width(14.dp))
                 Column {
-                    Text("Accent Color", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
+                    Text(stringResource(R.string.settings_accent), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
                     Text(
                         selected.label,
                         style = MaterialTheme.typography.bodySmall,
@@ -235,7 +321,7 @@ private fun AccentColorPicker(
                         if (isSelected) {
                             Icon(
                                 Icons.Rounded.Check,
-                                contentDescription = "Selected",
+                                contentDescription = null,
                                 tint = Color.White,
                                 modifier = Modifier.size(22.dp)
                             )
@@ -320,4 +406,13 @@ private fun SettingsClickItem(
             Icon(Icons.Rounded.ChevronRight, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
+}
+
+private fun Context.findActivity(): Activity? {
+    var ctx: Context = this
+    while (ctx is ContextWrapper) {
+        if (ctx is Activity) return ctx
+        ctx = ctx.baseContext
+    }
+    return null
 }

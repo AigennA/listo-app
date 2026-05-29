@@ -12,10 +12,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.listo.app.R
 import com.listo.app.ui.navigation.Screen
 import com.listo.app.ui.theme.LisGreen
 import com.listo.app.ui.theme.LisPurple
@@ -79,7 +81,7 @@ fun SplashScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(22.dp))
 
             Text(
-                text = "Listo",
+                text = stringResource(R.string.app_name),
                 fontSize = 38.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
@@ -87,7 +89,7 @@ fun SplashScreen(navController: NavController) {
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Your shopping, sorted.",
+                text = stringResource(R.string.app_tagline),
                 fontSize = 14.sp,
                 color = Color.White.copy(alpha = 0.55f),
                 fontFamily = PoppinsFontFamily

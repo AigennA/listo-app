@@ -20,39 +20,42 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.annotation.StringRes
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.listo.app.R
 import com.listo.app.ui.components.PrimaryButton
 import com.listo.app.ui.navigation.Screen
 import com.listo.app.ui.theme.*
 import kotlinx.coroutines.launch
 
 private data class PageData(
-    val title: String,
-    val subtitle: String,
+    @StringRes val titleRes: Int,
+    @StringRes val subtitleRes: Int,
     val primaryColor: Color,
     val secondaryColor: Color
 )
 
 private val pages = listOf(
     PageData(
-        title = "Quick Shopping Lists",
-        subtitle = "Jot down what you need the moment it comes to mind, in one clean place.",
+        titleRes = R.string.onb1_title,
+        subtitleRes = R.string.onb1_sub,
         primaryColor = LisGreen,
         secondaryColor = LisGreenLight
     ),
     PageData(
-        title = "Organize by Category",
-        subtitle = "Group items by aisle — produce, dairy, cleaning — and shop faster.",
+        titleRes = R.string.onb2_title,
+        subtitleRes = R.string.onb2_sub,
         primaryColor = LisPurple,
         secondaryColor = LisPurpleLight
     ),
     PageData(
-        title = "Check Off & Save",
-        subtitle = "Tick items as you shop, track the total, then keep lists in your history.",
+        titleRes = R.string.onb3_title,
+        subtitleRes = R.string.onb3_sub,
         primaryColor = Color(0xFF00B894),
         secondaryColor = Color(0xFFD5F5EE)
     )
@@ -91,7 +94,7 @@ fun OnboardingScreen(navController: NavController) {
                 .statusBarsPadding()
         ) {
             Text(
-                text = "Skip",
+                text = stringResource(R.string.onb_skip),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.labelLarge
             )
@@ -131,7 +134,7 @@ fun OnboardingScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(32.dp))
 
             PrimaryButton(
-                text = if (pagerState.currentPage == pages.lastIndex) "Get Started" else "Next",
+                text = if (pagerState.currentPage == pages.lastIndex) stringResource(R.string.onb_start) else stringResource(R.string.onb_next),
                 containerColor = pages[pagerState.currentPage].primaryColor,
                 onClick = {
                     if (pagerState.currentPage == pages.lastIndex) {
@@ -167,7 +170,7 @@ private fun OnboardingPageContent(page: PageData) {
         Spacer(modifier = Modifier.height(48.dp))
 
         Text(
-            text = page.title,
+            text = stringResource(page.titleRes),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
@@ -175,7 +178,7 @@ private fun OnboardingPageContent(page: PageData) {
         )
         Spacer(modifier = Modifier.height(12.dp))
         Text(
-            text = page.subtitle,
+            text = stringResource(page.subtitleRes),
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurfaceVariant,

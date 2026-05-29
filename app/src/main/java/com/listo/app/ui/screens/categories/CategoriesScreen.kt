@@ -17,9 +17,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.listo.app.R
 import com.listo.app.ui.components.EmptyState
 import com.listo.app.ui.components.LisToTopBar
 import com.listo.app.ui.components.PrimaryButton
@@ -40,7 +42,7 @@ fun CategoriesScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
-        topBar = { LisToTopBar(title = "Categories", navController = navController) },
+        topBar = { LisToTopBar(title = stringResource(R.string.categories_title), navController = navController) },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = viewModel::showDialog,
@@ -48,7 +50,7 @@ fun CategoriesScreen(
                 contentColor = Color.White,
                 shape = RoundedCornerShape(18.dp)
             ) {
-                Icon(Icons.Rounded.Add, contentDescription = "Add Category")
+                Icon(Icons.Rounded.Add, contentDescription = stringResource(R.string.cd_add_category))
             }
         },
         containerColor = MaterialTheme.colorScheme.background
@@ -56,8 +58,8 @@ fun CategoriesScreen(
         if (uiState.categories.isEmpty() && !uiState.isLoading) {
             Box(modifier = Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
                 EmptyState(
-                    title = "No categories yet",
-                    subtitle = "Create categories like Produce, Dairy or Cleaning",
+                    title = stringResource(R.string.categories_empty_title),
+                    subtitle = stringResource(R.string.categories_empty_subtitle),
                     icon = {
                         Icon(
                             Icons.Rounded.Category,
@@ -153,20 +155,20 @@ private fun CreateCategoryDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("New Category", fontWeight = FontWeight.Bold) },
+        title = { Text(stringResource(R.string.category_new_title), fontWeight = FontWeight.Bold) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 OutlinedTextField(
                     value = name,
                     onValueChange = onNameChange,
-                    label = { Text("Category Name") },
+                    label = { Text(stringResource(R.string.category_name_label)) },
                     shape = RoundedCornerShape(12.dp),
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = LisPurple)
                 )
 
-                Text("Pick a color", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+                Text(stringResource(R.string.category_pick_color), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     categoryColors.forEach { colorHex ->
                         val color = colorHex.toComposeColor()
@@ -195,10 +197,10 @@ private fun CreateCategoryDialog(
                 onClick = onConfirm,
                 colors = ButtonDefaults.buttonColors(containerColor = LisPurple),
                 enabled = name.isNotBlank()
-            ) { Text("Create") }
+            ) { Text(stringResource(R.string.action_create)) }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Cancel") }
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) }
         }
     )
 }

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Listo</string>
+    <string name="app_tagline">Alışverişin düzene girsin.</string>
+
+    <!-- Common actions -->
+    <string name="action_save">Kaydet</string>
+    <string name="action_cancel">İptal</string>
+    <string name="action_create">Oluştur</string>
+    <string name="action_delete">Sil</string>
+
+    <!-- Lists (home) -->
+    <string name="lists_title">Listelerim</string>
+    <string name="lists_new">Yeni Liste</string>
+    <string name="lists_empty_title">Henüz alışveriş listen yok</string>
+    <string name="lists_empty_subtitle">Hızlı bir liste için Yeni Liste\'ye dokun</string>
+    <string name="lists_items_count">%1$d / %2$d ürün</string>
+    <string name="lists_new_dialog_title">Yeni Alışveriş Listesi</string>
+    <string name="lists_new_hint">örn. Haftalık market</string>
+    <string name="cd_history">Geçmiş</string>
+    <string name="cd_categories">Kategoriler</string>
+    <string name="cd_settings">Ayarlar</string>
+
+    <!-- List detail -->
+    <string name="detail_default_title">Liste</string>
+    <string name="detail_not_found">Liste bulunamadı</string>
+    <string name="detail_rename">Listeyi yeniden adlandır</string>
+    <string name="detail_delete">Listeyi sil</string>
+    <string name="detail_delete_title">Liste silinsin mi?</string>
+    <string name="detail_delete_msg">\"%1$s\" ve içindeki tüm ürünler silinecek.</string>
+    <string name="detail_empty_title">Henüz ürün yok</string>
+    <string name="detail_empty_subtitle">İhtiyacın olanı aşağıya yaz</string>
+    <string name="detail_done_count">%1$d / %2$d tamamlandı</string>
+    <string name="detail_total">Toplam: %1$s</string>
+    <string name="detail_finish">Bitir ve Geçmişe Kaydet</string>
+    <string name="add_item_hint">Ürün ekle…</string>
+    <string name="qty_hint">Miktar (2 kg)</string>
+    <string name="qty_label">Miktar</string>
+    <string name="price_label">Fiyat</string>
+    <string name="category_none">Yok</string>
+    <string name="cd_details">Ayrıntılar</string>
+    <string name="edit_item_title">Ürünü düzenle</string>
+    <string name="name_label">Ad</string>
+    <string name="cd_check">İşaretle</string>
+    <string name="cd_uncheck">İşareti kaldır</string>
+    <string name="cd_delete">Sil</string>
+
+    <!-- History -->
+    <string name="history_title">Geçmiş</string>
+    <string name="history_empty_title">Geçmiş liste yok</string>
+    <string name="history_empty_subtitle">Biten alışveriş listelerin burada görünür</string>
+    <string name="history_delete_title">Geçmişten silinsin mi?</string>
+    <string name="history_delete_msg">\"%1$s\" kalıcı olarak silinecek.</string>
+    <string name="items_word">ürün</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Ayarlar</string>
+    <string name="settings_appearance">Görünüm</string>
+    <string name="settings_theme">Tema</string>
+    <string name="settings_theme_sub">Sistemi izle veya açık / koyu seç</string>
+    <string name="settings_accent">Vurgu Rengi</string>
+    <string name="settings_language">Dil</string>
+    <string name="settings_language_sub">Uygulama dilini seç</string>
+    <string name="lang_system">Sistem varsayılanı</string>
+    <string name="lang_en">English</string>
+    <string name="lang_tr">Türkçe</string>
+    <string name="settings_notifications">Bildirimler</string>
+    <string name="settings_push">Anlık Bildirimler</string>
+    <string name="settings_push_sub">Listelerin için hatırlatmalar</string>
+    <string name="settings_daily">Günlük Hatırlatma</string>
+    <string name="settings_daily_sub">Listelerini kontrol etmen için günlük dürtü</string>
+    <string name="settings_about">Hakkında</string>
+    <string name="settings_version">Uygulama Sürümü</string>
+    <string name="settings_privacy">Gizlilik Politikası</string>
+    <string name="settings_privacy_sub">Gizlilik politikamızı görüntüle</string>
+    <string name="theme_system">Sistem</string>
+    <string name="theme_light">Açık</string>
+    <string name="theme_dark">Koyu</string>
+
+    <!-- Categories -->
+    <string name="categories_title">Kategoriler</string>
+    <string name="categories_empty_title">Henüz kategori yok</string>
+    <string name="categories_empty_subtitle">Manav, Süt Ürünleri veya Temizlik gibi kategoriler oluştur</string>
+    <string name="category_new_title">Yeni Kategori</string>
+    <string name="category_name_label">Kategori Adı</string>
+    <string name="category_pick_color">Bir renk seç</string>
+    <string name="cd_add_category">Kategori Ekle</string>
+
+    <!-- Onboarding -->
+    <string name="onb1_title">Hızlı Alışveriş Listeleri</string>
+    <string name="onb1_sub">İhtiyacını aklına geldiği an, tek ve düzenli bir yerde not al.</string>
+    <string name="onb2_title">Kategoriye Göre Düzenle</string>
+    <string name="onb2_sub">Ürünleri reyona göre grupla — manav, süt ürünleri, temizlik — daha hızlı alışveriş yap.</string>
+    <string name="onb3_title">İşaretle ve Kaydet</string>
+    <string name="onb3_sub">Alışveriş yaparken ürünleri işaretle, toplamı takip et, sonra listeleri geçmişte sakla.</string>
+    <string name="onb_skip">Atla</string>
+    <string name="onb_next">İleri</string>
+    <string name="onb_start">Başla</string>
+</resources>
