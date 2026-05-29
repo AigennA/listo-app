@@ -65,6 +65,9 @@ object GroceryCatalog {
         return (starts + contains).distinctBy { it.name }.take(limit)
     }
 
+    fun itemsForCategory(category: String): List<String> =
+        items.filter { it.category.equals(category, ignoreCase = true) }.map { it.name }
+
     fun categoryFor(name: String): String? {
         val q = name.trim().lowercase(Locale.ROOT)
         if (q.isEmpty()) return null

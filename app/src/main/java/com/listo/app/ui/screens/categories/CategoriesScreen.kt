@@ -22,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.listo.app.R
+import com.listo.app.ui.navigation.Screen
 import com.listo.app.ui.components.EmptyState
 import com.listo.app.ui.components.LisToTopBar
 import com.listo.app.ui.components.PrimaryButton
@@ -81,6 +82,7 @@ fun CategoriesScreen(
                 items(uiState.categories, key = { it.id }) { category ->
                     val catColor = category.color.toComposeColor()
                     Card(
+                        onClick = { navController.navigate(Screen.CategoryItems.route(category.id)) },
                         shape = RoundedCornerShape(20.dp),
                         colors = CardDefaults.cardColors(
                             containerColor = catColor.copy(alpha = 0.1f)

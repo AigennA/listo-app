@@ -95,6 +95,8 @@
     <string name="category_name_label">Kategorinamn</string>
     <string name="category_pick_color">Välj en färg</string>
     <string name="cd_add_category">Lägg till kategori</string>
+    <string name="cat_create_list">Skapa lista</string>
+    <string name="cat_items_empty">Inga förslag för den här kategorin än</string>
 
     <!-- Onboarding -->
     <string name="onb1_title">Snabba inköpslistor</string>

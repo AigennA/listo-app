@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.listo.app.ui.screens.categories.CategoriesScreen
+import com.listo.app.ui.screens.categoryitems.CategoryItemsScreen
 import com.listo.app.ui.screens.history.HistoryScreen
 import com.listo.app.ui.screens.listdetail.ListDetailScreen
 import com.listo.app.ui.screens.lists.ListsScreen
@@ -61,6 +62,13 @@ fun LisToNavigation() {
 
         composable(Screen.Categories.route) {
             CategoriesScreen(navController = navController)
+        }
+
+        composable(
+            route = Screen.CategoryItems.route,
+            arguments = listOf(navArgument("categoryId") { type = NavType.LongType })
+        ) {
+            CategoryItemsScreen(navController = navController)
         }
 
         composable(Screen.Settings.route) {

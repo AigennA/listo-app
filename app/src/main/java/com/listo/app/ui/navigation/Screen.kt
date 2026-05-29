@@ -9,5 +9,8 @@ sealed class Screen(val route: String) {
     }
     data object History     : Screen("history")
     data object Categories  : Screen("categories")
+    data object CategoryItems : Screen("category_items/{categoryId}") {
+        fun route(categoryId: Long) = "category_items/$categoryId"
+    }
     data object Settings    : Screen("settings")
 }

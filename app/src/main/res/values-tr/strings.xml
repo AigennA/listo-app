@@ -95,6 +95,8 @@
     <string name="category_name_label">Kategori Adı</string>
     <string name="category_pick_color">Bir renk seç</string>
     <string name="cd_add_category">Kategori Ekle</string>
+    <string name="cat_create_list">Liste oluştur</string>
+    <string name="cat_items_empty">Bu kategori için henüz öneri yok</string>
 
     <!-- Onboarding -->
     <string name="onb1_title">Hızlı Alışveriş Listeleri</string>

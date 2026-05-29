@@ -95,6 +95,8 @@
     <string name="category_name_label">Category Name</string>
     <string name="category_pick_color">Pick a color</string>
     <string name="cd_add_category">Add Category</string>
+    <string name="cat_create_list">Create list</string>
+    <string name="cat_items_empty">No suggested items for this category yet</string>
 
     <!-- Onboarding -->
     <string name="onb1_title">Quick Shopping Lists</string>
