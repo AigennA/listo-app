@@ -70,6 +70,9 @@
     <string name="settings_push_sub">Reminders for your lists</string>
     <string name="settings_daily">Daily Reminder</string>
     <string name="settings_daily_sub">A daily nudge to check your lists</string>
+    <string name="settings_reminder_time">Reminder time</string>
+    <string name="daily_reminder_text">You have %1$d items left on your lists</string>
+    <string name="daily_reminder_text_empty">Time to plan your shopping list</string>
     <string name="settings_about">About</string>
     <string name="settings_version">App Version</string>
     <string name="settings_privacy">Privacy Policy</string>

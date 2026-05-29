@@ -70,6 +70,9 @@
     <string name="settings_push_sub">Listelerin için hatırlatmalar</string>
     <string name="settings_daily">Günlük Hatırlatma</string>
     <string name="settings_daily_sub">Listelerini kontrol etmen için günlük dürtü</string>
+    <string name="settings_reminder_time">Hatırlatma saati</string>
+    <string name="daily_reminder_text">Listelerinde %1$d ürün bekliyor</string>
+    <string name="daily_reminder_text_empty">Alışveriş listeni planlama zamanı</string>
     <string name="settings_about">Hakkında</string>
     <string name="settings_version">Uygulama Sürümü</string>
     <string name="settings_privacy">Gizlilik Politikası</string>

@@ -70,6 +70,9 @@
     <string name="settings_push_sub">Påminnelser för dina listor</string>
     <string name="settings_daily">Daglig påminnelse</string>
     <string name="settings_daily_sub">En daglig knuff att kolla dina listor</string>
+    <string name="settings_reminder_time">Påminnelsetid</string>
+    <string name="daily_reminder_text">Du har %1$d varor kvar på dina listor</string>
+    <string name="daily_reminder_text_empty">Dags att planera din inköpslista</string>
     <string name="settings_about">Om</string>
     <string name="settings_version">Appversion</string>
     <string name="settings_privacy">Integritetspolicy</string>

@@ -14,7 +14,9 @@ data class SettingsUiState(
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
     val accentColor: AccentColor = AccentColor.GREEN,
     val isNotificationsEnabled: Boolean = true,
-    val isDailyReminderEnabled: Boolean = false
+    val isDailyReminderEnabled: Boolean = false,
+    val reminderHour: Int = 18,
+    val reminderMinute: Int = 0
 )
 
 @HiltViewModel
@@ -26,13 +28,16 @@ class SettingsViewModel @Inject constructor(
         prefs.themeMode,
         prefs.accentColor,
         prefs.isNotificationsEnabled,
-        prefs.isDailyReminderEnabled
-    ) { theme, accent, notif, daily ->
+        prefs.isDailyReminderEnabled,
+        combine(prefs.dailyReminderHour, prefs.dailyReminderMinute) { h, m -> h to m }
+    ) { theme, accent, notif, daily, time ->
         SettingsUiState(
             themeMode = theme,
             accentColor = accent,
             isNotificationsEnabled = notif,
-            isDailyReminderEnabled = daily
+            isDailyReminderEnabled = daily,
+            reminderHour = time.first,
+            reminderMinute = time.second
         )
     }.stateIn(
         scope = viewModelScope,
@@ -54,5 +59,9 @@ class SettingsViewModel @Inject constructor(
 
     fun toggleDailyReminder(value: Boolean) {
         viewModelScope.launch { prefs.setDailyReminder(value) }
+    }
+
+    fun setReminderTime(hour: Int, minute: Int) {
+        viewModelScope.launch { prefs.setDailyReminderTime(hour, minute) }
     }
 }

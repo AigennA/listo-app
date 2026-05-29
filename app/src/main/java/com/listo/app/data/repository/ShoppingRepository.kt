@@ -59,6 +59,9 @@ class ShoppingRepository @Inject constructor(
 
     suspend fun deleteItem(id: Long) = itemDao.deleteById(id)
 
+    /** Count of unchecked items across all active (non-archived) lists. */
+    suspend fun getActivePendingItemCount(): Int = itemDao.getActivePendingCount()
+
     private suspend fun enrichWithCategory(entity: ShoppingItemEntity): ShoppingItem {
         val category = entity.categoryId?.let { categoryDao.getCategoryById(it) }
         return entity.toDomain(

@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.listo.app.data.models.AccentColor
@@ -25,6 +26,8 @@ class PreferencesManager @Inject constructor(private val context: Context) {
         val NOTIFICATIONS      = booleanPreferencesKey("notifications")
         val ONBOARDING_DONE    = booleanPreferencesKey("onboarding_done")
         val DAILY_REMINDER     = booleanPreferencesKey("daily_reminder")
+        val DAILY_REMINDER_HOUR   = intPreferencesKey("daily_reminder_hour")
+        val DAILY_REMINDER_MINUTE = intPreferencesKey("daily_reminder_minute")
         val CATEGORIES_SEEDED  = booleanPreferencesKey("categories_seeded")
     }
 
@@ -49,6 +52,19 @@ class PreferencesManager @Inject constructor(private val context: Context) {
 
     val isDailyReminderEnabled: Flow<Boolean> = context.dataStore.data
         .map { it[Keys.DAILY_REMINDER] ?: false }
+
+    val dailyReminderHour: Flow<Int> = context.dataStore.data
+        .map { it[Keys.DAILY_REMINDER_HOUR] ?: 18 }
+
+    val dailyReminderMinute: Flow<Int> = context.dataStore.data
+        .map { it[Keys.DAILY_REMINDER_MINUTE] ?: 0 }
+
+    suspend fun setDailyReminderTime(hour: Int, minute: Int) {
+        context.dataStore.edit {
+            it[Keys.DAILY_REMINDER_HOUR] = hour
+            it[Keys.DAILY_REMINDER_MINUTE] = minute
+        }
+    }
 
     suspend fun setThemeMode(value: ThemeMode) {
         context.dataStore.edit { it[Keys.THEME_MODE] = value.name }

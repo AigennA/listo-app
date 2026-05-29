@@ -13,6 +13,15 @@ interface ShoppingItemDao {
     @Query("SELECT COUNT(*) FROM shopping_items WHERE categoryId = :categoryId")
     fun getItemCountForCategory(categoryId: Long): Flow<Int>
 
+    @Query(
+        """
+        SELECT COUNT(*) FROM shopping_items
+        WHERE isChecked = 0
+          AND listId IN (SELECT id FROM shopping_lists WHERE isArchived = 0)
+        """
+    )
+    suspend fun getActivePendingCount(): Int
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(item: ShoppingItemEntity): Long
 

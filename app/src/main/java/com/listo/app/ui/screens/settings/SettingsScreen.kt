@@ -1,12 +1,19 @@
 package com.listo.app.ui.screens.settings
 
+import android.Manifest
 import android.app.Activity
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
@@ -26,6 +33,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -36,7 +44,9 @@ import com.listo.app.data.models.ThemeMode
 import com.listo.app.ui.components.LisToTopBar
 import com.listo.app.ui.theme.*
 import com.listo.app.ui.viewmodel.SettingsViewModel
+import com.listo.app.utils.DailyReminderScheduler
 import com.listo.app.utils.LocaleHelper
+import java.util.Locale
 
 @Composable
 fun SettingsScreen(
@@ -47,6 +57,38 @@ fun SettingsScreen(
     val context = LocalContext.current
     var showLanguageDialog by remember { mutableStateOf(false) }
     val currentLang = remember { LocaleHelper.getLanguage(context) }
+
+    val notifPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { /* notification simply won't show if denied */ }
+
+    fun onDailyReminderToggle(enabled: Boolean) {
+        viewModel.toggleDailyReminder(enabled)
+        if (enabled) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) !=
+                PackageManager.PERMISSION_GRANTED
+            ) {
+                notifPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+            DailyReminderScheduler.schedule(context, uiState.reminderHour, uiState.reminderMinute)
+        } else {
+            DailyReminderScheduler.cancel(context)
+        }
+    }
+
+    fun showTimePicker() {
+        TimePickerDialog(
+            context,
+            { _, hour, minute ->
+                viewModel.setReminderTime(hour, minute)
+                DailyReminderScheduler.schedule(context, hour, minute)
+            },
+            uiState.reminderHour,
+            uiState.reminderMinute,
+            true
+        ).show()
+    }
 
     Scaffold(
         topBar = { LisToTopBar(title = stringResource(R.string.settings_title), navController = navController) },
@@ -102,9 +144,19 @@ fun SettingsScreen(
                 label = stringResource(R.string.settings_daily),
                 subtitle = stringResource(R.string.settings_daily_sub),
                 checked = uiState.isDailyReminderEnabled,
-                onCheckedChange = viewModel::toggleDailyReminder,
+                onCheckedChange = { onDailyReminderToggle(it) },
                 iconColor = Color(0xFF00B894)
             )
+
+            if (uiState.isDailyReminderEnabled) {
+                SettingsClickItem(
+                    icon = Icons.Rounded.Schedule,
+                    label = stringResource(R.string.settings_reminder_time),
+                    subtitle = String.format(Locale.getDefault(), "%02d:%02d", uiState.reminderHour, uiState.reminderMinute),
+                    iconColor = Color(0xFF00B894),
+                    onClick = { showTimePicker() }
+                )
+            }
 
             SettingsSectionHeader(stringResource(R.string.settings_about))
 
@@ -301,7 +353,9 @@ private fun AccentColorPicker(
             Spacer(modifier = Modifier.height(14.dp))
 
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()),
                 horizontalArrangement = Arrangement.spacedBy(14.dp)
             ) {
                 AccentColor.entries.forEach { accent ->

@@ -35,7 +35,7 @@
         </activity>
 
         <receiver
-            android:name=".utils.NotificationReceiver"
+            android:name=".utils.DailyReminderReceiver"
             android:exported="false" />
 
         <receiver
