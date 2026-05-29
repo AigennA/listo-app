@@ -1,0 +1,66 @@
+# ============================================================
+#  LisTo — Android / Kotlin / Gradle .gitignore
+# ============================================================
+
+# --- Gradle ---
+.gradle/
+build/
+**/build/
+gradle-app.setting
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+
+# --- Android build outputs ---
+*.apk
+*.aab
+*.ap_
+*.aar
+*.dex
+*.class
+bin/
+gen/
+out/
+release/
+captures/
+
+# --- Local config (machine-specific, may contain secrets) ---
+local.properties
+keystore.properties
+*.jks
+*.keystore
+
+# --- Android Studio / IntelliJ IDEA ---
+.idea/
+*.iml
+*.ipr
+*.iws
+.navigation/
+.cxx/
+
+# --- Kotlin ---
+.kotlin/
+
+# --- Logs & temp ---
+*.log
+*.hprof
+*.tmp
+*.bak
+
+# --- OS files ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Lint ---
+lint/intermediates/
+lint/generated/
+lint/outputs/
+lint/tmp/
+
+# --- NDK / native ---
+obj/
+.externalNativeBuild/
+
+# --- Misc ---
+.vscode/
+*.orig

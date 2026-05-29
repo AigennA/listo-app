@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="lis_green">#2ECC71</color>
+    <color name="lis_purple">#6C5CE7</color>
+    <color name="lis_white">#FFFFFF</color>
+    <color name="lis_bg">#F5F6FA</color>
+    <color name="lis_dark_bg">#0F0F1E</color>
+    <color name="ic_launcher_background">#1A1A2E</color>
+</resources>
