@@ -101,4 +101,7 @@ dependencies {
 
     // Coroutines
     implementation(libs.coroutines.android)
+
+    // Ads (AdMob)
+    implementation(libs.play.services.ads)
 }

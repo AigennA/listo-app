@@ -27,7 +27,6 @@ import com.listo.app.BuildConfig
 import com.listo.app.data.models.AccentColor
 import com.listo.app.data.models.ThemeMode
 import com.listo.app.ui.components.LisToTopBar
-import com.listo.app.ui.navigation.Screen
 import com.listo.app.ui.theme.*
 import com.listo.app.ui.viewmodel.SettingsViewModel
 
@@ -84,16 +83,6 @@ fun SettingsScreen(
                 checked = uiState.isDailyReminderEnabled,
                 onCheckedChange = viewModel::toggleDailyReminder,
                 iconColor = Color(0xFF00B894)
-            )
-
-            SettingsSectionHeader("Premium")
-
-            SettingsClickItem(
-                icon = Icons.Rounded.Star,
-                label = "Upgrade to Premium",
-                subtitle = "Unlock all features",
-                iconColor = Color(0xFFFDCB6E),
-                onClick = { navController.navigate(Screen.Premium.route) }
             )
 
             SettingsSectionHeader("About")

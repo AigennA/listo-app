@@ -20,12 +20,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import com.listo.app.utils.GroceryCatalog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -35,6 +39,7 @@ import com.listo.app.ui.components.LisToTopBar
 import com.listo.app.ui.viewmodel.ListDetailUiState
 import com.listo.app.ui.viewmodel.ListDetailViewModel
 import com.listo.app.utils.formatPrice
+import com.listo.app.utils.iconForItem
 import com.listo.app.utils.toComposeColor
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -309,7 +314,24 @@ private fun ShoppingItemRow(
                         tint = if (item.isChecked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-                Spacer(Modifier.width(10.dp))
+                Spacer(Modifier.width(8.dp))
+                // Item icon avatar (chosen from the item name)
+                val avatarColor = item.categoryColor?.toComposeColor() ?: MaterialTheme.colorScheme.primary
+                Box(
+                    modifier = Modifier
+                        .size(36.dp)
+                        .clip(CircleShape)
+                        .background(avatarColor.copy(alpha = 0.14f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = iconForItem(item.name),
+                        contentDescription = null,
+                        tint = avatarColor,
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+                Spacer(Modifier.width(12.dp))
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = item.name,
@@ -350,12 +372,21 @@ private fun AddItemBar(
     var priceText by remember { mutableStateOf("") }
     var categoryId by remember { mutableStateOf<Long?>(null) }
     var expanded by remember { mutableStateOf(false) }
+    val focusRequester = remember { FocusRequester() }
+
+    fun categoryIdFor(catName: String?): Long? =
+        catName?.let { n -> categories.firstOrNull { it.name == n }?.id }
 
     fun submit() {
         if (name.isBlank()) return
-        onAdd(name, quantity, categoryId, priceText.toDoubleOrNull())
-        name = ""; quantity = ""; priceText = ""
+        val resolvedCategory = categoryId ?: categoryIdFor(GroceryCatalog.categoryFor(name))
+        onAdd(name, quantity, resolvedCategory, priceText.toDoubleOrNull())
+        name = ""; quantity = ""; priceText = ""; categoryId = null
+        // keep focus so the user can keep adding items quickly
+        focusRequester.requestFocus()
     }
+
+    val suggestions = remember(name) { GroceryCatalog.suggest(name) }
 
     Surface(
         color = MaterialTheme.colorScheme.surface,
@@ -369,6 +400,29 @@ private fun AddItemBar(
                 .imePadding()
                 .padding(horizontal = 16.dp, vertical = 10.dp)
         ) {
+            // Type-ahead suggestions
+            AnimatedVisibility(
+                visible = name.isNotBlank() && suggestions.isNotEmpty() &&
+                    suggestions.none { it.name.equals(name.trim(), ignoreCase = true) }
+            ) {
+                Row(
+                    modifier = Modifier
+                        .horizontalScroll(rememberScrollState())
+                        .padding(bottom = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    suggestions.forEach { s ->
+                        SuggestionChip(
+                            onClick = {
+                                name = s.name
+                                categoryId = categoryIdFor(s.category)
+                            },
+                            label = { Text(s.name) }
+                        )
+                    }
+                }
+            }
+
             AnimatedVisibility(visible = expanded) {
                 Column {
                     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -419,9 +473,14 @@ private fun AddItemBar(
                     onValueChange = { name = it },
                     placeholder = { Text("Add item…") },
                     singleLine = true,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .focusRequester(focusRequester),
                     shape = RoundedCornerShape(24.dp),
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Sentences,
+                        imeAction = ImeAction.Done
+                    ),
                     keyboardActions = KeyboardActions(onDone = { submit() }),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = MaterialTheme.colorScheme.primary

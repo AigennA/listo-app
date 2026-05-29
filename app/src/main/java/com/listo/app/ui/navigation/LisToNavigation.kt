@@ -13,7 +13,6 @@ import com.listo.app.ui.screens.history.HistoryScreen
 import com.listo.app.ui.screens.listdetail.ListDetailScreen
 import com.listo.app.ui.screens.lists.ListsScreen
 import com.listo.app.ui.screens.onboarding.OnboardingScreen
-import com.listo.app.ui.screens.premium.PremiumScreen
 import com.listo.app.ui.screens.settings.SettingsScreen
 import com.listo.app.ui.screens.splash.SplashScreen
 
@@ -66,10 +65,6 @@ fun LisToNavigation() {
 
         composable(Screen.Settings.route) {
             SettingsScreen(navController = navController)
-        }
-
-        composable(Screen.Premium.route) {
-            PremiumScreen(navController = navController)
         }
     }
 }

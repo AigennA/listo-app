@@ -24,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.listo.app.data.models.ShoppingList
+import com.listo.app.ui.components.AdBanner
 import com.listo.app.ui.components.EmptyState
 import com.listo.app.ui.navigation.Screen
 import com.listo.app.ui.viewmodel.ListsViewModel
@@ -47,6 +48,9 @@ fun ListsScreen(
                 icon = { Icon(Icons.Rounded.Add, contentDescription = null) },
                 text = { Text("New List", fontWeight = FontWeight.SemiBold) }
             )
+        },
+        bottomBar = {
+            AdBanner(modifier = Modifier.navigationBarsPadding())
         },
         containerColor = MaterialTheme.colorScheme.background
     ) { padding ->

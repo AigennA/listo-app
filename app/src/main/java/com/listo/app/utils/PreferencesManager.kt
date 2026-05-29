@@ -25,6 +25,14 @@ class PreferencesManager @Inject constructor(private val context: Context) {
         val NOTIFICATIONS      = booleanPreferencesKey("notifications")
         val ONBOARDING_DONE    = booleanPreferencesKey("onboarding_done")
         val DAILY_REMINDER     = booleanPreferencesKey("daily_reminder")
+        val CATEGORIES_SEEDED  = booleanPreferencesKey("categories_seeded")
+    }
+
+    val isCategoriesSeeded: Flow<Boolean> = context.dataStore.data
+        .map { it[Keys.CATEGORIES_SEEDED] ?: false }
+
+    suspend fun setCategoriesSeeded(value: Boolean) {
+        context.dataStore.edit { it[Keys.CATEGORIES_SEEDED] = value }
     }
 
     val themeMode: Flow<ThemeMode> = context.dataStore.data

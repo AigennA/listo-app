@@ -6,6 +6,8 @@ import com.listo.app.data.models.ShoppingList
 import com.listo.app.domain.usecases.CreateShoppingListUseCase
 import com.listo.app.domain.usecases.DeleteShoppingListUseCase
 import com.listo.app.domain.usecases.GetShoppingListsUseCase
+import com.listo.app.domain.usecases.SeedCategoriesUseCase
+import com.listo.app.utils.PreferencesManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -22,11 +24,22 @@ data class ListsUiState(
 class ListsViewModel @Inject constructor(
     getShoppingListsUseCase: GetShoppingListsUseCase,
     private val createListUseCase: CreateShoppingListUseCase,
-    private val deleteListUseCase: DeleteShoppingListUseCase
+    private val deleteListUseCase: DeleteShoppingListUseCase,
+    private val seedCategoriesUseCase: SeedCategoriesUseCase,
+    private val prefs: PreferencesManager
 ) : ViewModel() {
 
     private val _showDialog = MutableStateFlow(false)
     private val _newName = MutableStateFlow("")
+
+    init {
+        viewModelScope.launch {
+            if (!prefs.isCategoriesSeeded.first()) {
+                seedCategoriesUseCase()
+                prefs.setCategoriesSeeded(true)
+            }
+        }
+    }
 
     val uiState: StateFlow<ListsUiState> = combine(
         getShoppingListsUseCase.active(),
