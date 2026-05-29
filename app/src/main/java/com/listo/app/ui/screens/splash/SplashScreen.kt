@@ -87,7 +87,7 @@ fun SplashScreen(navController: NavController) {
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Get things done.",
+                text = "Your shopping, sorted.",
                 fontSize = 14.sp,
                 color = Color.White.copy(alpha = 0.55f),
                 fontFamily = PoppinsFontFamily

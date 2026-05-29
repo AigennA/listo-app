@@ -1,7 +1,6 @@
 package com.listo.app.data.repository
 
 import com.listo.app.data.database.dao.CategoryDao
-import com.listo.app.data.database.dao.TaskDao
 import com.listo.app.data.database.entities.toDomain
 import com.listo.app.data.database.entities.toEntity
 import com.listo.app.data.models.Category
@@ -12,8 +11,7 @@ import javax.inject.Singleton
 
 @Singleton
 class CategoryRepository @Inject constructor(
-    private val categoryDao: CategoryDao,
-    private val taskDao: TaskDao
+    private val categoryDao: CategoryDao
 ) {
 
     fun getAllCategories(): Flow<List<Category>> =

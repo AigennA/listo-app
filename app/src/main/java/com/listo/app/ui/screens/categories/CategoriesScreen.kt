@@ -57,7 +57,7 @@ fun CategoriesScreen(
             Box(modifier = Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
                 EmptyState(
                     title = "No categories yet",
-                    subtitle = "Create categories to organize your tasks",
+                    subtitle = "Create categories like Produce, Dairy or Cleaning",
                     icon = {
                         Icon(
                             Icons.Rounded.Category,

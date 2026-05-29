@@ -4,12 +4,17 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.listo.app.data.models.Priority
-import com.listo.app.data.models.Task
+import com.listo.app.data.models.ShoppingItem
 
 @Entity(
-    tableName = "tasks",
+    tableName = "shopping_items",
     foreignKeys = [
+        ForeignKey(
+            entity = ShoppingListEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["listId"],
+            onDelete = ForeignKey.CASCADE
+        ),
         ForeignKey(
             entity = CategoryEntity::class,
             parentColumns = ["id"],
@@ -17,42 +22,42 @@ import com.listo.app.data.models.Task
             onDelete = ForeignKey.SET_NULL
         )
     ],
-    indices = [Index("categoryId")]
+    indices = [Index("listId"), Index("categoryId")]
 )
-data class TaskEntity(
+data class ShoppingItemEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0L,
-    val title: String,
-    val description: String = "",
-    val priority: String = Priority.LOW.name,
-    val dueDate: Long? = null,
+    val listId: Long,
+    val name: String,
+    val quantity: String = "",
     val categoryId: Long? = null,
-    val isCompleted: Boolean = false,
+    val price: Double? = null,
+    val isChecked: Boolean = false,
     val createdAt: Long = System.currentTimeMillis()
 )
 
-fun TaskEntity.toDomain(
+fun ShoppingItemEntity.toDomain(
     categoryName: String? = null,
     categoryColor: String? = null
-) = Task(
+) = ShoppingItem(
     id = id,
-    title = title,
-    description = description,
-    priority = Priority.fromName(priority),
-    dueDate = dueDate,
+    listId = listId,
+    name = name,
+    quantity = quantity,
     categoryId = categoryId,
     categoryName = categoryName,
     categoryColor = categoryColor,
-    isCompleted = isCompleted,
+    price = price,
+    isChecked = isChecked,
     createdAt = createdAt
 )
 
-fun Task.toEntity() = TaskEntity(
+fun ShoppingItem.toEntity() = ShoppingItemEntity(
     id = id,
-    title = title,
-    description = description,
-    priority = priority.name,
-    dueDate = dueDate,
+    listId = listId,
+    name = name,
+    quantity = quantity,
     categoryId = categoryId,
-    isCompleted = isCompleted,
+    price = price,
+    isChecked = isChecked,
     createdAt = createdAt
 )

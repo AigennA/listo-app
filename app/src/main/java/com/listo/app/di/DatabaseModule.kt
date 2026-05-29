@@ -4,7 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.listo.app.data.database.LisToDatabase
 import com.listo.app.data.database.dao.CategoryDao
-import com.listo.app.data.database.dao.TaskDao
+import com.listo.app.data.database.dao.ShoppingItemDao
+import com.listo.app.data.database.dao.ShoppingListDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,7 +29,10 @@ object DatabaseModule {
             .build()
 
     @Provides
-    fun provideTaskDao(db: LisToDatabase): TaskDao = db.taskDao()
+    fun provideShoppingListDao(db: LisToDatabase): ShoppingListDao = db.shoppingListDao()
+
+    @Provides
+    fun provideShoppingItemDao(db: LisToDatabase): ShoppingItemDao = db.shoppingItemDao()
 
     @Provides
     fun provideCategoryDao(db: LisToDatabase): CategoryDao = db.categoryDao()

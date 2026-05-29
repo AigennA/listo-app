@@ -39,20 +39,20 @@ private data class PageData(
 
 private val pages = listOf(
     PageData(
-        title = "Organize Your Life",
-        subtitle = "Create lists, set priorities and keep everything in one clean place.",
+        title = "Quick Shopping Lists",
+        subtitle = "Jot down what you need the moment it comes to mind, in one clean place.",
         primaryColor = LisGreen,
         secondaryColor = LisGreenLight
     ),
     PageData(
-        title = "Track Your Tasks",
-        subtitle = "Monitor your progress with beautiful charts and daily summaries.",
+        title = "Organize by Category",
+        subtitle = "Group items by aisle — produce, dairy, cleaning — and shop faster.",
         primaryColor = LisPurple,
         secondaryColor = LisPurpleLight
     ),
     PageData(
-        title = "Stay Productive",
-        subtitle = "Get reminders, set due dates and never miss an important task again.",
+        title = "Check Off & Save",
+        subtitle = "Tick items as you shop, track the total, then keep lists in your history.",
         primaryColor = Color(0xFF00B894),
         secondaryColor = Color(0xFFD5F5EE)
     )
