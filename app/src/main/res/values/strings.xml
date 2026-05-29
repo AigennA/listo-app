@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Listo</string>
+    <string name="app_tagline">Get things done.</string>
+    <string name="add_task">Add Task</string>
+    <string name="create_task">Create Task</string>
+    <string name="edit_task">Edit Task</string>
+    <string name="delete_task">Delete Task</string>
+    <string name="task_title">Task Title</string>
+    <string name="task_description">Description</string>
+    <string name="due_date">Due Date</string>
+    <string name="priority">Priority</string>
+    <string name="category">Category</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="settings">Settings</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="notifications">Notifications</string>
+    <string name="version">Version</string>
+    <string name="premium">Premium</string>
+    <string name="statistics">Statistics</string>
+    <string name="categories">Categories</string>
+    <string name="today">Today</string>
+    <string name="completed">Completed</string>
+    <string name="pending">Pending</string>
+</resources>
