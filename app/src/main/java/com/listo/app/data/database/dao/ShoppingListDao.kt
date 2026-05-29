@@ -46,6 +46,9 @@ interface ShoppingListDao {
     @Query("UPDATE shopping_lists SET name = :name WHERE id = :id")
     suspend fun rename(id: Long, name: String)
 
+    @Query("UPDATE shopping_lists SET budget = :budget WHERE id = :id")
+    suspend fun setBudget(id: Long, budget: Double?)
+
     @Query("UPDATE shopping_lists SET isArchived = :archived, archivedAt = :archivedAt WHERE id = :id")
     suspend fun setArchived(id: Long, archived: Boolean, archivedAt: Long?)
 

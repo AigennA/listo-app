@@ -11,7 +11,7 @@ import com.listo.app.data.database.entities.ShoppingListEntity
 
 @Database(
     entities = [ShoppingListEntity::class, ShoppingItemEntity::class, CategoryEntity::class],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 abstract class LisToDatabase : RoomDatabase() {

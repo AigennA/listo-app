@@ -6,6 +6,7 @@ data class ShoppingList(
     val createdAt: Long = System.currentTimeMillis(),
     val isArchived: Boolean = false,
     val archivedAt: Long? = null,
+    val budget: Double? = null,
     val itemCount: Int = 0,
     val checkedCount: Int = 0,
     val totalPrice: Double = 0.0
@@ -15,4 +16,7 @@ data class ShoppingList(
 
     val isComplete: Boolean
         get() = itemCount > 0 && checkedCount == itemCount
+
+    val isOverBudget: Boolean
+        get() = budget != null && totalPrice > budget
 }

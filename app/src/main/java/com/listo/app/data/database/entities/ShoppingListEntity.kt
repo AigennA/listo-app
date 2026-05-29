@@ -11,7 +11,8 @@ data class ShoppingListEntity(
     val name: String,
     val createdAt: Long = System.currentTimeMillis(),
     val isArchived: Boolean = false,
-    val archivedAt: Long? = null
+    val archivedAt: Long? = null,
+    val budget: Double? = null
 )
 
 /** Projection used by list queries to carry aggregate counts/total alongside the row. */
@@ -28,6 +29,7 @@ fun ShoppingListWithStats.toDomain() = ShoppingList(
     createdAt = list.createdAt,
     isArchived = list.isArchived,
     archivedAt = list.archivedAt,
+    budget = list.budget,
     itemCount = itemCount,
     checkedCount = checkedCount,
     totalPrice = totalPrice
@@ -38,7 +40,8 @@ fun ShoppingListEntity.toDomain() = ShoppingList(
     name = name,
     createdAt = createdAt,
     isArchived = isArchived,
-    archivedAt = archivedAt
+    archivedAt = archivedAt,
+    budget = budget
 )
 
 fun ShoppingList.toEntity() = ShoppingListEntity(
@@ -46,5 +49,6 @@ fun ShoppingList.toEntity() = ShoppingListEntity(
     name = name,
     createdAt = createdAt,
     isArchived = isArchived,
-    archivedAt = archivedAt
+    archivedAt = archivedAt,
+    budget = budget
 )

@@ -44,6 +44,12 @@
     <string name="cd_check">Markera</string>
     <string name="cd_uncheck">Avmarkera</string>
     <string name="cd_delete">Ta bort</string>
+    <string name="budget_title">Budget</string>
+    <string name="budget_set">Ange budget</string>
+    <string name="budget_hint">Budgetbelopp</string>
+    <string name="budget_over">Över med %1$s</string>
+    <string name="budget_remaining">%1$s kvar</string>
+    <string name="budget_remove">Ta bort</string>
 
     <!-- History -->
     <string name="history_title">Historik</string>

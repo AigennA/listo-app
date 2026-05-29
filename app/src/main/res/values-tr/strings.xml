@@ -44,6 +44,12 @@
     <string name="cd_check">İşaretle</string>
     <string name="cd_uncheck">İşareti kaldır</string>
     <string name="cd_delete">Sil</string>
+    <string name="budget_title">Bütçe</string>
+    <string name="budget_set">Bütçe belirle</string>
+    <string name="budget_hint">Bütçe tutarı</string>
+    <string name="budget_over">%1$s aşıldı</string>
+    <string name="budget_remaining">%1$s kaldı</string>
+    <string name="budget_remove">Kaldır</string>
 
     <!-- History -->
     <string name="history_title">Geçmiş</string>

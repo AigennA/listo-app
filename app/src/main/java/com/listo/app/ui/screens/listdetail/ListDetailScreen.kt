@@ -55,6 +55,7 @@ fun ListDetailScreen(
 
     var showRename by remember { mutableStateOf(false) }
     var showDeleteList by remember { mutableStateOf(false) }
+    var showBudget by remember { mutableStateOf(false) }
     var editItem by remember { mutableStateOf<ShoppingItem?>(null) }
 
     Scaffold(
@@ -64,6 +65,9 @@ fun ListDetailScreen(
                 navController = navController,
                 actions = {
                     if (list != null) {
+                        IconButton(onClick = { showBudget = true }) {
+                            Icon(Icons.Rounded.Savings, contentDescription = stringResource(R.string.budget_set))
+                        }
                         IconButton(onClick = { showRename = true }) {
                             Icon(Icons.Rounded.Edit, contentDescription = stringResource(R.string.detail_rename))
                         }
@@ -199,6 +203,14 @@ fun ListDetailScreen(
         )
     }
 
+    if (showBudget && list != null) {
+        BudgetDialog(
+            current = list.budget,
+            onConfirm = { budget -> viewModel.setBudget(budget); showBudget = false },
+            onDismiss = { showBudget = false }
+        )
+    }
+
     editItem?.let { item ->
         EditItemDialog(
             item = item,
@@ -211,6 +223,8 @@ fun ListDetailScreen(
 
 @Composable
 private fun SummaryHeader(state: ListDetailUiState) {
+    val budget = state.list?.budget
+    val overBudget = budget != null && state.total > budget
     Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -227,10 +241,35 @@ private fun SummaryHeader(state: ListDetailUiState) {
                     text = stringResource(R.string.detail_total, formatPrice(state.total)),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
+                    color = if (overBudget) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
                 )
             }
         }
+
+        if (budget != null) {
+            Spacer(Modifier.height(2.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "${stringResource(R.string.budget_title)}: ${formatPrice(budget)}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = if (overBudget) {
+                        stringResource(R.string.budget_over, formatPrice(state.total - budget))
+                    } else {
+                        stringResource(R.string.budget_remaining, formatPrice(budget - state.total))
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.SemiBold,
+                    color = if (overBudget) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+                )
+            }
+        }
+
         Spacer(Modifier.height(8.dp))
         LinearProgressIndicator(
             progress = { state.progress },
@@ -539,6 +578,47 @@ private fun RenameDialog(initial: String, onConfirm: (String) -> Unit, onDismiss
             Button(
                 onClick = { onConfirm(name) },
                 enabled = name.isNotBlank(),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+            ) { Text(stringResource(R.string.action_save)) }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } }
+    )
+}
+
+@Composable
+private fun BudgetDialog(
+    current: Double?,
+    onConfirm: (Double?) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var text by remember {
+        mutableStateOf(current?.let { if (it % 1.0 == 0.0) it.toInt().toString() else it.toString() } ?: "")
+    }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = { Icon(Icons.Rounded.Savings, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
+        title = { Text(stringResource(R.string.budget_title), fontWeight = FontWeight.Bold) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                OutlinedTextField(
+                    value = text,
+                    onValueChange = { text = it.filter { c -> c.isDigit() || c == '.' || c == ',' }.replace(',', '.') },
+                    placeholder = { Text(stringResource(R.string.budget_hint)) },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier.fillMaxWidth()
+                )
+                if (current != null) {
+                    TextButton(onClick = { onConfirm(null) }) {
+                        Text(stringResource(R.string.budget_remove), color = MaterialTheme.colorScheme.error)
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = { onConfirm(text.toDoubleOrNull()) },
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
             ) { Text(stringResource(R.string.action_save)) }
         },

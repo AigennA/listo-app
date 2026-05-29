@@ -44,6 +44,12 @@
     <string name="cd_check">Check</string>
     <string name="cd_uncheck">Uncheck</string>
     <string name="cd_delete">Delete</string>
+    <string name="budget_title">Budget</string>
+    <string name="budget_set">Set budget</string>
+    <string name="budget_hint">Budget amount</string>
+    <string name="budget_over">Over by %1$s</string>
+    <string name="budget_remaining">%1$s left</string>
+    <string name="budget_remove">Remove</string>
 
     <!-- History -->
     <string name="history_title">History</string>

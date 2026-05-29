@@ -96,6 +96,10 @@ class ListDetailViewModel @Inject constructor(
         viewModelScope.launch { updateListUseCase.rename(listId, name) }
     }
 
+    fun setBudget(budget: Double?) {
+        viewModelScope.launch { updateListUseCase.setBudget(listId, budget) }
+    }
+
     fun archiveList(onDone: () -> Unit) {
         viewModelScope.launch {
             updateListUseCase.archive(listId)

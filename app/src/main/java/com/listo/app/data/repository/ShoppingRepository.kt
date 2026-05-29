@@ -36,6 +36,8 @@ class ShoppingRepository @Inject constructor(
 
     suspend fun renameList(id: Long, name: String) = listDao.rename(id, name)
 
+    suspend fun setBudget(id: Long, budget: Double?) = listDao.setBudget(id, budget)
+
     suspend fun archiveList(id: Long) =
         listDao.setArchived(id, archived = true, archivedAt = System.currentTimeMillis())
 
