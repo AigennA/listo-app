@@ -64,6 +64,7 @@
     <string name="lang_system">System default</string>
     <string name="lang_en">English</string>
     <string name="lang_tr">Türkçe</string>
+    <string name="lang_sv">Svenska</string>
     <string name="settings_notifications">Notifications</string>
     <string name="settings_push">Push Notifications</string>
     <string name="settings_push_sub">Reminders for your lists</string>

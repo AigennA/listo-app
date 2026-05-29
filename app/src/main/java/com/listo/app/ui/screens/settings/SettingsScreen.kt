@@ -147,6 +147,7 @@ fun SettingsScreen(
 private fun languageLabel(code: String): String = when (code) {
     "en" -> stringResource(R.string.lang_en)
     "tr" -> stringResource(R.string.lang_tr)
+    "sv" -> stringResource(R.string.lang_sv)
     else -> stringResource(R.string.lang_system)
 }
 
@@ -159,7 +160,8 @@ private fun LanguageDialog(
     val options = listOf(
         LocaleHelper.SYSTEM to stringResource(R.string.lang_system),
         "en" to stringResource(R.string.lang_en),
-        "tr" to stringResource(R.string.lang_tr)
+        "tr" to stringResource(R.string.lang_tr),
+        "sv" to stringResource(R.string.lang_sv)
     )
     AlertDialog(
         onDismissRequest = onDismiss,

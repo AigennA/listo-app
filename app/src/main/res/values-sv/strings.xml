@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Listo</string>
+    <string name="app_tagline">Din shopping, organiserad.</string>
+
+    <!-- Common actions -->
+    <string name="action_save">Spara</string>
+    <string name="action_cancel">Avbryt</string>
+    <string name="action_create">Skapa</string>
+    <string name="action_delete">Ta bort</string>
+
+    <!-- Lists (home) -->
+    <string name="lists_title">Mina listor</string>
+    <string name="lists_new">Ny lista</string>
+    <string name="lists_empty_title">Inga inköpslistor än</string>
+    <string name="lists_empty_subtitle">Tryck på Ny lista för att börja en snabb inköpslista</string>
+    <string name="lists_items_count">%1$d / %2$d varor</string>
+    <string name="lists_new_dialog_title">Ny inköpslista</string>
+    <string name="lists_new_hint">t.ex. Veckohandling</string>
+    <string name="cd_history">Historik</string>
+    <string name="cd_categories">Kategorier</string>
+    <string name="cd_settings">Inställningar</string>
+
+    <!-- List detail -->
+    <string name="detail_default_title">Lista</string>
+    <string name="detail_not_found">Listan hittades inte</string>
+    <string name="detail_rename">Byt namn på lista</string>
+    <string name="detail_delete">Ta bort lista</string>
+    <string name="detail_delete_title">Ta bort lista?</string>
+    <string name="detail_delete_msg">\"%1$s\" och alla dess varor tas bort.</string>
+    <string name="detail_empty_title">Inga varor än</string>
+    <string name="detail_empty_subtitle">Skriv nedan för att lägga till det du behöver</string>
+    <string name="detail_done_count">%1$d / %2$d klara</string>
+    <string name="detail_total">Totalt: %1$s</string>
+    <string name="detail_finish">Slutför och spara i historik</string>
+    <string name="add_item_hint">Lägg till vara…</string>
+    <string name="qty_hint">Antal (2 kg)</string>
+    <string name="qty_label">Antal</string>
+    <string name="price_label">Pris</string>
+    <string name="category_none">Ingen</string>
+    <string name="cd_details">Detaljer</string>
+    <string name="edit_item_title">Redigera vara</string>
+    <string name="name_label">Namn</string>
+    <string name="cd_check">Markera</string>
+    <string name="cd_uncheck">Avmarkera</string>
+    <string name="cd_delete">Ta bort</string>
+
+    <!-- History -->
+    <string name="history_title">Historik</string>
+    <string name="history_empty_title">Inga tidigare listor</string>
+    <string name="history_empty_subtitle">Slutförda inköpslistor visas här</string>
+    <string name="history_delete_title">Ta bort från historik?</string>
+    <string name="history_delete_msg">\"%1$s\" tas bort permanent.</string>
+    <string name="items_word">varor</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Inställningar</string>
+    <string name="settings_appearance">Utseende</string>
+    <string name="settings_theme">Tema</string>
+    <string name="settings_theme_sub">Följ systemet, eller välj ljust / mörkt</string>
+    <string name="settings_accent">Accentfärg</string>
+    <string name="settings_language">Språk</string>
+    <string name="settings_language_sub">Välj appspråk</string>
+    <string name="lang_system">Systemstandard</string>
+    <string name="lang_en">English</string>
+    <string name="lang_tr">Türkçe</string>
+    <string name="lang_sv">Svenska</string>
+    <string name="settings_notifications">Aviseringar</string>
+    <string name="settings_push">Push-aviseringar</string>
+    <string name="settings_push_sub">Påminnelser för dina listor</string>
+    <string name="settings_daily">Daglig påminnelse</string>
+    <string name="settings_daily_sub">En daglig knuff att kolla dina listor</string>
+    <string name="settings_about">Om</string>
+    <string name="settings_version">Appversion</string>
+    <string name="settings_privacy">Integritetspolicy</string>
+    <string name="settings_privacy_sub">Visa vår integritetspolicy</string>
+    <string name="theme_system">System</string>
+    <string name="theme_light">Ljust</string>
+    <string name="theme_dark">Mörkt</string>
+
+    <!-- Categories -->
+    <string name="categories_title">Kategorier</string>
+    <string name="categories_empty_title">Inga kategorier än</string>
+    <string name="categories_empty_subtitle">Skapa kategorier som Frukt &amp; grönt, Mejeri eller Städ</string>
+    <string name="category_new_title">Ny kategori</string>
+    <string name="category_name_label">Kategorinamn</string>
+    <string name="category_pick_color">Välj en färg</string>
+    <string name="cd_add_category">Lägg till kategori</string>
+
+    <!-- Onboarding -->
+    <string name="onb1_title">Snabba inköpslistor</string>
+    <string name="onb1_sub">Skriv ner det du behöver direkt när du kommer på det, på ett städat ställe.</string>
+    <string name="onb2_title">Organisera per kategori</string>
+    <string name="onb2_sub">Gruppera varor per avdelning — frukt, mejeri, städ — och handla snabbare.</string>
+    <string name="onb3_title">Bocka av &amp; spara</string>
+    <string name="onb3_sub">Bocka av varor medan du handlar, följ totalen och spara listor i historiken.</string>
+    <string name="onb_skip">Hoppa över</string>
+    <string name="onb_next">Nästa</string>
+    <string name="onb_start">Kom igång</string>
+</resources>

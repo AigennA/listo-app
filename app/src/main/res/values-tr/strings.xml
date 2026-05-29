@@ -64,6 +64,7 @@
     <string name="lang_system">Sistem varsayılanı</string>
     <string name="lang_en">English</string>
     <string name="lang_tr">Türkçe</string>
+    <string name="lang_sv">Svenska</string>
     <string name="settings_notifications">Bildirimler</string>
     <string name="settings_push">Anlık Bildirimler</string>
     <string name="settings_push_sub">Listelerin için hatırlatmalar</string>
