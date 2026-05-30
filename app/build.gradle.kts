@@ -104,4 +104,12 @@ dependencies {
 
     // Ads (AdMob)
     implementation(libs.play.services.ads)
+
+    // Unit tests
+    testImplementation(libs.junit)
+
+    // Instrumented / behaviour tests (data layer; no Espresso/Compose UI —
+    // the installed emulator images are an API preview Espresso can't drive)
+    androidTestImplementation(libs.androidx.test.junit)
+    androidTestImplementation(libs.androidx.test.runner)
 }

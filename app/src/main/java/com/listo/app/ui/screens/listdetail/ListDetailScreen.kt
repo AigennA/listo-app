@@ -27,7 +27,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.listo.app.R
@@ -40,6 +39,7 @@ import com.listo.app.data.models.ShoppingItem
 import com.listo.app.ui.components.LisToTopBar
 import com.listo.app.ui.viewmodel.ListDetailUiState
 import com.listo.app.ui.viewmodel.ListDetailViewModel
+import com.listo.app.utils.AppDefaults
 import com.listo.app.utils.formatPrice
 import com.listo.app.utils.iconForItem
 import com.listo.app.utils.toComposeColor
@@ -410,7 +410,7 @@ private fun AddItemBar(
 ) {
     var name by remember { mutableStateOf("") }
     var quantity by remember { mutableStateOf("") }
-    var priceText by remember { mutableStateOf("") }
+    var price by remember { mutableStateOf(0.0) }
     var categoryId by remember { mutableStateOf<Long?>(null) }
     var expanded by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
@@ -421,8 +421,8 @@ private fun AddItemBar(
     fun submit() {
         if (name.isBlank()) return
         val resolvedCategory = categoryId ?: categoryIdFor(GroceryCatalog.categoryFor(name))
-        onAdd(name, quantity, resolvedCategory, priceText.toDoubleOrNull())
-        name = ""; quantity = ""; priceText = ""; categoryId = null
+        onAdd(name, quantity, resolvedCategory, if (price > 0.0) price else null)
+        name = ""; quantity = ""; price = 0.0; categoryId = null
         // keep focus so the user can keep adding items quickly
         focusRequester.requestFocus()
     }
@@ -466,25 +466,16 @@ private fun AddItemBar(
 
             AnimatedVisibility(visible = expanded) {
                 Column {
-                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        OutlinedTextField(
-                            value = quantity,
-                            onValueChange = { quantity = it },
-                            placeholder = { Text(stringResource(R.string.qty_hint)) },
-                            singleLine = true,
-                            modifier = Modifier.weight(1f),
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                        OutlinedTextField(
-                            value = priceText,
-                            onValueChange = { priceText = it.filter { c -> c.isDigit() || c == '.' || c == ',' }.replace(',', '.') },
-                            placeholder = { Text(stringResource(R.string.price_label)) },
-                            singleLine = true,
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                            modifier = Modifier.weight(1f),
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                    }
+                    OutlinedTextField(
+                        value = quantity,
+                        onValueChange = { quantity = it },
+                        placeholder = { Text(stringResource(R.string.qty_hint)) },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    PriceStepper(value = price, onChange = { price = it })
                     if (categories.isNotEmpty()) {
                         Spacer(Modifier.height(8.dp))
                         Row(
@@ -586,29 +577,74 @@ private fun RenameDialog(initial: String, onConfirm: (String) -> Unit, onDismiss
 }
 
 @Composable
+private fun PriceStepper(
+    value: Double,
+    onChange: (Double) -> Unit,
+    step: Double = AppDefaults.PRICE_STEP
+) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            stringResource(R.string.price_label),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Spacer(Modifier.weight(1f))
+        FilledTonalIconButton(
+            onClick = { onChange((value - step).coerceAtLeast(0.0)) },
+            modifier = Modifier.size(36.dp)
+        ) { Icon(Icons.Rounded.Remove, contentDescription = "−", modifier = Modifier.size(18.dp)) }
+        Text(
+            text = if (value > 0.0) formatPrice(value) else "—",
+            modifier = Modifier.widthIn(min = 64.dp),
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+        FilledTonalIconButton(
+            onClick = { onChange(value + step) },
+            modifier = Modifier.size(36.dp)
+        ) { Icon(Icons.Rounded.Add, contentDescription = "+", modifier = Modifier.size(18.dp)) }
+    }
+}
+
+@Composable
 private fun BudgetDialog(
     current: Double?,
     onConfirm: (Double?) -> Unit,
     onDismiss: () -> Unit
 ) {
-    var text by remember {
-        mutableStateOf(current?.let { if (it % 1.0 == 0.0) it.toInt().toString() else it.toString() } ?: "")
-    }
+    val maxBudget = AppDefaults.BUDGET_MAX
+    val step = AppDefaults.BUDGET_STEP
+    var amount by remember { mutableStateOf(current ?: 0.0) }
     AlertDialog(
         onDismissRequest = onDismiss,
         icon = { Icon(Icons.Rounded.Savings, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
         title = { Text(stringResource(R.string.budget_title), fontWeight = FontWeight.Bold) },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                OutlinedTextField(
-                    value = text,
-                    onValueChange = { text = it.filter { c -> c.isDigit() || c == '.' || c == ',' }.replace(',', '.') },
-                    placeholder = { Text(stringResource(R.string.budget_hint)) },
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                    shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier.fillMaxWidth()
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    text = if (amount > 0.0) formatPrice(amount) else "—",
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
                 )
+                Spacer(Modifier.height(8.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    FilledTonalIconButton(onClick = { amount = (amount - step).coerceAtLeast(0.0) }) {
+                        Icon(Icons.Rounded.Remove, contentDescription = "−")
+                    }
+                    Slider(
+                        value = amount.toFloat().coerceIn(0f, maxBudget.toFloat()),
+                        onValueChange = { amount = it.toDouble() },
+                        valueRange = 0f..maxBudget.toFloat(),
+                        steps = (maxBudget / step).toInt() - 1,
+                        modifier = Modifier.weight(1f).padding(horizontal = 8.dp)
+                    )
+                    FilledTonalIconButton(onClick = { amount = (amount + step).coerceAtMost(maxBudget) }) {
+                        Icon(Icons.Rounded.Add, contentDescription = "+")
+                    }
+                }
                 if (current != null) {
                     TextButton(onClick = { onConfirm(null) }) {
                         Text(stringResource(R.string.budget_remove), color = MaterialTheme.colorScheme.error)
@@ -618,7 +654,7 @@ private fun BudgetDialog(
         },
         confirmButton = {
             Button(
-                onClick = { onConfirm(text.toDoubleOrNull()) },
+                onClick = { onConfirm(if (amount > 0.0) amount else null) },
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
             ) { Text(stringResource(R.string.action_save)) }
         },
@@ -635,7 +671,7 @@ private fun EditItemDialog(
 ) {
     var name by remember { mutableStateOf(item.name) }
     var quantity by remember { mutableStateOf(item.quantity) }
-    var priceText by remember { mutableStateOf(item.price?.let { if (it % 1.0 == 0.0) it.toInt().toString() else it.toString() } ?: "") }
+    var price by remember { mutableStateOf(item.price ?: 0.0) }
     var categoryId by remember { mutableStateOf(item.categoryId) }
 
     AlertDialog(
@@ -648,20 +684,12 @@ private fun EditItemDialog(
                     label = { Text(stringResource(R.string.name_label)) }, singleLine = true,
                     shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth()
                 )
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    OutlinedTextField(
-                        value = quantity, onValueChange = { quantity = it },
-                        label = { Text(stringResource(R.string.qty_label)) }, singleLine = true,
-                        shape = RoundedCornerShape(12.dp), modifier = Modifier.weight(1f)
-                    )
-                    OutlinedTextField(
-                        value = priceText,
-                        onValueChange = { priceText = it.filter { c -> c.isDigit() || c == '.' || c == ',' }.replace(',', '.') },
-                        label = { Text(stringResource(R.string.price_label)) }, singleLine = true,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                        shape = RoundedCornerShape(12.dp), modifier = Modifier.weight(1f)
-                    )
-                }
+                OutlinedTextField(
+                    value = quantity, onValueChange = { quantity = it },
+                    label = { Text(stringResource(R.string.qty_label)) }, singleLine = true,
+                    shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth()
+                )
+                PriceStepper(value = price, onChange = { price = it })
                 if (categories.isNotEmpty()) {
                     Row(
                         modifier = Modifier.horizontalScroll(rememberScrollState()),
@@ -682,7 +710,7 @@ private fun EditItemDialog(
                         item.copy(
                             name = name.trim(),
                             quantity = quantity.trim(),
-                            price = priceText.toDoubleOrNull(),
+                            price = if (price > 0.0) price else null,
                             categoryId = categoryId
                         )
                     )
