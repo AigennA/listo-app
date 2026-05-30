@@ -7,7 +7,10 @@ object DateUtils {
 
     private val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
     private val timeFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
+    private val timeOnlyFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
     private val shortDateFormat = SimpleDateFormat("MMM dd", Locale.getDefault())
+
+    fun formatTime(millis: Long): String = timeOnlyFormat.format(Date(millis))
 
     fun todayRange(): Pair<Long, Long> {
         val cal = Calendar.getInstance()
