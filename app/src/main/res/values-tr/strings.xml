@@ -20,6 +20,15 @@
     <string name="cd_history">Geçmiş</string>
     <string name="cd_categories">Kategoriler</string>
     <string name="cd_settings">Ayarlar</string>
+    <string name="cd_calendar">Takvim</string>
+
+    <!-- Calendar -->
+    <string name="calendar_title">Takvim</string>
+    <string name="calendar_no_lists">Bu gün için henüz liste yok</string>
+    <string name="calendar_create_for_day">Bu gün için liste oluştur</string>
+    <string name="reminder_add">Hatırlat</string>
+    <string name="reminder_clear">Hatırlatma yok</string>
+    <string name="list_reminder_text">Alışverişi unutma: %1$s</string>
 
     <!-- List detail -->
     <string name="detail_default_title">Liste</string>

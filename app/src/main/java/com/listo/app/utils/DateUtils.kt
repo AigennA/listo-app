@@ -32,6 +32,17 @@ object DateUtils {
         return start to cal.timeInMillis
     }
 
+    fun startOfDay(millis: Long): Long {
+        val cal = Calendar.getInstance().apply {
+            timeInMillis = millis
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        return cal.timeInMillis
+    }
+
     fun formatDate(millis: Long): String = dateFormat.format(Date(millis))
 
     fun formatShortDate(millis: Long): String = shortDateFormat.format(Date(millis))

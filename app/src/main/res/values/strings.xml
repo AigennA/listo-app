@@ -20,6 +20,15 @@
     <string name="cd_history">History</string>
     <string name="cd_categories">Categories</string>
     <string name="cd_settings">Settings</string>
+    <string name="cd_calendar">Calendar</string>
+
+    <!-- Calendar -->
+    <string name="calendar_title">Calendar</string>
+    <string name="calendar_no_lists">No lists for this day yet</string>
+    <string name="calendar_create_for_day">Create a list for this day</string>
+    <string name="reminder_add">Remind me</string>
+    <string name="reminder_clear">No reminder</string>
+    <string name="list_reminder_text">Don\'t forget to shop: %1$s</string>
 
     <!-- List detail -->
     <string name="detail_default_title">List</string>

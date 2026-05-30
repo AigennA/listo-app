@@ -20,6 +20,15 @@
     <string name="cd_history">Historik</string>
     <string name="cd_categories">Kategorier</string>
     <string name="cd_settings">Inställningar</string>
+    <string name="cd_calendar">Kalender</string>
+
+    <!-- Calendar -->
+    <string name="calendar_title">Kalender</string>
+    <string name="calendar_no_lists">Inga listor för den här dagen än</string>
+    <string name="calendar_create_for_day">Skapa en lista för den här dagen</string>
+    <string name="reminder_add">Påminn mig</string>
+    <string name="reminder_clear">Ingen påminnelse</string>
+    <string name="list_reminder_text">Glöm inte att handla: %1$s</string>
 
     <!-- List detail -->
     <string name="detail_default_title">Lista</string>

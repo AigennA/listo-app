@@ -37,6 +37,15 @@ interface ShoppingListDao {
     @Query("SELECT * FROM shopping_lists WHERE id = :id")
     fun observeListById(id: Long): Flow<ShoppingListEntity?>
 
+    @Query("SELECT * FROM shopping_lists WHERE id = :id")
+    suspend fun getById(id: Long): ShoppingListEntity?
+
+    @Query("UPDATE shopping_lists SET scheduledDate = :scheduledDate, reminderAt = :reminderAt WHERE id = :id")
+    suspend fun setSchedule(id: Long, scheduledDate: Long?, reminderAt: Long?)
+
+    @Query("SELECT * FROM shopping_lists WHERE isArchived = 0 AND reminderAt IS NOT NULL AND reminderAt > :now")
+    suspend fun getListsWithFutureReminders(now: Long): List<ShoppingListEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(list: ShoppingListEntity): Long
 

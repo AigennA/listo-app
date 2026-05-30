@@ -31,12 +31,25 @@ class ShoppingRepository @Inject constructor(
     fun observeListById(id: Long): Flow<ShoppingList?> =
         listDao.observeListById(id).map { entity -> entity?.toDomain() }
 
-    suspend fun createList(name: String): Long =
-        listDao.insert(com.listo.app.data.database.entities.ShoppingListEntity(name = name))
+    suspend fun getListById(id: Long): ShoppingList? = listDao.getById(id)?.toDomain()
+
+    suspend fun createList(name: String, scheduledDate: Long? = null): Long =
+        listDao.insert(
+            com.listo.app.data.database.entities.ShoppingListEntity(
+                name = name,
+                scheduledDate = scheduledDate
+            )
+        )
 
     suspend fun renameList(id: Long, name: String) = listDao.rename(id, name)
 
     suspend fun setBudget(id: Long, budget: Double?) = listDao.setBudget(id, budget)
+
+    suspend fun setSchedule(id: Long, scheduledDate: Long?, reminderAt: Long?) =
+        listDao.setSchedule(id, scheduledDate, reminderAt)
+
+    suspend fun getListsWithFutureReminders(now: Long): List<ShoppingList> =
+        listDao.getListsWithFutureReminders(now).map { it.toDomain() }
 
     suspend fun archiveList(id: Long) =
         listDao.setArchived(id, archived = true, archivedAt = System.currentTimeMillis())

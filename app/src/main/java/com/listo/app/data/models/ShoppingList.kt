@@ -7,6 +7,8 @@ data class ShoppingList(
     val isArchived: Boolean = false,
     val archivedAt: Long? = null,
     val budget: Double? = null,
+    val scheduledDate: Long? = null,
+    val reminderAt: Long? = null,
     val itemCount: Int = 0,
     val checkedCount: Int = 0,
     val totalPrice: Double = 0.0
