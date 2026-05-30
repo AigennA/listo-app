@@ -35,6 +35,10 @@
     <string name="detail_not_found">List not found</string>
     <string name="detail_rename">Rename list</string>
     <string name="detail_delete">Delete list</string>
+    <string name="detail_schedule">Date &amp; reminder</string>
+    <string name="cd_share">Share</string>
+    <string name="schedule_pick_date">Pick a date</string>
+    <string name="schedule_remove">Remove date</string>
     <string name="detail_delete_title">Delete list?</string>
     <string name="detail_delete_msg">\"%1$s\" and all its items will be removed.</string>
     <string name="detail_empty_title">No items yet</string>

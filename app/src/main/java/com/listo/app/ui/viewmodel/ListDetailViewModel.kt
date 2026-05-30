@@ -100,6 +100,10 @@ class ListDetailViewModel @Inject constructor(
         viewModelScope.launch { updateListUseCase.setBudget(listId, budget) }
     }
 
+    fun setSchedule(scheduledDate: Long?, reminderAt: Long?) {
+        viewModelScope.launch { updateListUseCase.setSchedule(listId, scheduledDate, reminderAt) }
+    }
+
     fun archiveList(onDone: () -> Unit) {
         viewModelScope.launch {
             updateListUseCase.archive(listId)

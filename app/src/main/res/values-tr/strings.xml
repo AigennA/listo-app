@@ -35,6 +35,10 @@
     <string name="detail_not_found">Liste bulunamadı</string>
     <string name="detail_rename">Listeyi yeniden adlandır</string>
     <string name="detail_delete">Listeyi sil</string>
+    <string name="detail_schedule">Tarih ve hatırlatma</string>
+    <string name="cd_share">Paylaş</string>
+    <string name="schedule_pick_date">Tarih seç</string>
+    <string name="schedule_remove">Tarihi kaldır</string>
     <string name="detail_delete_title">Liste silinsin mi?</string>
     <string name="detail_delete_msg">\"%1$s\" ve içindeki tüm ürünler silinecek.</string>
     <string name="detail_empty_title">Henüz ürün yok</string>

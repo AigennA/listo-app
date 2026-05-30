@@ -1,5 +1,14 @@
 package com.listo.app.ui.screens.listdetail
 
+import android.Manifest
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -23,26 +32,32 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import com.listo.app.R
-import com.listo.app.utils.GroceryCatalog
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.listo.app.R
 import com.listo.app.data.models.Category
 import com.listo.app.data.models.ShoppingItem
+import com.listo.app.data.models.ShoppingList
 import com.listo.app.ui.components.LisToTopBar
 import com.listo.app.ui.viewmodel.ListDetailUiState
 import com.listo.app.ui.viewmodel.ListDetailViewModel
 import com.listo.app.utils.AppDefaults
 import com.listo.app.utils.DateUtils
+import com.listo.app.utils.GroceryCatalog
+import com.listo.app.utils.ListReminderScheduler
 import com.listo.app.utils.formatPrice
 import com.listo.app.utils.iconForItem
 import com.listo.app.utils.toComposeColor
+import java.util.Calendar
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,11 +67,18 @@ fun ListDetailScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val list = uiState.list
+    val context = LocalContext.current
 
     var showRename by remember { mutableStateOf(false) }
     var showDeleteList by remember { mutableStateOf(false) }
     var showBudget by remember { mutableStateOf(false) }
+    var showSchedule by remember { mutableStateOf(false) }
+    var showMenu by remember { mutableStateOf(false) }
     var editItem by remember { mutableStateOf<ShoppingItem?>(null) }
+
+    val notifPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { }
 
     Scaffold(
         topBar = {
@@ -65,14 +87,35 @@ fun ListDetailScreen(
                 navController = navController,
                 actions = {
                     if (list != null) {
-                        IconButton(onClick = { showBudget = true }) {
-                            Icon(Icons.Rounded.AccountBalanceWallet, contentDescription = stringResource(R.string.budget_set))
+                        IconButton(onClick = { shareList(context, list, uiState.items) }) {
+                            Icon(Icons.Rounded.Share, contentDescription = stringResource(R.string.cd_share))
                         }
-                        IconButton(onClick = { showRename = true }) {
-                            Icon(Icons.Rounded.Edit, contentDescription = stringResource(R.string.detail_rename))
-                        }
-                        IconButton(onClick = { showDeleteList = true }) {
-                            Icon(Icons.Rounded.DeleteOutline, contentDescription = stringResource(R.string.detail_delete))
+                        Box {
+                            IconButton(onClick = { showMenu = true }) {
+                                Icon(Icons.Rounded.MoreVert, contentDescription = null)
+                            }
+                            DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(R.string.detail_schedule)) },
+                                    leadingIcon = { Icon(Icons.Rounded.CalendarMonth, contentDescription = null) },
+                                    onClick = { showMenu = false; showSchedule = true }
+                                )
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(R.string.detail_rename)) },
+                                    leadingIcon = { Icon(Icons.Rounded.Edit, contentDescription = null) },
+                                    onClick = { showMenu = false; showRename = true }
+                                )
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(R.string.budget_title)) },
+                                    leadingIcon = { Icon(Icons.Rounded.AccountBalanceWallet, contentDescription = null) },
+                                    onClick = { showMenu = false; showBudget = true }
+                                )
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(R.string.detail_delete)) },
+                                    leadingIcon = { Icon(Icons.Rounded.DeleteOutline, contentDescription = null) },
+                                    onClick = { showMenu = false; showDeleteList = true }
+                                )
+                            }
                         }
                     }
                 }
@@ -184,6 +227,29 @@ fun ListDetailScreen(
             initial = list.name,
             onConfirm = { viewModel.renameList(it); showRename = false },
             onDismiss = { showRename = false }
+        )
+    }
+
+    if (showSchedule && list != null) {
+        ScheduleDialog(
+            currentDate = list.scheduledDate,
+            currentReminder = list.reminderAt,
+            onConfirm = { scheduledDate, reminderAt ->
+                viewModel.setSchedule(scheduledDate, reminderAt)
+                if (reminderAt != null) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                        ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) !=
+                        PackageManager.PERMISSION_GRANTED
+                    ) {
+                        notifPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    }
+                    ListReminderScheduler.schedule(context, list.id, reminderAt)
+                } else {
+                    ListReminderScheduler.cancel(context, list.id)
+                }
+                showSchedule = false
+            },
+            onDismiss = { showSchedule = false }
         )
     }
 
@@ -752,5 +818,112 @@ private fun EditItemDialog(
             ) { Text(stringResource(R.string.action_save)) }
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } }
+    )
+}
+
+@Composable
+private fun ScheduleDialog(
+    currentDate: Long?,
+    currentReminder: Long?,
+    onConfirm: (scheduledDate: Long?, reminderAt: Long?) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val context = LocalContext.current
+    var date by remember { mutableStateOf(currentDate) }
+    var remind by remember { mutableStateOf(currentReminder != null) }
+    val initial = remember { Calendar.getInstance().apply { timeInMillis = currentReminder ?: System.currentTimeMillis() } }
+    var hour by remember { mutableStateOf(if (currentReminder != null) initial.get(Calendar.HOUR_OF_DAY) else 9) }
+    var minute by remember { mutableStateOf(if (currentReminder != null) initial.get(Calendar.MINUTE) else 0) }
+
+    fun openDatePicker() {
+        val c = Calendar.getInstance().apply { timeInMillis = date ?: System.currentTimeMillis() }
+        DatePickerDialog(
+            context,
+            { _, y, m, d ->
+                val picked = Calendar.getInstance().apply {
+                    set(y, m, d, 0, 0, 0); set(Calendar.MILLISECOND, 0)
+                }.timeInMillis
+                date = DateUtils.startOfDay(picked)
+            },
+            c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)
+        ).show()
+    }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = { Icon(Icons.Rounded.CalendarMonth, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
+        title = { Text(stringResource(R.string.detail_schedule), fontWeight = FontWeight.Bold) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                OutlinedButton(
+                    onClick = { openDatePicker() },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Icon(Icons.Rounded.CalendarMonth, contentDescription = null)
+                    Spacer(Modifier.width(8.dp))
+                    Text(date?.let { DateUtils.formatDate(it) } ?: stringResource(R.string.schedule_pick_date))
+                }
+                if (date != null) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Rounded.Notifications, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                        Spacer(Modifier.width(10.dp))
+                        Text(stringResource(R.string.reminder_add), modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
+                        Switch(checked = remind, onCheckedChange = { remind = it })
+                    }
+                    if (remind) {
+                        TextButton(onClick = {
+                            TimePickerDialog(context, { _, h, m -> hour = h; minute = m }, hour, minute, true).show()
+                        }) {
+                            Icon(Icons.Rounded.Schedule, contentDescription = null)
+                            Spacer(Modifier.width(8.dp))
+                            Text(String.format(Locale.getDefault(), "%02d:%02d", hour, minute))
+                        }
+                    }
+                    TextButton(onClick = { date = null; remind = false }) {
+                        Text(stringResource(R.string.schedule_remove), color = MaterialTheme.colorScheme.error)
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = {
+                    val d = date
+                    val reminderAt = if (d != null && remind) {
+                        Calendar.getInstance().apply {
+                            timeInMillis = d
+                            set(Calendar.HOUR_OF_DAY, hour); set(Calendar.MINUTE, minute)
+                            set(Calendar.SECOND, 0); set(Calendar.MILLISECOND, 0)
+                        }.timeInMillis
+                    } else null
+                    onConfirm(d, reminderAt)
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+            ) { Text(stringResource(R.string.action_save)) }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } }
+    )
+}
+
+/** Builds a plain-text version of the list and opens the Android share sheet. */
+private fun shareList(context: Context, list: ShoppingList, items: List<ShoppingItem>) {
+    val builder = StringBuilder()
+    builder.append(list.name).append("\n\n")
+    items.forEach { item ->
+        val box = if (item.isChecked) "[x]" else "[ ]"
+        val qty = if (item.quantity.isNotBlank()) " (${item.quantity})" else ""
+        builder.append(box).append(' ').append(item.name).append(qty).append('\n')
+    }
+    val total = items.sumOf { it.price ?: 0.0 }
+    if (total > 0.0) builder.append('\n').append(formatPrice(total))
+
+    val sendIntent = Intent(Intent.ACTION_SEND).apply {
+        type = "text/plain"
+        putExtra(Intent.EXTRA_SUBJECT, list.name)
+        putExtra(Intent.EXTRA_TEXT, builder.toString().trim())
+    }
+    context.startActivity(
+        Intent.createChooser(sendIntent, null).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     )
 }
