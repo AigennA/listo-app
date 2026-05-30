@@ -21,6 +21,8 @@ import javax.inject.Inject
 
 private const val DAILY_REMINDER_NOTIF_ID = 2001
 private const val DAILY_REMINDER_REQUEST = 7001
+private const val LIST_REMINDER_NOTIF_BASE = 3000
+private const val EXTRA_LIST_ID = "list_id"
 
 /** Schedules / cancels the once-a-day reminder alarm. */
 object DailyReminderScheduler {
@@ -83,11 +85,67 @@ class DailyReminderReceiver : BroadcastReceiver() {
     }
 }
 
-/** Re-arms the daily reminder after a reboot (alarms are cleared on boot). */
+/** Schedules / cancels a one-shot reminder for a specific shopping list. */
+object ListReminderScheduler {
+
+    private fun pendingIntent(context: Context, listId: Long): PendingIntent {
+        val intent = Intent(context, ListReminderReceiver::class.java).putExtra(EXTRA_LIST_ID, listId)
+        return PendingIntent.getBroadcast(
+            context,
+            listId.toInt(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+    }
+
+    fun schedule(context: Context, listId: Long, triggerAtMillis: Long) {
+        val alarmManager = context.getSystemService(AlarmManager::class.java) ?: return
+        val showIntent = PendingIntent.getActivity(
+            context, 0, Intent(context, MainActivity::class.java),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        // setAlarmClock is exact and exempt from the exact-alarm permission.
+        alarmManager.setAlarmClock(
+            AlarmManager.AlarmClockInfo(triggerAtMillis, showIntent),
+            pendingIntent(context, listId)
+        )
+    }
+
+    fun cancel(context: Context, listId: Long) {
+        val alarmManager = context.getSystemService(AlarmManager::class.java) ?: return
+        alarmManager.cancel(pendingIntent(context, listId))
+    }
+}
+
+/** Fires at a list's reminder time and notifies about that list. */
+@AndroidEntryPoint
+class ListReminderReceiver : BroadcastReceiver() {
+
+    @Inject lateinit var repository: ShoppingRepository
+
+    override fun onReceive(context: Context, intent: Intent) {
+        val listId = intent.getLongExtra(EXTRA_LIST_ID, -1L)
+        if (listId < 0L) return
+        val pending = goAsync()
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val list = repository.getListById(listId)
+                if (list != null && !list.isArchived) {
+                    showListReminder(context, listId, list.name)
+                }
+            } finally {
+                pending.finish()
+            }
+        }
+    }
+}
+
+/** Re-arms reminders after a reboot (alarms are cleared on boot). */
 @AndroidEntryPoint
 class BootReceiver : BroadcastReceiver() {
 
     @Inject lateinit var prefs: PreferencesManager
+    @Inject lateinit var repository: ShoppingRepository
 
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
@@ -100,6 +158,9 @@ class BootReceiver : BroadcastReceiver() {
                         prefs.dailyReminderHour.first(),
                         prefs.dailyReminderMinute.first()
                     )
+                }
+                repository.getListsWithFutureReminders(System.currentTimeMillis()).forEach { list ->
+                    list.reminderAt?.let { ListReminderScheduler.schedule(context, list.id, it) }
                 }
             } finally {
                 pending.finish()
@@ -137,4 +198,28 @@ private fun showDailyReminder(context: Context, pendingCount: Int) {
 
     // On Android 13+ this is a no-op unless POST_NOTIFICATIONS was granted.
     context.getSystemService(NotificationManager::class.java).notify(DAILY_REMINDER_NOTIF_ID, notification)
+}
+
+private fun showListReminder(context: Context, listId: Long, listName: String) {
+    val ctx = LocaleHelper.wrap(context)
+    val contentIntent = PendingIntent.getActivity(
+        context,
+        0,
+        Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        },
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
+
+    val notification = NotificationCompat.Builder(context, LisToApplication.CHANNEL_DAILY_REMINDER)
+        .setSmallIcon(R.drawable.ic_notification)
+        .setContentTitle(ctx.getString(R.string.app_name))
+        .setContentText(ctx.getString(R.string.list_reminder_text, listName))
+        .setPriority(NotificationCompat.PRIORITY_HIGH)
+        .setAutoCancel(true)
+        .setContentIntent(contentIntent)
+        .build()
+
+    context.getSystemService(NotificationManager::class.java)
+        .notify((LIST_REMINDER_NOTIF_BASE + listId).toInt(), notification)
 }

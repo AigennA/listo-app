@@ -26,6 +26,14 @@ object DatabaseModule {
         }
     }
 
+    /** v3 -> v4 added a scheduled date and a reminder timestamp per list. */
+    private val MIGRATION_3_4 = object : Migration(3, 4) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE shopping_lists ADD COLUMN scheduledDate INTEGER")
+            db.execSQL("ALTER TABLE shopping_lists ADD COLUMN reminderAt INTEGER")
+        }
+    }
+
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): LisToDatabase =
@@ -37,7 +45,7 @@ object DatabaseModule {
             // Real migrations keep data across schema changes. Destructive
             // fallback only applies to the pre-shopping (v1 task) schema, which
             // has no migration path and predates any real data.
-            .addMigrations(MIGRATION_2_3)
+            .addMigrations(MIGRATION_2_3, MIGRATION_3_4)
             .fallbackToDestructiveMigration()
             .build()
 

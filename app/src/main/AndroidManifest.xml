@@ -39,6 +39,10 @@
             android:exported="false" />
 
         <receiver
+            android:name=".utils.ListReminderReceiver"
+            android:exported="false" />
+
+        <receiver
             android:name=".utils.BootReceiver"
             android:exported="true">
             <intent-filter>

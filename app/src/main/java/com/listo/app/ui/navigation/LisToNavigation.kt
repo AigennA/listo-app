@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.listo.app.ui.screens.calendar.CalendarScreen
 import com.listo.app.ui.screens.categories.CategoriesScreen
 import com.listo.app.ui.screens.categoryitems.CategoryItemsScreen
 import com.listo.app.ui.screens.history.HistoryScreen
@@ -58,6 +59,10 @@ fun LisToNavigation() {
 
         composable(Screen.History.route) {
             HistoryScreen(navController = navController)
+        }
+
+        composable(Screen.Calendar.route) {
+            CalendarScreen(navController = navController)
         }
 
         composable(Screen.Categories.route) {

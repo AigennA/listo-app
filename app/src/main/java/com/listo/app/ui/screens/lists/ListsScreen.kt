@@ -143,6 +143,7 @@ private fun ListsHeader(navController: NavController) {
             )
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            HeaderIcon(Icons.Rounded.CalendarMonth, stringResource(R.string.cd_calendar), BrandColors.Coral) { navController.navigate(Screen.Calendar.route) }
             HeaderIcon(Icons.Rounded.History, stringResource(R.string.cd_history), BrandColors.Amber) { navController.navigate(Screen.History.route) }
             HeaderIcon(Icons.Rounded.Category, stringResource(R.string.cd_categories), LisPurple) { navController.navigate(Screen.Categories.route) }
             HeaderIcon(Icons.Rounded.Settings, stringResource(R.string.cd_settings), BrandColors.Sprout) { navController.navigate(Screen.Settings.route) }
