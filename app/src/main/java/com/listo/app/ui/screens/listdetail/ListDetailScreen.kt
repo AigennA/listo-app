@@ -39,6 +39,7 @@ import com.listo.app.ui.components.LisToTopBar
 import com.listo.app.ui.viewmodel.ListDetailUiState
 import com.listo.app.ui.viewmodel.ListDetailViewModel
 import com.listo.app.utils.AppDefaults
+import com.listo.app.utils.DateUtils
 import com.listo.app.utils.formatPrice
 import com.listo.app.utils.iconForItem
 import com.listo.app.utils.toComposeColor
@@ -224,7 +225,42 @@ fun ListDetailScreen(
 private fun SummaryHeader(state: ListDetailUiState) {
     val budget = state.list?.budget
     val overBudget = budget != null && state.total > budget
+    val scheduledDate = state.list?.scheduledDate
     Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)) {
+        if (scheduledDate != null) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                modifier = Modifier.padding(bottom = 8.dp)
+            ) {
+                Icon(
+                    Icons.Rounded.CalendarMonth,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(16.dp)
+                )
+                Text(
+                    text = DateUtils.formatDate(scheduledDate),
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                state.list?.reminderAt?.let { reminder ->
+                    Spacer(Modifier.width(2.dp))
+                    Icon(
+                        Icons.Rounded.Notifications,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Text(
+                        text = DateUtils.formatTime(reminder),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
+        }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,

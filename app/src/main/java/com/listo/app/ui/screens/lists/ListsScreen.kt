@@ -36,6 +36,7 @@ import com.listo.app.ui.navigation.Screen
 import com.listo.app.ui.theme.DisplayFontFamily
 import com.listo.app.ui.theme.LisPurple
 import com.listo.app.ui.viewmodel.ListsViewModel
+import com.listo.app.utils.DateUtils
 import com.listo.app.utils.formatPrice
 import java.text.SimpleDateFormat
 import java.util.*
@@ -221,6 +222,39 @@ private fun ShoppingListCard(
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
+                    if (list.scheduledDate != null) {
+                        Spacer(Modifier.height(4.dp))
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Icon(
+                                Icons.Rounded.CalendarMonth,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(14.dp)
+                            )
+                            Text(
+                                text = DateUtils.formatShortDate(list.scheduledDate),
+                                style = MaterialTheme.typography.labelMedium,
+                                fontWeight = FontWeight.Medium,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                            list.reminderAt?.let { reminder ->
+                                Icon(
+                                    Icons.Rounded.Notifications,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(14.dp)
+                                )
+                                Text(
+                                    text = DateUtils.formatTime(reminder),
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                        }
+                    }
                 }
                 if (list.totalPrice > 0.0) {
                     Text(
