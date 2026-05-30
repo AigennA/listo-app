@@ -26,7 +26,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.listo.app.R
@@ -66,7 +65,7 @@ fun ListDetailScreen(
                 actions = {
                     if (list != null) {
                         IconButton(onClick = { showBudget = true }) {
-                            Icon(Icons.Rounded.Savings, contentDescription = stringResource(R.string.budget_set))
+                            Icon(Icons.Rounded.AccountBalanceWallet, contentDescription = stringResource(R.string.budget_set))
                         }
                         IconButton(onClick = { showRename = true }) {
                             Icon(Icons.Rounded.Edit, contentDescription = stringResource(R.string.detail_rename))
@@ -509,10 +508,7 @@ private fun AddItemBar(
                         .weight(1f)
                         .focusRequester(focusRequester),
                     shape = RoundedCornerShape(24.dp),
-                    keyboardOptions = KeyboardOptions(
-                        capitalization = KeyboardCapitalization.Sentences,
-                        imeAction = ImeAction.Done
-                    ),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                     keyboardActions = KeyboardActions(onDone = { submit() }),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = MaterialTheme.colorScheme.primary
@@ -619,7 +615,7 @@ private fun BudgetDialog(
     var amount by remember { mutableStateOf(current ?: 0.0) }
     AlertDialog(
         onDismissRequest = onDismiss,
-        icon = { Icon(Icons.Rounded.Savings, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
+        icon = { Icon(Icons.Rounded.AccountBalanceWallet, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
         title = { Text(stringResource(R.string.budget_title), fontWeight = FontWeight.Bold) },
         text = {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
