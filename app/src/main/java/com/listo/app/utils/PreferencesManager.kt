@@ -54,10 +54,10 @@ class PreferencesManager @Inject constructor(private val context: Context) {
         .map { it[Keys.DAILY_REMINDER] ?: false }
 
     val dailyReminderHour: Flow<Int> = context.dataStore.data
-        .map { it[Keys.DAILY_REMINDER_HOUR] ?: 18 }
+        .map { it[Keys.DAILY_REMINDER_HOUR] ?: AppDefaults.DEFAULT_REMINDER_HOUR }
 
     val dailyReminderMinute: Flow<Int> = context.dataStore.data
-        .map { it[Keys.DAILY_REMINDER_MINUTE] ?: 0 }
+        .map { it[Keys.DAILY_REMINDER_MINUTE] ?: AppDefaults.DEFAULT_REMINDER_MINUTE }
 
     suspend fun setDailyReminderTime(hour: Int, minute: Int) {
         context.dataStore.edit {

@@ -104,4 +104,16 @@ dependencies {
 
     // Ads (AdMob)
     implementation(libs.play.services.ads)
+
+    // Unit tests
+    testImplementation(libs.junit)
+    testImplementation(libs.coroutines.test)
+
+    // Instrumented / behaviour tests
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.androidx.test.junit)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.compose.ui.test.junit4)
+    androidTestImplementation(libs.coroutines.test)
+    debugImplementation(libs.compose.ui.test.manifest)
 }
