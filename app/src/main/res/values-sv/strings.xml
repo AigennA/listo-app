@@ -32,7 +32,7 @@
     <string name="detail_empty_subtitle">Skriv nedan för att lägga till det du behöver</string>
     <string name="detail_done_count">%1$d / %2$d klara</string>
     <string name="detail_total">Totalt: %1$s</string>
-    <string name="detail_finish">Slutför och spara i historik</string>
+    <string name="detail_finish">Klar — flytta till historik</string>
     <string name="add_item_hint">Lägg till vara…</string>
     <string name="qty_hint">Antal (2 kg)</string>
     <string name="qty_label">Antal</string>

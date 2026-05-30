@@ -53,10 +53,9 @@ fun CategoryItemsScreen(
             Surface(tonalElevation = 3.dp, shadowElevation = 8.dp) {
                 Button(
                     onClick = {
-                        viewModel.createList(listName.ifBlank { category?.name ?: "List" }, selections.toMap()) { id ->
-                            navController.navigate(Screen.ListDetail.route(id)) {
-                                popUpTo(Screen.Home.route)
-                            }
+                        viewModel.createList(listName.ifBlank { category?.name ?: "List" }, selections.toMap()) {
+                            // Return to My Lists so the new (active) list is visible there.
+                            navController.popBackStack(Screen.Home.route, inclusive = false)
                         }
                     },
                     enabled = anyChosen,
