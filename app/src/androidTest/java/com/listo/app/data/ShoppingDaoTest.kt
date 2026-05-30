@@ -10,7 +10,7 @@ import com.listo.app.data.database.dao.ShoppingListDao
 import com.listo.app.data.database.entities.ShoppingItemEntity
 import com.listo.app.data.database.entities.ShoppingListEntity
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -42,7 +42,7 @@ class ShoppingDaoTest {
     }
 
     @Test
-    fun activeList_aggregatesItemCountsAndTotal() = runTest {
+    fun activeList_aggregatesItemCountsAndTotal() = runBlocking {
         val listId = listDao.insert(ShoppingListEntity(name = "Groceries"))
         itemDao.insert(ShoppingItemEntity(listId = listId, name = "Milk", price = 10.0, isChecked = true))
         itemDao.insert(ShoppingItemEntity(listId = listId, name = "Bread", price = 5.0, isChecked = false))
@@ -54,7 +54,7 @@ class ShoppingDaoTest {
     }
 
     @Test
-    fun pendingCount_countsOnlyUncheckedItemsInActiveLists() = runTest {
+    fun pendingCount_countsOnlyUncheckedItemsInActiveLists() = runBlocking {
         val active = listDao.insert(ShoppingListEntity(name = "Active"))
         itemDao.insert(ShoppingItemEntity(listId = active, name = "x", isChecked = false))
         itemDao.insert(ShoppingItemEntity(listId = active, name = "y", isChecked = true))
@@ -66,7 +66,7 @@ class ShoppingDaoTest {
     }
 
     @Test
-    fun archiving_movesListFromActiveToArchived() = runTest {
+    fun archiving_movesListFromActiveToArchived() = runBlocking {
         val id = listDao.insert(ShoppingListEntity(name = "Trip"))
         assertEquals(1, listDao.getActiveLists().first().size)
 
@@ -77,7 +77,7 @@ class ShoppingDaoTest {
     }
 
     @Test
-    fun deletingList_cascadesToItems() = runTest {
+    fun deletingList_cascadesToItems() = runBlocking {
         val id = listDao.insert(ShoppingListEntity(name = "Trip"))
         itemDao.insert(ShoppingItemEntity(listId = id, name = "x"))
 

@@ -107,13 +107,9 @@ dependencies {
 
     // Unit tests
     testImplementation(libs.junit)
-    testImplementation(libs.coroutines.test)
 
-    // Instrumented / behaviour tests
-    androidTestImplementation(platform(libs.compose.bom))
+    // Instrumented / behaviour tests (data layer; no Espresso/Compose UI —
+    // the installed emulator images are an API preview Espresso can't drive)
     androidTestImplementation(libs.androidx.test.junit)
-    androidTestImplementation(libs.espresso.core)
-    androidTestImplementation(libs.compose.ui.test.junit4)
-    androidTestImplementation(libs.coroutines.test)
-    debugImplementation(libs.compose.ui.test.manifest)
+    androidTestImplementation(libs.androidx.test.runner)
 }
