@@ -4,6 +4,7 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -28,10 +29,12 @@ import androidx.navigation.NavController
 import com.listo.app.R
 import com.listo.app.data.models.ShoppingList
 import com.listo.app.ui.components.AdBanner
+import com.listo.app.ui.components.BrandColors
 import com.listo.app.ui.components.EmptyState
 import com.listo.app.ui.components.ThemedMeshBackground
 import com.listo.app.ui.navigation.Screen
 import com.listo.app.ui.theme.DisplayFontFamily
+import com.listo.app.ui.theme.LisPurple
 import com.listo.app.ui.viewmodel.ListsViewModel
 import com.listo.app.utils.formatPrice
 import java.text.SimpleDateFormat
@@ -139,31 +142,30 @@ private fun ListsHeader(navController: NavController) {
                 color = MaterialTheme.colorScheme.onBackground
             )
         }
-        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            HeaderIcon(Icons.Rounded.History, stringResource(R.string.cd_history)) { navController.navigate(Screen.History.route) }
-            HeaderIcon(Icons.Rounded.Category, stringResource(R.string.cd_categories)) { navController.navigate(Screen.Categories.route) }
-            HeaderIcon(Icons.Rounded.Settings, stringResource(R.string.cd_settings)) { navController.navigate(Screen.Settings.route) }
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            HeaderIcon(Icons.Rounded.History, stringResource(R.string.cd_history), BrandColors.Amber) { navController.navigate(Screen.History.route) }
+            HeaderIcon(Icons.Rounded.Category, stringResource(R.string.cd_categories), LisPurple) { navController.navigate(Screen.Categories.route) }
+            HeaderIcon(Icons.Rounded.Settings, stringResource(R.string.cd_settings), BrandColors.Sprout) { navController.navigate(Screen.Settings.route) }
         }
     }
 }
 
 @Composable
-private fun HeaderIcon(icon: ImageVector, desc: String, onClick: () -> Unit) {
-    IconButton(onClick = onClick) {
-        Box(
-            modifier = Modifier
-                .size(42.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.surface),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                icon,
-                contentDescription = desc,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(20.dp)
-            )
-        }
+private fun HeaderIcon(icon: ImageVector, desc: String, color: Color, onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .size(46.dp)
+            .clip(RoundedCornerShape(15.dp))
+            .background(color.copy(alpha = 0.18f))
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            icon,
+            contentDescription = desc,
+            tint = color,
+            modifier = Modifier.size(24.dp)
+        )
     }
 }
 
