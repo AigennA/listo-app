@@ -3,6 +3,7 @@ package com.listo.app.ui.components
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -72,6 +73,33 @@ fun OrganicBackground(
                 onDrawBehind {
                     drawRect(base)
                     brandBlobs.forEach { drawBlob(it) }
+                }
+            },
+        content = content
+    )
+}
+
+/**
+ * Theme-aware version for in-app screens: soft accent blobs over the current
+ * Material background, so it follows light/dark mode and the chosen accent.
+ */
+@Composable
+fun ThemedMeshBackground(
+    modifier: Modifier = Modifier,
+    content: @Composable BoxScope.() -> Unit
+) {
+    val background = MaterialTheme.colorScheme.background
+    val primary = MaterialTheme.colorScheme.primary
+    val secondary = MaterialTheme.colorScheme.secondary
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .drawWithCache {
+                onDrawBehind {
+                    drawRect(background)
+                    drawBlob(Blob(0.88f, 0.05f, 0.75f, primary, 0.18f))
+                    drawBlob(Blob(0.04f, 0.40f, 0.60f, secondary, 0.10f))
+                    drawBlob(Blob(0.96f, 0.85f, 0.85f, primary, 0.10f))
                 }
             },
         content = content
