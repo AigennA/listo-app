@@ -98,15 +98,18 @@ object ListReminderScheduler {
         )
     }
 
+    /**
+     * Inexact on purpose: a shopping nudge does not need to-the-second accuracy, and an
+     * exact alarm would need SCHEDULE_EXACT_ALARM, which Google Play only grants to
+     * alarm-clock style apps. The reminder fires within [AppDefaults.REMINDER_WINDOW_MS]
+     * of the chosen time.
+     */
     fun schedule(context: Context, listId: Long, triggerAtMillis: Long) {
         val alarmManager = context.getSystemService(AlarmManager::class.java) ?: return
-        val showIntent = PendingIntent.getActivity(
-            context, 0, Intent(context, MainActivity::class.java),
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-        // setAlarmClock is exact and exempt from the exact-alarm permission.
-        alarmManager.setAlarmClock(
-            AlarmManager.AlarmClockInfo(triggerAtMillis, showIntent),
+        alarmManager.setWindow(
+            AlarmManager.RTC_WAKEUP,
+            triggerAtMillis,
+            AppDefaults.REMINDER_WINDOW_MS,
             pendingIntent(context, listId)
         )
     }
