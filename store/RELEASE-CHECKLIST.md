@@ -41,8 +41,9 @@ still need work. Items marked **BLOCKER** must be fixed before a public release.
       choice. (Draft implementation already written — `AdsInitializer`, `ConsentManager`
       and unit tests are parked outside the repo.)
 - [ ] Configure the GDPR consent message in the AdMob console.
-- [ ] Wire the Settings → "Privacy Policy" row to open the published policy URL
-      (currently an empty `onClick`).
+- [x] Wire the Settings -> "Privacy Policy" row to open the published policy URL.
+      Done: a `privacy_policy_url` string resource plus `Context.openInBrowser`.
+      The link resolves once GitHub Pages is enabled.
 
 ## 4. Build and signing
 

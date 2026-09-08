@@ -3,9 +3,12 @@ package com.listo.app.ui.screens.settings
 import android.Manifest
 import android.app.Activity
 import android.app.TimePickerDialog
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -168,12 +171,13 @@ fun SettingsScreen(
                 onClick = {}
             )
 
+            val privacyPolicyUrl = stringResource(R.string.privacy_policy_url)
             SettingsClickItem(
                 icon = Icons.Rounded.PrivacyTip,
                 label = stringResource(R.string.settings_privacy),
                 subtitle = stringResource(R.string.settings_privacy_sub),
                 iconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                onClick = {}
+                onClick = { context.openInBrowser(privacyPolicyUrl) }
             )
 
             Spacer(modifier = Modifier.height(40.dp))
@@ -461,6 +465,15 @@ private fun SettingsClickItem(
             }
             Icon(Icons.Rounded.ChevronRight, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
         }
+    }
+}
+
+/** Opens [url] in the browser. Ignored if the device has no browser. */
+private fun Context.openInBrowser(url: String) {
+    try {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+    } catch (e: ActivityNotFoundException) {
+        // No browser installed — nothing sensible to fall back to.
     }
 }
 
