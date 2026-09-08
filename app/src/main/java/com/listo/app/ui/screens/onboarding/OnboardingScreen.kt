@@ -31,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.listo.app.R
 import com.listo.app.ui.components.BrandColors
@@ -38,6 +39,7 @@ import com.listo.app.ui.components.OrganicBackground
 import com.listo.app.ui.navigation.Screen
 import com.listo.app.ui.theme.DisplayFontFamily
 import com.listo.app.ui.theme.PoppinsFontFamily
+import com.listo.app.ui.viewmodel.OnboardingViewModel
 import kotlinx.coroutines.launch
 
 private data class PageData(
@@ -54,13 +56,20 @@ private val pages = listOf(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun OnboardingScreen(navController: NavController) {
+fun OnboardingScreen(
+    navController: NavController,
+    viewModel: OnboardingViewModel = hiltViewModel()
+) {
     val pagerState = rememberPagerState { pages.size }
     val scope = rememberCoroutineScope()
 
+    // Remember that the intro was seen before leaving, so it is shown only once.
     fun goHome() {
-        navController.navigate(Screen.Home.route) {
-            popUpTo(Screen.Onboarding.route) { inclusive = true }
+        scope.launch {
+            viewModel.markOnboardingDone()
+            navController.navigate(Screen.Home.route) {
+                popUpTo(Screen.Onboarding.route) { inclusive = true }
+            }
         }
     }
 

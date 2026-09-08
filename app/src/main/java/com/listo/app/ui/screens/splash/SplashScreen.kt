@@ -27,6 +27,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.listo.app.R
 import com.listo.app.ui.components.BrandColors
@@ -34,13 +36,18 @@ import com.listo.app.ui.components.OrganicBackground
 import com.listo.app.ui.navigation.Screen
 import com.listo.app.ui.theme.DisplayFontFamily
 import com.listo.app.ui.theme.PoppinsFontFamily
+import com.listo.app.ui.viewmodel.SplashViewModel
 import kotlinx.coroutines.delay
 
 private const val SPLASH_DURATION_MS = 2200L
 
 @Composable
-fun SplashScreen(navController: NavController) {
+fun SplashScreen(
+    navController: NavController,
+    viewModel: SplashViewModel = hiltViewModel()
+) {
     var started by remember { mutableStateOf(false) }
+    val nextRoute by viewModel.nextRoute.collectAsStateWithLifecycle()
 
     val markScale by animateFloatAsState(
         targetValue = if (started) 1f else 0.3f,
@@ -63,10 +70,12 @@ fun SplashScreen(navController: NavController) {
         label = "taglineAlpha"
     )
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(nextRoute) {
         started = true
+        // Wait for the stored onboarding flag before deciding where to go.
+        val route = nextRoute ?: return@LaunchedEffect
         delay(SPLASH_DURATION_MS)
-        navController.navigate(Screen.Onboarding.route) {
+        navController.navigate(route) {
             popUpTo(Screen.Splash.route) { inclusive = true }
         }
     }
