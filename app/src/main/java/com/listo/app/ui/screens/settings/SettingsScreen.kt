@@ -16,10 +16,10 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -34,6 +34,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -247,13 +250,6 @@ private fun LanguageDialog(
 }
 
 @Composable
-private fun ThemeMode.localized(): String = when (this) {
-    ThemeMode.SYSTEM -> stringResource(R.string.theme_system)
-    ThemeMode.LIGHT -> stringResource(R.string.theme_light)
-    ThemeMode.DARK -> stringResource(R.string.theme_dark)
-}
-
-@Composable
 private fun ThemeModeSelector(
     selected: ThemeMode,
     onSelect: (ThemeMode) -> Unit
@@ -313,7 +309,7 @@ private fun ThemeModeSelector(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = mode.localized(),
+                            text = stringResource(mode.labelRes()),
                             style = MaterialTheme.typography.labelLarge,
                             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
                             color = fg
@@ -325,6 +321,7 @@ private fun ThemeModeSelector(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun AccentColorPicker(
     selected: AccentColor,
@@ -347,7 +344,7 @@ private fun AccentColorPicker(
                 Column {
                     Text(stringResource(R.string.settings_accent), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
                     Text(
-                        selected.label,
+                        stringResource(selected.labelRes()),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -356,34 +353,45 @@ private fun AccentColorPicker(
 
             Spacer(modifier = Modifier.height(14.dp))
 
-            Row(
+            FlowRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState()),
-                horizontalArrangement = Arrangement.spacedBy(14.dp)
+                    .selectableGroup(),
+                horizontalArrangement = Arrangement.spacedBy(SwatchGap),
+                verticalArrangement = Arrangement.spacedBy(SwatchGap)
             ) {
                 AccentColor.entries.forEach { accent ->
-                    val color = Color(accent.primary)
                     val isSelected = accent == selected
+                    val name = stringResource(accent.labelRes())
                     Box(
                         modifier = Modifier
-                            .size(40.dp)
                             .clip(CircleShape)
-                            .background(color)
-                            .border(
-                                width = if (isSelected) 3.dp else 0.dp,
-                                color = MaterialTheme.colorScheme.onBackground,
-                                shape = CircleShape
+                            .selectable(
+                                selected = isSelected,
+                                role = Role.RadioButton,
+                                onClick = { onSelect(accent) }
                             )
-                            .clickable { onSelect(accent) },
+                            .semantics { contentDescription = name }
+                            .minimumInteractiveComponentSize()
+                            .size(SwatchSize)
+                            .clip(CircleShape)
+                            .background(accent.primaryOn(MaterialTheme.colorScheme.background))
+                            .then(
+                                if (isSelected) {
+                                    Modifier.border(SwatchSelectedBorder, MaterialTheme.colorScheme.onBackground, CircleShape)
+                                } else {
+                                    Modifier
+                                }
+                            ),
                         contentAlignment = Alignment.Center
                     ) {
                         if (isSelected) {
                             Icon(
                                 Icons.Rounded.Check,
                                 contentDescription = null,
-                                tint = Color.White,
-                                modifier = Modifier.size(22.dp)
+                                // Swatches are toned to read on the background, which is also onPrimary.
+                                tint = MaterialTheme.colorScheme.onPrimary,
+                                modifier = Modifier.size(SwatchCheckSize)
                             )
                         }
                     }
@@ -392,6 +400,15 @@ private fun AccentColorPicker(
         }
     }
 }
+
+/** Visible diameter of an accent swatch. */
+private val SwatchSize = 40.dp
+
+/** Gap between swatch touch targets; each 48dp target already adds 4dp around its circle. */
+private val SwatchGap = 6.dp
+
+private val SwatchSelectedBorder = 3.dp
+private val SwatchCheckSize = 22.dp
 
 @Composable
 private fun SettingsSectionHeader(title: String) {
