@@ -1,11 +1,13 @@
 # Listo — Google Play release checklist
 
-Status as of 8 September 2026. Ticked items are done and in the repo; unticked items
+Status as of 15 September 2026. Ticked items are done and in the repo; unticked items
 still need work. Items marked **BLOCKER** must be fixed before a public release.
 
 ## 1. Store assets — done
 
 - [x] Phone screenshots (6), English — `store/screenshots/phone-en/`
+      (02–06 retaken on 15 September 2026 after the accent-colour update, with a clean
+      demo-mode status bar; 01 onboarding does not use the accent and is unchanged)
 - [x] App icon 512×512 PNG — `store/graphics/icon-512.png`
 - [x] Feature graphic 1024×500 PNG — `store/graphics/feature-graphic-1024x500.png`
 - [x] Listing copy in English, Turkish, Swedish — `store/listing/`
@@ -30,6 +32,14 @@ still need work. Items marked **BLOCKER** must be fixed before a public release.
       `SplashViewModel` where to go (`StartDestination.afterSplash`), and
       `OnboardingScreen` persists `setOnboardingDone(true)` before navigating away.
       Covered by `StartDestinationTest`; verified with a cold restart on an emulator.
+- [x] **Accent colours were hard to read.** White text on light accents such as Green
+      and Amber was about 2:1. `ColorContrast` now tones each accent just enough to
+      reach WCAG AA (4.5:1) against the light and dark backgrounds, covered by
+      `ColorContrastTest` and `AccentTonesTest`. The palette grew from 10 to 15 colours,
+      with names translated into all three languages.
+- [x] **Accent picker accessibility.** 48dp touch targets; TalkBack reads each colour's
+      name as a radio button within one group; unselected swatches no longer draw a
+      hairline ring.
 
 ## 3. Monetisation and consent
 

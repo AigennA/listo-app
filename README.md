@@ -21,9 +21,9 @@
 
 ## Screenshots
 
-| Lists | Auto-sorted items | Calendar |
-|---|---|---|
-| <img src="store/screenshots/phone-en/02-my-lists.png" width="220"> | <img src="store/screenshots/phone-en/03-list-detail.png" width="220"> | <img src="store/screenshots/phone-en/05-calendar.png" width="220"> |
+| Lists | Auto-sorted items | Calendar | Accent colours |
+|---|---|---|---|
+| <img src="store/screenshots/phone-en/02-my-lists.png" width="200"> | <img src="store/screenshots/phone-en/03-list-detail.png" width="200"> | <img src="store/screenshots/phone-en/05-calendar.png" width="200"> | <img src="store/screenshots/phone-en/06-settings.png" width="200"> |
 
 ## What it does
 
@@ -37,8 +37,10 @@
   whole month in the built-in calendar.
 - **Keeps history.** Finished lists move to History rather than disappearing.
 - **Shares.** Send any list as plain text.
-- **Adapts.** Light / dark / system theme, ten accent colours, and three languages
+- **Adapts.** Light / dark / system theme, fifteen accent colours, and three languages
   (English, Türkçe, Svenska).
+- **Stays readable.** Each accent colour is tuned to meet WCAG AA text contrast in both
+  light and dark mode, and the colour picker works with TalkBack.
 
 Everything runs **offline**. There is no account, no sign-up and no server — your
 lists are stored only on your device.
@@ -66,7 +68,7 @@ app/src/main/java/com/listo/app/
 │   ├── screens/   Splash, onboarding, lists, list detail, calendar,
 │   │              categories, category items, history, settings
 │   ├── components/ Reusable Compose pieces (top bar, cards, ad banner…)
-│   ├── theme/     Colour, typography, shape
+│   ├── theme/     Colour, typography, shape, accent contrast
 │   └── viewmodel/ One view model per screen
 └── utils/         Grocery catalog, date helpers, notifications, preferences
 ```
