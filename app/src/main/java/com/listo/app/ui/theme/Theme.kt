@@ -65,7 +65,9 @@ fun LisToTheme(
     accent: AccentColor = AccentColor.GREEN,
     content: @Composable () -> Unit
 ) {
-    val primary      = Color(accent.primary)
+    // onPrimary is the background color in both schemes, so toning primary against the
+    // background also keeps text on primary readable.
+    val primary      = accent.primaryOn(if (darkTheme) LisDarkBg else LisWhite)
     val primaryDark  = Color(accent.dark)
     val primaryLight = Color(accent.light)
     val colorScheme = if (darkTheme) {
