@@ -95,10 +95,15 @@ generated while developing.
 
 ## Store assets
 
-Everything needed for the Google Play listing lives under [`store/`](store/):
-screenshots, the 512×512 icon, the 1024×500 feature graphic and the listing copy in
-English, Turkish and Swedish. The privacy policy is at
+Everything needed for the Google Play listing lives under [`store/`](store/): the
+512×512 icon, the 1024×500 feature graphic and the listing copy in English, Turkish
+and Swedish. The privacy policy is at
 [`docs/privacy-policy.html`](docs/privacy-policy.html).
+
+Screenshots come in two sets: `store/screenshots/phone-en/` holds the raw emulator
+captures (used above), and `store/screenshots/play-phone-en/` holds the 1080×1920
+9:16 versions that Play Console accepts — captioned and framed by
+`store/graphics/render-play-screenshots.ps1`.
 
 ## License
 

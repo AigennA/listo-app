@@ -7,7 +7,15 @@ still need work. Items marked **BLOCKER** must be fixed before a public release.
 
 - [x] Phone screenshots (6), English — `store/screenshots/phone-en/`
       (02–06 retaken on 15 September 2026 after the accent-colour update, with a clean
-      demo-mode status bar; 01 onboarding does not use the accent and is unchanged)
+      demo-mode status bar; 01 onboarding does not use the accent and is unchanged).
+      These are the raw captures and are **not** what Play accepts — see below.
+- [x] Play-ready phone screenshots (6), English — `store/screenshots/play-phone-en/`
+      **Upload these.** 1080×1920 (9:16), 24-bit PNG without alpha, each screen framed
+      in a phone with a short caption, rendered from the raw captures by
+      `store/graphics/render-play-screenshots.ps1` (frame: `play-screenshot.html`).
+      The raw captures are 1280×2856 (1:2.23) with an alpha channel, and Play requires
+      JPEG or 24-bit PNG without alpha whose long side is at most twice the short side;
+      9:16 at 1080×1920 or larger is also what large-format promotion asks for.
 - [x] App icon 512×512 PNG — `store/graphics/icon-512.png`
 - [x] Feature graphic 1024×500 PNG — `store/graphics/feature-graphic-1024x500.png`
 - [x] Listing copy in English, Turkish, Swedish — `store/listing/`
@@ -75,7 +83,7 @@ still need work. Items marked **BLOCKER** must be fixed before a public release.
 
 - [ ] Create the app: name "Listo", default language English, app type **App**, **Free**
 - [ ] Store listing per language (copy from `store/listing/`)
-- [ ] Upload icon, feature graphic, screenshots
+- [ ] Upload icon, feature graphic and the screenshots in `store/screenshots/play-phone-en/`
 - [ ] Content rating questionnaire
 - [ ] Data safety form (`store/data-safety.md`)
 - [ ] Ads declaration → contains ads
