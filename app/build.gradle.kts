@@ -11,7 +11,9 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.listo.app"
+        // Play Store identity (com.listo.app was taken). The code package
+        // stays com.listo.app — see namespace above.
+        applicationId = "com.mopilappar.listo"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
