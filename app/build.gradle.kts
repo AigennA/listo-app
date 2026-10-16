@@ -102,8 +102,9 @@ dependencies {
     // Coroutines
     implementation(libs.coroutines.android)
 
-    // Ads (AdMob)
+    // Ads (AdMob) and the consent form (UMP)
     implementation(libs.play.services.ads)
+    implementation(libs.user.messaging.platform)
 
     // Unit tests
     testImplementation(libs.junit)

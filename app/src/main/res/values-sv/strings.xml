@@ -111,6 +111,8 @@
     <string name="settings_version">Appversion</string>
     <string name="settings_privacy">Integritetspolicy</string>
     <string name="settings_privacy_sub">Visa vår integritetspolicy</string>
+    <string name="settings_ad_privacy">Annonsintegritet</string>
+    <string name="settings_ad_privacy_sub">Ändra ditt samtycke för annonser</string>
     <string name="theme_system">System</string>
     <string name="theme_light">Ljust</string>
     <string name="theme_dark">Mörkt</string>

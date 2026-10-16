@@ -111,6 +111,8 @@
     <string name="settings_version">App Version</string>
     <string name="settings_privacy">Privacy Policy</string>
     <string name="settings_privacy_sub">View our privacy policy</string>
+    <string name="settings_ad_privacy">Ad Privacy</string>
+    <string name="settings_ad_privacy_sub">Change your ad consent choices</string>
 
     <!-- Published policy page (listo.html in the public AigennA/privacy-policy repo). Not translated. -->
     <string name="privacy_policy_url" translatable="false">https://aigenna.github.io/privacy-policy/listo.html</string>

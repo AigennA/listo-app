@@ -4,7 +4,6 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
-import com.google.android.gms.ads.MobileAds
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
@@ -12,8 +11,8 @@ class LisToApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        // The ads SDK is started by AdsConsentController once consent allows it.
         createNotificationChannels()
-        MobileAds.initialize(this)
     }
 
     private fun createNotificationChannels() {

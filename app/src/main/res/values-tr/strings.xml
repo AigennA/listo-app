@@ -111,6 +111,8 @@
     <string name="settings_version">Uygulama Sürümü</string>
     <string name="settings_privacy">Gizlilik Politikası</string>
     <string name="settings_privacy_sub">Gizlilik politikamızı görüntüle</string>
+    <string name="settings_ad_privacy">Reklam Gizliliği</string>
+    <string name="settings_ad_privacy_sub">Reklam izni tercihini değiştir</string>
     <string name="theme_system">Sistem</string>
     <string name="theme_light">Açık</string>
     <string name="theme_dark">Koyu</string>
