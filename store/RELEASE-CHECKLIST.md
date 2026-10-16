@@ -58,10 +58,12 @@ still need work. Items marked **BLOCKER** must be fixed before a public release.
 - [ ] Replace Google's **test** AdMob ids with the real ones:
       `AndroidManifest.xml` app id and `AdBanner.kt` banner unit id. Wire them so debug
       builds keep the test ids and only release builds use the real ones.
-- [ ] Add Google's User Messaging Platform (UMP) consent flow before
-      `MobileAds.initialize`, and a Settings entry so EEA/UK users can change their
-      choice. (Draft implementation already written — `AdsInitializer`, `ConsentManager`
-      and unit tests are parked outside the repo.)
+- [x] Google's User Messaging Platform (UMP) consent flow — written on 16 October 2026
+      in `app/src/main/java/com/listo/app/ads/`. `AdsConsentController` starts Google
+      Mobile Ads only after the user's choice allows it and at most once, `AdBanner`
+      requests no banner before that, and Settings shows an ad privacy row where the
+      choice must stay reachable (EEA/UK). Covered by `AdsConsentControllerTest`.
+      Still to verify on a device once the machine has memory for an emulator.
 - [ ] Configure the GDPR consent message in the AdMob console.
 - [x] Wire the Settings -> "Privacy Policy" row to open the published policy URL.
       Done: a `privacy_policy_url` string resource plus `Context.openInBrowser`.
