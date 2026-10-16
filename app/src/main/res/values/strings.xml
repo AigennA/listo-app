@@ -112,8 +112,8 @@
     <string name="settings_privacy">Privacy Policy</string>
     <string name="settings_privacy_sub">View our privacy policy</string>
 
-    <!-- Published policy page (docs/privacy-policy.html on GitHub Pages). Not translated. -->
-    <string name="privacy_policy_url" translatable="false">https://aigenna.github.io/listo-app/privacy-policy.html</string>
+    <!-- Published policy page (listo.html in the public AigennA/privacy-policy repo). Not translated. -->
+    <string name="privacy_policy_url" translatable="false">https://aigenna.github.io/privacy-policy/listo.html</string>
     <string name="theme_system">System</string>
     <string name="theme_light">Light</string>
     <string name="theme_dark">Dark</string>

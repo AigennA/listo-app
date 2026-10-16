@@ -1,6 +1,6 @@
 # Listo — Google Play release checklist
 
-Status as of 15 September 2026. Ticked items are done and in the repo; unticked items
+Status as of 16 October 2026. Ticked items are done and in the repo; unticked items
 still need work. Items marked **BLOCKER** must be fixed before a public release.
 
 ## 1. Store assets — done
@@ -22,8 +22,12 @@ still need work. Items marked **BLOCKER** must be fixed before a public release.
 - [x] Privacy policy page — `docs/privacy-policy.html`
 - [x] Data safety form answers — `store/data-safety.md`
 - [x] Contact address in the privacy policy — `viktoriassverige@gmail.com` (set 16 October 2026)
-- [ ] Publish the policy: repo Settings → Pages → source `main` / `/docs`, giving
-      `https://aigenna.github.io/listo-app/privacy-policy.html`
+- [x] Policy published at `https://aigenna.github.io/privacy-policy/listo.html` — the page
+      is `listo.html` in the public `AigennA/privacy-policy` repo, next to the Daily
+      Affirmations policy, because this repo is private and GitHub Pages needs a public
+      repo on the free plan. `docs/privacy-policy.html` stays the source: copy it over
+      and push that repo whenever the policy changes. The app's `privacy_policy_url`
+      string points at the published page.
 - [ ] Optional: Turkish and Swedish screenshot sets (switch the in-app language and
       recapture — the same six screens)
 
