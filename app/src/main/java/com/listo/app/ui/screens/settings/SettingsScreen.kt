@@ -49,6 +49,7 @@ import com.listo.app.data.models.AccentColor
 import com.listo.app.data.models.ThemeMode
 import com.listo.app.ui.components.LisToTopBar
 import com.listo.app.ui.theme.*
+import com.listo.app.ui.viewmodel.AdsViewModel
 import com.listo.app.ui.viewmodel.SettingsViewModel
 import com.listo.app.utils.DailyReminderScheduler
 import com.listo.app.utils.LocaleHelper
@@ -57,9 +58,11 @@ import java.util.Locale
 @Composable
 fun SettingsScreen(
     navController: NavController,
-    viewModel: SettingsViewModel = hiltViewModel()
+    viewModel: SettingsViewModel = hiltViewModel(),
+    adsViewModel: AdsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val adsState by adsViewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
     var showLanguageDialog by remember { mutableStateOf(false) }
     val currentLang = remember { LocaleHelper.getLanguage(context) }
@@ -182,6 +185,17 @@ fun SettingsScreen(
                 iconColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 onClick = { context.openInBrowser(privacyPolicyUrl) }
             )
+
+            // Only where the law requires a way back to the consent choice (EEA and UK).
+            if (adsState.privacyOptionsRequired) {
+                SettingsClickItem(
+                    icon = Icons.Rounded.Campaign,
+                    label = stringResource(R.string.settings_ad_privacy),
+                    subtitle = stringResource(R.string.settings_ad_privacy_sub),
+                    iconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    onClick = { context.findActivity()?.let(adsViewModel::showPrivacyOptions) }
+                )
+            }
 
             Spacer(modifier = Modifier.height(40.dp))
         }
