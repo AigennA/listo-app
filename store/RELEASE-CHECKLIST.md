@@ -21,7 +21,7 @@ still need work. Items marked **BLOCKER** must be fixed before a public release.
 - [x] Listing copy in English, Turkish, Swedish — `store/listing/`
 - [x] Privacy policy page — `docs/privacy-policy.html`
 - [x] Data safety form answers — `store/data-safety.md`
-- [ ] Replace `REPLACE_WITH_CONTACT_EMAIL` in the privacy policy with a real address
+- [x] Contact address in the privacy policy — `viktoriassverige@gmail.com` (set 16 October 2026)
 - [ ] Publish the policy: repo Settings → Pages → source `main` / `/docs`, giving
       `https://aigenna.github.io/listo-app/privacy-policy.html`
 - [ ] Optional: Turkish and Swedish screenshot sets (switch the in-app language and
