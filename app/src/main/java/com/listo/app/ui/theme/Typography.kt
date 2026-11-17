@@ -26,16 +26,6 @@ val PoppinsFontFamily = FontFamily(
     Font(googleFont = PoppinsFont, fontProvider = provider, weight = FontWeight.ExtraBold),
 )
 
-// Characterful display face for brand moments (splash / onboarding).
-private val FrauncesFont = GoogleFont("Fraunces")
-
-val DisplayFontFamily = FontFamily(
-    Font(googleFont = FrauncesFont, fontProvider = provider, weight = FontWeight.Medium),
-    Font(googleFont = FrauncesFont, fontProvider = provider, weight = FontWeight.SemiBold),
-    Font(googleFont = FrauncesFont, fontProvider = provider, weight = FontWeight.Bold),
-    Font(googleFont = FrauncesFont, fontProvider = provider, weight = FontWeight.Black),
-)
-
 val LisToTypography = Typography(
     // Display
     displayLarge = TextStyle(

@@ -36,7 +36,7 @@ import com.listo.app.data.models.ShoppingList
 import com.listo.app.ui.components.LisToTopBar
 import com.listo.app.ui.components.ThemedMeshBackground
 import com.listo.app.ui.navigation.Screen
-import com.listo.app.ui.theme.DisplayFontFamily
+import com.listo.app.ui.theme.PoppinsFontFamily
 import com.listo.app.ui.viewmodel.CalendarViewModel
 import com.listo.app.utils.DateUtils
 import com.listo.app.utils.ListReminderScheduler
@@ -110,7 +110,7 @@ fun CalendarScreen(
 
                 Text(
                     text = remember(selectedDay) { DateUtils.formatDate(selectedDay) },
-                    fontFamily = DisplayFontFamily,
+                    fontFamily = PoppinsFontFamily,
                     fontWeight = FontWeight.Bold,
                     fontSize = 22.sp,
                     color = MaterialTheme.colorScheme.onBackground
@@ -198,7 +198,7 @@ private fun MonthHeader(anchor: Long, onPrev: () -> Unit, onNext: () -> Unit) {
         }
         Text(
             text = label,
-            fontFamily = DisplayFontFamily,
+            fontFamily = PoppinsFontFamily,
             fontWeight = FontWeight.Bold,
             fontSize = 22.sp,
             color = MaterialTheme.colorScheme.onBackground

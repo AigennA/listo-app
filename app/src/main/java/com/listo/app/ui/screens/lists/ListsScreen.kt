@@ -33,7 +33,7 @@ import com.listo.app.ui.components.BrandColors
 import com.listo.app.ui.components.EmptyState
 import com.listo.app.ui.components.ThemedMeshBackground
 import com.listo.app.ui.navigation.Screen
-import com.listo.app.ui.theme.DisplayFontFamily
+import com.listo.app.ui.theme.PoppinsFontFamily
 import com.listo.app.ui.theme.LisPurple
 import com.listo.app.ui.viewmodel.ListsViewModel
 import com.listo.app.utils.DateUtils
@@ -137,7 +137,7 @@ private fun ListsHeader(navController: NavController) {
             Spacer(Modifier.height(2.dp))
             Text(
                 text = stringResource(R.string.lists_title),
-                fontFamily = DisplayFontFamily,
+                fontFamily = PoppinsFontFamily,
                 fontWeight = FontWeight.Bold,
                 fontSize = 34.sp,
                 color = MaterialTheme.colorScheme.onBackground
@@ -212,7 +212,7 @@ private fun ShoppingListCard(
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = list.name,
-                        fontFamily = DisplayFontFamily,
+                        fontFamily = PoppinsFontFamily,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 20.sp,
                         color = MaterialTheme.colorScheme.onSurface
@@ -300,7 +300,7 @@ private fun CreateListDialog(
         title = {
             Text(
                 stringResource(R.string.lists_new_dialog_title),
-                fontFamily = DisplayFontFamily,
+                fontFamily = PoppinsFontFamily,
                 fontWeight = FontWeight.Bold
             )
         },
