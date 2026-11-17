@@ -145,4 +145,9 @@
     <string name="nav_calendar">Calendar</string>
     <string name="nav_history">History</string>
     <string name="nav_settings">Settings</string>
+
+    <!-- Bought section -->
+    <string name="detail_bought">Bought (%1$d)</string>
+    <string name="cd_show_bought">Show bought items</string>
+    <string name="cd_hide_bought">Hide bought items</string>
 </resources>

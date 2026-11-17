@@ -26,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -78,6 +79,7 @@ fun ListDetailScreen(
     var showSchedule by remember { mutableStateOf(false) }
     var showMenu by remember { mutableStateOf(false) }
     var editItem by remember { mutableStateOf<ShoppingItem?>(null) }
+    var showBought by rememberSaveable { mutableStateOf(true) }
 
     val notifPermissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -202,6 +204,27 @@ fun ListDetailScreen(
                             onClick = { editItem = item },
                             onDelete = { viewModel.deleteItem(item.id) }
                         )
+                    }
+                }
+
+                if (uiState.bought.isNotEmpty()) {
+                    item(key = "header_bought") {
+                        BoughtHeader(
+                            count = uiState.bought.size,
+                            expanded = showBought,
+                            onToggle = { showBought = !showBought }
+                        )
+                    }
+                    if (showBought) {
+                        items(uiState.bought, key = { it.id }) { item ->
+                            ShoppingItemRow(
+                                item = item,
+                                iconKey = catalog.keyFor(item.name) ?: item.name,
+                                onToggle = { viewModel.toggleItem(item) },
+                                onClick = { editItem = item },
+                                onDelete = { viewModel.deleteItem(item.id) }
+                            )
+                        }
                     }
                 }
             }
@@ -409,6 +432,39 @@ private fun CategoryHeader(name: String, color: Color) {
             style = MaterialTheme.typography.labelLarge,
             fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+/** "Bought (n)" divider; tapping it folds the bought items away. */
+@Composable
+private fun BoughtHeader(count: Int, expanded: Boolean, onToggle: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 12.dp)
+            .clickable(onClick = onToggle)
+            .padding(horizontal = 20.dp, vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Icon(
+            Icons.Rounded.CheckCircle,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(18.dp)
+        )
+        Text(
+            text = stringResource(R.string.detail_bought, count),
+            style = MaterialTheme.typography.labelLarge,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.weight(1f)
+        )
+        Icon(
+            if (expanded) Icons.Rounded.ExpandLess else Icons.Rounded.ExpandMore,
+            contentDescription = stringResource(if (expanded) R.string.cd_hide_bought else R.string.cd_show_bought),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }

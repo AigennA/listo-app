@@ -24,9 +24,16 @@ data class ListDetailUiState(
     val progress: Float get() = if (items.isEmpty()) 0f else checkedCount.toFloat() / items.size
     val total: Double get() = items.sumOf { it.price ?: 0.0 }
 
-    /** Items grouped by category name (uncategorised under [GroceryCatalog.UNCATEGORIZED], kept last). */
+    /** Items already in the basket, shown in their own section at the bottom. */
+    val bought: List<ShoppingItem> get() = items.filter { it.isChecked }
+
+    /**
+     * Items still to buy, grouped by category name (uncategorised under
+     * [GroceryCatalog.UNCATEGORIZED], kept last). Bought items are in [bought].
+     */
     val grouped: List<Pair<String, List<ShoppingItem>>>
         get() = items
+            .filterNot { it.isChecked }
             .groupBy { it.categoryName ?: GroceryCatalog.UNCATEGORIZED }
             .toList()
             .sortedBy { it.first == GroceryCatalog.UNCATEGORIZED }
