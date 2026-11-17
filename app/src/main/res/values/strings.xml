@@ -113,6 +113,8 @@
 
     <!-- Published policy page (listo.html in the public AigennA/privacy-policy repo). Not translated. -->
     <string name="privacy_policy_url" translatable="false">https://aigenna.github.io/privacy-policy/listo.html</string>
+    <!-- Same address as the privacy policy's contact section. -->
+    <string name="support_email" translatable="false">viktoriassverige@gmail.com</string>
     <string name="theme_system">System</string>
     <string name="theme_light">Light</string>
     <string name="theme_dark">Dark</string>
@@ -157,4 +159,10 @@
     <string name="list_action_copy">Copy</string>
     <string name="list_copy_name">%1$s (copy)</string>
     <string name="cd_list_actions">List options</string>
+
+    <!-- Settings: help and feedback (nothing is sent by the app itself) -->
+    <string name="settings_feedback">Help &amp; feedback</string>
+    <string name="settings_feedback_sub">Questions, ideas or a bug? Write to us</string>
+    <string name="feedback_subject">Listo feedback (%1$s)</string>
+    <string name="feedback_body">\n\n—\nListo %1$s · Android %2$s</string>
 </resources>
