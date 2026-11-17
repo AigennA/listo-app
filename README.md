@@ -51,6 +51,9 @@
 Everything runs **offline**. There is no account, no sign-up and no server — your
 lists are stored only on your device.
 
+How it is built — architecture, testing, localisation, accessibility and release
+preparation, with links into the code — is described in [SKILLS.md](SKILLS.md).
+
 ## Tech
 
 | Area | Choice |
