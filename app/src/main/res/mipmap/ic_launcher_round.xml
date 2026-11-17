@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 7.x (API 24-25) round icon: the same two layers in a circle. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <gradient
+                android:angle="315"
+                android:startColor="#40916C"
+                android:endColor="#1B4332"
+                android:type="linear" />
+        </shape>
+    </item>
+    <item android:drawable="@drawable/ic_launcher_foreground" />
+</layer-list>

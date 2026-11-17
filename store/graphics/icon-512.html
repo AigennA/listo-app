@@ -3,6 +3,12 @@
 <style>
   html,body{margin:0;padding:0;width:512px;height:512px;overflow:hidden}
 </style>
+<!--
+  Listo icon: a shopping-list card (two ticked rows, one open) with the Listo
+  sprout growing out of its top edge. The launcher icon
+  (app/src/main/res/drawable/ic_launcher_foreground.xml) uses the same geometry.
+  Everything stays inside a centred circle of radius 256 so round masks crop nothing.
+-->
 <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="badge" x1="0" y1="0" x2="1" y2="1">
@@ -11,13 +17,37 @@
     </linearGradient>
   </defs>
   <rect width="512" height="512" fill="url(#badge)"/>
-  <!-- SproutMark, same geometry as SplashScreen.kt -->
-  <svg x="86" y="104" width="330" height="330" viewBox="0 -45 274 320">
+
+  <!-- Content scaled 1.2x about the centre and nudged down so it sits optically centred. -->
+  <g transform="matrix(1.2 0 0 1.2 -51.2 -34.4)">
+
+  <!-- Sprout (same shapes as SplashScreen.kt), scaled 0.4; its stem base hides behind the card. -->
+  <g transform="translate(201.2 80.88) scale(0.4)">
     <path d="M137,260.3 Q131.52,150.7 137,82.2"
           fill="none" stroke="#FFFFFF" stroke-width="24.66" stroke-linecap="round"/>
     <path d="M137,115.08 Q200.29,51.79 137,0 Q73.71,51.79 137,115.08 Z"
           fill="#FFFFFF" transform="rotate(-38 137 115.08)"/>
     <path d="M137,93.16 Q206.32,23.84 137,-32.88 Q67.68,23.84 137,93.16 Z"
           fill="#FFFFFF" transform="rotate(32 137 93.16)"/>
-  </svg>
+  </g>
+
+  <!-- List card -->
+  <rect x="136" y="170" width="240" height="240" rx="28" fill="#FFFFFF"/>
+
+  <!-- Row 1: ticked -->
+  <circle cx="180" cy="230" r="18" fill="#40916C"/>
+  <path d="M171,230 L178,237 L190,223" fill="none" stroke="#FFFFFF" stroke-width="6"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="214" y="223" width="126" height="14" rx="7" fill="#B7D3C4"/>
+
+  <!-- Row 2: ticked -->
+  <circle cx="180" cy="290" r="18" fill="#40916C"/>
+  <path d="M171,290 L178,297 L190,283" fill="none" stroke="#FFFFFF" stroke-width="6"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="214" y="283" width="106" height="14" rx="7" fill="#B7D3C4"/>
+
+  <!-- Row 3: still to buy -->
+  <circle cx="180" cy="350" r="15" fill="none" stroke="#95B8A6" stroke-width="6"/>
+  <rect x="214" y="343" width="118" height="14" rx="7" fill="#2D6A4F"/>
+  </g>
 </svg>
