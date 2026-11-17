@@ -34,7 +34,6 @@ import com.listo.app.R
 import com.listo.app.ui.components.BrandColors
 import com.listo.app.ui.components.OrganicBackground
 import com.listo.app.ui.navigation.Screen
-import com.listo.app.ui.theme.DisplayFontFamily
 import com.listo.app.ui.theme.PoppinsFontFamily
 import com.listo.app.ui.viewmodel.SplashViewModel
 import kotlinx.coroutines.delay
@@ -103,9 +102,9 @@ fun SplashScreen(
             Text(
                 text = stringResource(R.string.app_name),
                 fontSize = 46.sp,
-                fontWeight = FontWeight.Black,
+                fontWeight = FontWeight.ExtraBold,
                 color = BrandColors.Forest,
-                fontFamily = DisplayFontFamily,
+                fontFamily = PoppinsFontFamily,
                 modifier = Modifier
                     .offset(y = wordmarkShift.dp)
                     .alpha(wordmarkAlpha)

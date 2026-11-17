@@ -37,7 +37,6 @@ import com.listo.app.R
 import com.listo.app.ui.components.BrandColors
 import com.listo.app.ui.components.OrganicBackground
 import com.listo.app.ui.navigation.Screen
-import com.listo.app.ui.theme.DisplayFontFamily
 import com.listo.app.ui.theme.PoppinsFontFamily
 import com.listo.app.ui.viewmodel.OnboardingViewModel
 import kotlinx.coroutines.launch
@@ -170,7 +169,7 @@ private fun OnboardingPage(page: PageData) {
 
         Text(
             text = stringResource(page.titleRes),
-            fontFamily = DisplayFontFamily,
+            fontFamily = PoppinsFontFamily,
             fontWeight = FontWeight.Bold,
             fontSize = 32.sp,
             lineHeight = 38.sp,
