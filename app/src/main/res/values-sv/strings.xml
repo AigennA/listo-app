@@ -147,4 +147,11 @@
     <string name="detail_bought">Köpt (%1$d)</string>
     <string name="cd_show_bought">Visa köpta varor</string>
     <string name="cd_hide_bought">Dölj köpta varor</string>
+
+    <!-- List actions (My Lists: swipe left or the ⋮ button) -->
+    <string name="list_action_rename">Byt namn</string>
+    <string name="list_action_share">Dela</string>
+    <string name="list_action_copy">Kopiera</string>
+    <string name="list_copy_name">%1$s (kopia)</string>
+    <string name="cd_list_actions">Listalternativ</string>
 </resources>

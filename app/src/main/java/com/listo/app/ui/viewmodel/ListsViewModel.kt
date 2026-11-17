@@ -2,11 +2,15 @@ package com.listo.app.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.listo.app.data.models.ShoppingItem
 import com.listo.app.data.models.ShoppingList
 import com.listo.app.domain.usecases.CreateShoppingListUseCase
 import com.listo.app.domain.usecases.DeleteShoppingListUseCase
+import com.listo.app.domain.usecases.DuplicateShoppingListUseCase
+import com.listo.app.domain.usecases.GetShoppingItemsUseCase
 import com.listo.app.domain.usecases.GetShoppingListsUseCase
 import com.listo.app.domain.usecases.SeedCategoriesUseCase
+import com.listo.app.domain.usecases.UpdateShoppingListUseCase
 import com.listo.app.utils.PreferencesManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -25,6 +29,9 @@ class ListsViewModel @Inject constructor(
     getShoppingListsUseCase: GetShoppingListsUseCase,
     private val createListUseCase: CreateShoppingListUseCase,
     private val deleteListUseCase: DeleteShoppingListUseCase,
+    private val updateListUseCase: UpdateShoppingListUseCase,
+    private val duplicateListUseCase: DuplicateShoppingListUseCase,
+    private val getShoppingItemsUseCase: GetShoppingItemsUseCase,
     private val seedCategoriesUseCase: SeedCategoriesUseCase,
     private val prefs: PreferencesManager
 ) : ViewModel() {
@@ -74,5 +81,20 @@ class ListsViewModel @Inject constructor(
 
     fun deleteList(id: Long) {
         viewModelScope.launch { deleteListUseCase(id) }
+    }
+
+    fun renameList(id: Long, name: String) {
+        if (name.isBlank()) return
+        viewModelScope.launch { updateListUseCase.rename(id, name) }
+    }
+
+    /** [copyName] is already localised by the screen, e.g. "Weekly (copy)". */
+    fun duplicateList(list: ShoppingList, copyName: String) {
+        viewModelScope.launch { duplicateListUseCase(list, copyName) }
+    }
+
+    /** Loads [list]'s items, then hands them to [onReady] (to build the share text). */
+    fun withItems(list: ShoppingList, onReady: (List<ShoppingItem>) -> Unit) {
+        viewModelScope.launch { onReady(getShoppingItemsUseCase.forList(list.id).first()) }
     }
 }

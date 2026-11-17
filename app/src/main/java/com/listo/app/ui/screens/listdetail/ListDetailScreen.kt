@@ -47,7 +47,9 @@ import com.listo.app.R
 import com.listo.app.data.models.Category
 import com.listo.app.data.models.ShoppingItem
 import com.listo.app.data.models.ShoppingList
+import com.listo.app.ui.components.DeleteListDialog
 import com.listo.app.ui.components.LisToTopBar
+import com.listo.app.ui.components.RenameListDialog
 import com.listo.app.ui.viewmodel.ListDetailUiState
 import com.listo.app.ui.viewmodel.ListDetailViewModel
 import com.listo.app.utils.AppDefaults
@@ -58,6 +60,7 @@ import com.listo.app.utils.categoryLabel
 import com.listo.app.utils.formatPrice
 import com.listo.app.utils.iconForItem
 import com.listo.app.utils.rememberItemCatalog
+import com.listo.app.utils.shareList
 import com.listo.app.utils.toComposeColor
 import java.util.Calendar
 import java.util.Locale
@@ -251,7 +254,7 @@ fun ListDetailScreen(
     }
 
     if (showRename && list != null) {
-        RenameDialog(
+        RenameListDialog(
             initial = list.name,
             onConfirm = { viewModel.renameList(it); showRename = false },
             onDismiss = { showRename = false }
@@ -282,18 +285,13 @@ fun ListDetailScreen(
     }
 
     if (showDeleteList && list != null) {
-        AlertDialog(
-            onDismissRequest = { showDeleteList = false },
-            icon = { Icon(Icons.Rounded.DeleteOutline, contentDescription = null, tint = MaterialTheme.colorScheme.error) },
-            title = { Text(stringResource(R.string.detail_delete_title)) },
-            text = { Text(stringResource(R.string.detail_delete_msg, list.name)) },
-            confirmButton = {
-                TextButton(onClick = {
-                    showDeleteList = false
-                    viewModel.deleteList { navController.navigateUp() }
-                }) { Text(stringResource(R.string.action_delete), color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.Bold) }
+        DeleteListDialog(
+            name = list.name,
+            onConfirm = {
+                showDeleteList = false
+                viewModel.deleteList { navController.navigateUp() }
             },
-            dismissButton = { TextButton(onClick = { showDeleteList = false }) { Text(stringResource(R.string.action_cancel)) } }
+            onDismiss = { showDeleteList = false }
         )
     }
 
@@ -711,31 +709,6 @@ private fun CategoryChoice(label: String, color: Color?, selected: Boolean, onCl
     }
 }
 
-@Composable
-private fun RenameDialog(initial: String, onConfirm: (String) -> Unit, onDismiss: () -> Unit) {
-    var name by remember { mutableStateOf(initial) }
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.detail_rename), fontWeight = FontWeight.Bold) },
-        text = {
-            OutlinedTextField(
-                value = name,
-                onValueChange = { name = it },
-                singleLine = true,
-                shape = RoundedCornerShape(12.dp),
-                modifier = Modifier.fillMaxWidth()
-            )
-        },
-        confirmButton = {
-            Button(
-                onClick = { onConfirm(name) },
-                enabled = name.isNotBlank(),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-            ) { Text(stringResource(R.string.action_save)) }
-        },
-        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } }
-    )
-}
 
 @Composable
 private fun PriceStepper(
@@ -970,23 +943,3 @@ private fun ScheduleDialog(
 }
 
 /** Builds a plain-text version of the list and opens the Android share sheet. */
-private fun shareList(context: Context, list: ShoppingList, items: List<ShoppingItem>) {
-    val builder = StringBuilder()
-    builder.append(list.name).append("\n\n")
-    items.forEach { item ->
-        val box = if (item.isChecked) "[x]" else "[ ]"
-        val qty = if (item.quantity.isNotBlank()) " (${item.quantity})" else ""
-        builder.append(box).append(' ').append(item.name).append(qty).append('\n')
-    }
-    val total = items.sumOf { it.price ?: 0.0 }
-    if (total > 0.0) builder.append('\n').append(formatPrice(total))
-
-    val sendIntent = Intent(Intent.ACTION_SEND).apply {
-        type = "text/plain"
-        putExtra(Intent.EXTRA_SUBJECT, list.name)
-        putExtra(Intent.EXTRA_TEXT, builder.toString().trim())
-    }
-    context.startActivity(
-        Intent.createChooser(sendIntent, null).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    )
-}
