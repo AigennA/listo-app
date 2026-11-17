@@ -13,15 +13,11 @@ android {
     defaultConfig {
         // Play Store identity (com.listo.app was taken). The code package
         // stays com.listo.app — see namespace above.
-        val storePackage = "com.mopilappar.listo"
-        applicationId = storePackage
-        // The Play listing's id; debug builds add ".debug" to applicationId but
-        // "Rate Listo" must still open the real listing.
-        buildConfigField("String", "STORE_PACKAGE", "\"$storePackage\"")
+        applicationId = "com.mopilappar.listo"
         minSdk = 24
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 2
+        versionName = "1.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }

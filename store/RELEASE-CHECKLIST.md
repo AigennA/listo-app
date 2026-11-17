@@ -108,5 +108,8 @@ still need work. Items marked **BLOCKER** must be fixed before a public release.
 - [x] The launcher icon now matches the store icon (the sprout), fills
       the whole mask (no dark corners on the Android 12+ splash) and has an Android 7.x
       fallback and a themed monochrome version.
+- [ ] After the app is live on Play, add a **Rate Listo** row to Settings › About. It was
+      built and then held back, because a Play link opens a not-found page before release;
+      commit d19aa73 has the Settings row, strings and Play-link helpers.
 - [ ] The system date picker renders in stock teal rather than the app's accent colour.
 - [ ] Onboarding pages leave a large empty gap between the subtitle and the pager dots.

@@ -1,26 +1,10 @@
 package com.listo.app.utils
 
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class SupportLinksTest {
-
-    private val pkg = "com.example.app"
-
-    @Test
-    fun `play store app link opens the listing in the Play app`() {
-        assertEquals("market://details?id=com.example.app", SupportLinks.playStoreAppUri(pkg))
-    }
-
-    @Test
-    fun `play store web link is the fallback without the Play app`() {
-        assertEquals(
-            "https://play.google.com/store/apps/details?id=com.example.app",
-            SupportLinks.playStoreWebUrl(pkg)
-        )
-    }
 
     @Test
     fun `feedback mail goes to the support address with an encoded subject`() {

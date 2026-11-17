@@ -155,9 +155,7 @@
     <string name="list_copy_name">%1$s (kopia)</string>
     <string name="cd_list_actions">Listalternativ</string>
 
-    <!-- Settings: rate and feedback (nothing is sent by the app itself) -->
-    <string name="settings_rate">Gillar du Listo?</string>
-    <string name="settings_rate_sub">Betygsätt den på Google Play</string>
+    <!-- Settings: help and feedback (nothing is sent by the app itself) -->
     <string name="settings_feedback">Hjälp och feedback</string>
     <string name="settings_feedback_sub">Frågor, idéer eller en bugg? Skriv till oss</string>
     <string name="feedback_subject">Listo – feedback (%1$s)</string>
