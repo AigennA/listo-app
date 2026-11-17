@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -17,6 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Listo">
 
+        <!-- AdMob App ID. NOTE: this is Google's TEST app id. Replace with your
+             real AdMob app id before publishing to Google Play. -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -29,7 +34,11 @@
         </activity>
 
         <receiver
-            android:name=".utils.NotificationReceiver"
+            android:name=".utils.DailyReminderReceiver"
+            android:exported="false" />
+
+        <receiver
+            android:name=".utils.ListReminderReceiver"
             android:exported="false" />
 
         <receiver

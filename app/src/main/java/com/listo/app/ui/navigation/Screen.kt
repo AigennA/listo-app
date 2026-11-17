@@ -4,14 +4,14 @@ sealed class Screen(val route: String) {
     data object Splash      : Screen("splash")
     data object Onboarding  : Screen("onboarding")
     data object Home        : Screen("home")
-    data object CreateTask  : Screen("create_task?taskId={taskId}") {
-        fun route(taskId: Long? = null) = if (taskId != null) "create_task?taskId=$taskId" else "create_task"
+    data object ListDetail  : Screen("list_detail/{listId}") {
+        fun route(listId: Long) = "list_detail/$listId"
     }
-    data object TaskDetail  : Screen("task_detail/{taskId}") {
-        fun route(taskId: Long) = "task_detail/$taskId"
-    }
+    data object History     : Screen("history")
+    data object Calendar    : Screen("calendar")
     data object Categories  : Screen("categories")
-    data object Statistics  : Screen("statistics")
+    data object CategoryItems : Screen("category_items/{categoryId}") {
+        fun route(categoryId: Long) = "category_items/$categoryId"
+    }
     data object Settings    : Screen("settings")
-    data object Premium     : Screen("premium")
 }

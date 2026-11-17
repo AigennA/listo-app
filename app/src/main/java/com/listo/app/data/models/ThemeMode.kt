@@ -1,9 +1,10 @@
 package com.listo.app.data.models
 
-enum class ThemeMode(val label: String) {
-    SYSTEM("System"),
-    LIGHT("Light"),
-    DARK("Dark");
+/** Display names are string resources (see ui/theme/ThemeLabels.kt). */
+enum class ThemeMode {
+    SYSTEM,
+    LIGHT,
+    DARK;
 
     companion object {
         fun fromName(name: String?): ThemeMode =

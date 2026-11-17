@@ -1,26 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Listo</string>
-    <string name="app_tagline">Get things done.</string>
-    <string name="add_task">Add Task</string>
-    <string name="create_task">Create Task</string>
-    <string name="edit_task">Edit Task</string>
-    <string name="delete_task">Delete Task</string>
-    <string name="task_title">Task Title</string>
-    <string name="task_description">Description</string>
-    <string name="due_date">Due Date</string>
-    <string name="priority">Priority</string>
-    <string name="category">Category</string>
-    <string name="save">Save</string>
-    <string name="cancel">Cancel</string>
-    <string name="settings">Settings</string>
-    <string name="dark_mode">Dark Mode</string>
-    <string name="notifications">Notifications</string>
-    <string name="version">Version</string>
-    <string name="premium">Premium</string>
-    <string name="statistics">Statistics</string>
-    <string name="categories">Categories</string>
-    <string name="today">Today</string>
-    <string name="completed">Completed</string>
-    <string name="pending">Pending</string>
+    <string name="app_tagline">Your shopping, sorted.</string>
+
+    <!-- Common actions -->
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_create">Create</string>
+    <string name="action_delete">Delete</string>
+
+    <!-- Lists (home) -->
+    <string name="lists_title">My Lists</string>
+    <string name="lists_new">New List</string>
+    <string name="lists_empty_title">No shopping lists yet</string>
+    <string name="lists_empty_subtitle">Tap New List to start a quick shopping list</string>
+    <string name="lists_items_count">%1$d / %2$d items</string>
+    <string name="lists_new_dialog_title">New Shopping List</string>
+    <string name="lists_new_hint">e.g. Weekly groceries</string>
+    <string name="cd_history">History</string>
+    <string name="cd_categories">Categories</string>
+    <string name="cd_settings">Settings</string>
+    <string name="cd_calendar">Calendar</string>
+
+    <!-- Calendar -->
+    <string name="calendar_title">Calendar</string>
+    <string name="calendar_no_lists">No lists for this day yet</string>
+    <string name="calendar_create_for_day">Create a list for this day</string>
+    <string name="reminder_add">Remind me</string>
+    <string name="reminder_clear">No reminder</string>
+    <string name="list_reminder_text">Don\'t forget to shop: %1$s</string>
+
+    <!-- List detail -->
+    <string name="detail_default_title">List</string>
+    <string name="detail_not_found">List not found</string>
+    <string name="detail_rename">Rename list</string>
+    <string name="detail_delete">Delete list</string>
+    <string name="detail_schedule">Date &amp; reminder</string>
+    <string name="cd_share">Share</string>
+    <string name="schedule_pick_date">Pick a date</string>
+    <string name="schedule_remove">Remove date</string>
+    <string name="detail_delete_title">Delete list?</string>
+    <string name="detail_delete_msg">\"%1$s\" and all its items will be removed.</string>
+    <string name="detail_empty_title">No items yet</string>
+    <string name="detail_empty_subtitle">Type below to add what you need</string>
+    <string name="detail_done_count">%1$d / %2$d done</string>
+    <string name="detail_total">Total: %1$s</string>
+    <string name="detail_finish">Done — move to History</string>
+    <string name="add_item_hint">Add item…</string>
+    <string name="qty_hint">Qty (2 kg)</string>
+    <string name="qty_label">Qty</string>
+    <string name="price_label">Price</string>
+    <string name="category_none">None</string>
+    <string name="cd_details">Details</string>
+    <string name="edit_item_title">Edit item</string>
+    <string name="name_label">Name</string>
+    <string name="cd_check">Check</string>
+    <string name="cd_uncheck">Uncheck</string>
+    <string name="cd_delete">Delete</string>
+    <string name="budget_title">Budget</string>
+    <string name="budget_set">Set budget</string>
+    <string name="budget_hint">Budget amount</string>
+    <string name="budget_over">Over by %1$s</string>
+    <string name="budget_remaining">%1$s left</string>
+    <string name="budget_remove">Remove</string>
+
+    <!-- History -->
+    <string name="history_title">History</string>
+    <string name="history_empty_title">No past lists</string>
+    <string name="history_empty_subtitle">Finished shopping lists will appear here</string>
+    <string name="history_delete_title">Delete from history?</string>
+    <string name="history_delete_msg">\"%1$s\" will be permanently removed.</string>
+    <string name="items_word">items</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_theme_sub">Follow system, or force light / dark</string>
+    <string name="settings_accent">Accent Color</string>
+    <string name="accent_green">Green</string>
+    <string name="accent_teal">Teal</string>
+    <string name="accent_cyan">Cyan</string>
+    <string name="accent_blue">Blue</string>
+    <string name="accent_indigo">Indigo</string>
+    <string name="accent_purple">Purple</string>
+    <string name="accent_orchid">Orchid</string>
+    <string name="accent_pink">Pink</string>
+    <string name="accent_red">Red</string>
+    <string name="accent_coral">Coral</string>
+    <string name="accent_orange">Orange</string>
+    <string name="accent_amber">Amber</string>
+    <string name="accent_lime">Lime</string>
+    <string name="accent_mocha">Mocha</string>
+    <string name="accent_slate">Slate</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_language_sub">Choose the app language</string>
+    <string name="lang_system">System default</string>
+    <string name="lang_en">English</string>
+    <string name="lang_tr">Türkçe</string>
+    <string name="lang_sv">Svenska</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_push">Push Notifications</string>
+    <string name="settings_push_sub">Reminders for your lists</string>
+    <string name="settings_daily">Daily Reminder</string>
+    <string name="settings_daily_sub">A daily nudge to check your lists</string>
+    <string name="settings_reminder_time">Reminder time</string>
+    <string name="daily_reminder_text">You have %1$d items left on your lists</string>
+    <string name="daily_reminder_text_empty">Time to plan your shopping list</string>
+    <string name="settings_about">About</string>
+    <string name="settings_version">App Version</string>
+    <string name="settings_privacy">Privacy Policy</string>
+    <string name="settings_privacy_sub">View our privacy policy</string>
+    <string name="settings_ad_privacy">Ad Privacy</string>
+    <string name="settings_ad_privacy_sub">Change your ad consent choices</string>
+
+    <!-- Published policy page (listo.html in the public AigennA/privacy-policy repo). Not translated. -->
+    <string name="privacy_policy_url" translatable="false">https://aigenna.github.io/privacy-policy/listo.html</string>
+    <string name="theme_system">System</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+
+    <!-- Categories -->
+    <string name="categories_title">Categories</string>
+    <string name="categories_empty_title">No categories yet</string>
+    <string name="categories_empty_subtitle">Create categories like Produce, Dairy or Cleaning</string>
+    <string name="category_new_title">New Category</string>
+    <string name="category_name_label">Category Name</string>
+    <string name="category_pick_color">Pick a color</string>
+    <string name="cd_add_category">Add Category</string>
+    <string name="cat_create_list">Create list</string>
+    <string name="cat_items_empty">No suggested items for this category yet</string>
+
+    <!-- Onboarding -->
+    <string name="onb1_title">Quick Shopping Lists</string>
+    <string name="onb1_sub">Jot down what you need the moment it comes to mind, in one clean place.</string>
+    <string name="onb2_title">Organize by Category</string>
+    <string name="onb2_sub">Group items by aisle — produce, dairy, cleaning — and shop faster.</string>
+    <string name="onb3_title">Check Off &amp; Save</string>
+    <string name="onb3_sub">Tick items as you shop, track the total, then keep lists in your history.</string>
+    <string name="onb_skip">Skip</string>
+    <string name="onb_next">Next</string>
+    <string name="onb_start">Get Started</string>
 </resources>

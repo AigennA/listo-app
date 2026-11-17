@@ -11,6 +11,7 @@ class LisToApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        // The ads SDK is started by AdsConsentController once consent allows it.
         createNotificationChannels()
     }
 

@@ -7,7 +7,10 @@ object DateUtils {
 
     private val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
     private val timeFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
+    private val timeOnlyFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
     private val shortDateFormat = SimpleDateFormat("MMM dd", Locale.getDefault())
+
+    fun formatTime(millis: Long): String = timeOnlyFormat.format(Date(millis))
 
     fun todayRange(): Pair<Long, Long> {
         val cal = Calendar.getInstance()
@@ -30,6 +33,17 @@ object DateUtils {
         val start = cal.timeInMillis
         cal.add(Calendar.WEEK_OF_YEAR, 1)
         return start to cal.timeInMillis
+    }
+
+    fun startOfDay(millis: Long): Long {
+        val cal = Calendar.getInstance().apply {
+            timeInMillis = millis
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        return cal.timeInMillis
     }
 
     fun formatDate(millis: Long): String = dateFormat.format(Date(millis))

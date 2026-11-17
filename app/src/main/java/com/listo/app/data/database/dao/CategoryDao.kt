@@ -13,9 +13,6 @@ interface CategoryDao {
     @Query("SELECT * FROM categories WHERE id = :id")
     suspend fun getCategoryById(id: Long): CategoryEntity?
 
-    @Query("SELECT COUNT(*) FROM tasks WHERE categoryId = :categoryId AND isCompleted = 0")
-    fun getTaskCountForCategory(categoryId: Long): Flow<Int>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCategory(category: CategoryEntity): Long
 

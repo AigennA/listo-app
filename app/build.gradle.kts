@@ -11,7 +11,9 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.listo.app"
+        // Play Store identity (com.listo.app was taken). The code package
+        // stays com.listo.app — see namespace above.
+        applicationId = "com.mopilappar.listo"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -101,4 +103,16 @@ dependencies {
 
     // Coroutines
     implementation(libs.coroutines.android)
+
+    // Ads (AdMob) and the consent form (UMP)
+    implementation(libs.play.services.ads)
+    implementation(libs.user.messaging.platform)
+
+    // Unit tests
+    testImplementation(libs.junit)
+
+    // Instrumented / behaviour tests (data layer; no Espresso/Compose UI —
+    // the installed emulator images are an API preview Espresso can't drive)
+    androidTestImplementation(libs.androidx.test.junit)
+    androidTestImplementation(libs.androidx.test.runner)
 }
