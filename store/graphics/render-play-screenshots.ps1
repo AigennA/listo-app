@@ -20,7 +20,8 @@ $shots = @(
     @{ shot = '03-list-detail'; title = "Type it, don't organise it"; sub = 'Every item lands in the right aisle by itself' },
     @{ shot = '04-categories';  title = 'Aisles your way';            sub = 'Add your own categories and colours' },
     @{ shot = '05-calendar';    title = 'Plan the week ahead';        sub = 'Give a list a date and a reminder' },
-    @{ shot = '06-settings';    title = 'Make it yours';              sub = 'Light or dark, 12 accent colours, 3 languages' }
+    @{ shot = '06-settings';    title = 'Make it yours';              sub = 'Light or dark, 12 accent colours, 3 languages' },
+    @{ shot = '07-budget';      title = 'Stay on budget';             sub = 'Set a limit and see what is left as you shop' }
 )
 
 if (-not $Chrome) {
