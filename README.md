@@ -14,7 +14,7 @@
   <img alt="platform" src="https://img.shields.io/badge/platform-Android%207.0%2B-2ECC71">
   <img alt="language" src="https://img.shields.io/badge/Kotlin-2.0-1B4332">
   <img alt="ui" src="https://img.shields.io/badge/Jetpack%20Compose-Material%203-40916C">
-  <img alt="license" src="https://img.shields.io/badge/license-MIT-555">
+  <img alt="license" src="https://img.shields.io/badge/license-All%20rights%20reserved-555">
 </p>
 
 ---
@@ -107,4 +107,4 @@ captures (used above), and `store/screenshots/play-phone-en/` holds the 1080×19
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+All rights reserved — this code may not be copied, modified or reused without written permission. See [LICENSE](LICENSE).
