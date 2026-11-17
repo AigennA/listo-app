@@ -53,6 +53,8 @@ import com.listo.app.ui.viewmodel.AdsViewModel
 import com.listo.app.ui.viewmodel.SettingsViewModel
 import com.listo.app.utils.DailyReminderScheduler
 import com.listo.app.utils.LocaleHelper
+import com.listo.app.utils.composeFeedbackEmail
+import com.listo.app.utils.openPlayStoreListing
 import java.util.Locale
 
 @Composable
@@ -168,6 +170,25 @@ fun SettingsScreen(
             }
 
             SettingsSectionHeader(stringResource(R.string.settings_about))
+
+            SettingsClickItem(
+                icon = Icons.Rounded.StarRate,
+                label = stringResource(R.string.settings_rate),
+                subtitle = stringResource(R.string.settings_rate_sub),
+                iconColor = MaterialTheme.colorScheme.primary,
+                onClick = { context.openPlayStoreListing(BuildConfig.STORE_PACKAGE) }
+            )
+
+            val supportEmail = stringResource(R.string.support_email)
+            val feedbackSubject = stringResource(R.string.feedback_subject, BuildConfig.VERSION_NAME)
+            val feedbackBody = stringResource(R.string.feedback_body, BuildConfig.VERSION_NAME, Build.VERSION.RELEASE)
+            SettingsClickItem(
+                icon = Icons.Rounded.HelpOutline,
+                label = stringResource(R.string.settings_feedback),
+                subtitle = stringResource(R.string.settings_feedback_sub),
+                iconColor = MaterialTheme.colorScheme.primary,
+                onClick = { context.composeFeedbackEmail(supportEmail, feedbackSubject, feedbackBody) }
+            )
 
             SettingsClickItem(
                 icon = Icons.Rounded.Info,
