@@ -1,13 +1,11 @@
 package com.listo.app.utils
 
-import java.util.Locale
-
-data class GrocerySuggestion(val name: String, val category: String)
+import com.listo.app.R
 
 /**
- * Built-in catalog of common grocery items and default categories.
- * Used to seed starter categories, power type-ahead suggestions, and
- * auto-assign a category to freely typed items.
+ * Keys of the built-in categories. They are stored in the database in English
+ * and only translated for display (see [CategoryLabels]), so existing data
+ * keeps working whatever language the app runs in.
  */
 object GroceryCatalog {
 
@@ -20,6 +18,9 @@ object GroceryCatalog {
     const val CLEANING = "Cleaning"
     const val BREAKFAST = "Breakfast"
     const val PANTRY = "Pantry"
+
+    /** Group key for items without a category. */
+    const val UNCATEGORIZED = "Other"
 
     /** name to hex color, used to seed categories on first launch. */
     val defaultCategories: List<Pair<String, String>> = listOf(
@@ -34,44 +35,16 @@ object GroceryCatalog {
         PANTRY to "#A29BFE"
     )
 
-    private val items: List<GrocerySuggestion> = buildList {
-        fun group(category: String, vararg names: String) {
-            names.forEach { add(GrocerySuggestion(it, category)) }
-        }
-        group(PRODUCE, "Tomato", "Cucumber", "Lettuce", "Pepper", "Potato", "Onion", "Garlic",
-            "Carrot", "Apple", "Banana", "Orange", "Lemon", "Strawberry", "Grapes", "Watermelon",
-            "Eggplant", "Spinach", "Parsley", "Avocado", "Mushroom")
-        group(DAIRY, "Milk", "Yogurt", "Cheese", "Butter", "Cream", "Sour Cream", "Cottage Cheese")
-        group(MEAT, "Chicken", "Ground Beef", "Steak", "Fish", "Salmon", "Sausage", "Meatballs",
-            "Turkey", "Bacon", "Shrimp")
-        group(BAKERY, "Bread", "Bagel", "Baguette", "Croissant", "Tortilla", "Toast Bread", "Buns")
-        group(DRINKS, "Water", "Sparkling Water", "Cola", "Juice", "Tea", "Coffee", "Soda", "Lemonade")
-        group(SNACKS, "Chips", "Chocolate", "Cookies", "Crackers", "Nuts", "Cake", "Wafer", "Gum", "Popcorn")
-        group(CLEANING, "Detergent", "Dish Soap", "Bleach", "Soap", "Shampoo", "Toilet Paper",
-            "Paper Towels", "Napkins", "Toothpaste", "Fabric Softener", "Glass Cleaner", "Trash Bags")
-        group(BREAKFAST, "Eggs", "Honey", "Jam", "Olives", "Cereal", "Peanut Butter", "Oatmeal")
-        group(PANTRY, "Rice", "Pasta", "Flour", "Sugar", "Salt", "Olive Oil", "Sunflower Oil",
-            "Lentils", "Chickpeas", "Beans", "Tomato Paste", "Vinegar", "Spices", "Canned Tomatoes")
-    }
-
-    fun suggest(query: String, limit: Int = 6): List<GrocerySuggestion> {
-        val q = query.trim().lowercase(Locale.ROOT)
-        if (q.isEmpty()) return emptyList()
-        val starts = items.filter { it.name.lowercase(Locale.ROOT).startsWith(q) }
-        val contains = items.filter {
-            val n = it.name.lowercase(Locale.ROOT)
-            !n.startsWith(q) && n.contains(q)
-        }
-        return (starts + contains).distinctBy { it.name }.take(limit)
-    }
-
-    fun itemsForCategory(category: String): List<String> =
-        items.filter { it.category.equals(category, ignoreCase = true) }.map { it.name }
-
-    fun categoryFor(name: String): String? {
-        val q = name.trim().lowercase(Locale.ROOT)
-        if (q.isEmpty()) return null
-        return items.firstOrNull { it.name.lowercase(Locale.ROOT) == q }?.category
-            ?: items.firstOrNull { q.contains(it.name.lowercase(Locale.ROOT)) }?.category
-    }
+    /** Category key to the string-array resource listing its common items. */
+    val itemArrays: Map<String, Int> = mapOf(
+        PRODUCE to R.array.catalog_produce,
+        DAIRY to R.array.catalog_dairy,
+        MEAT to R.array.catalog_meat,
+        BAKERY to R.array.catalog_bakery,
+        DRINKS to R.array.catalog_drinks,
+        SNACKS to R.array.catalog_snacks,
+        CLEANING to R.array.catalog_cleaning,
+        BREAKFAST to R.array.catalog_breakfast,
+        PANTRY to R.array.catalog_pantry
+    )
 }

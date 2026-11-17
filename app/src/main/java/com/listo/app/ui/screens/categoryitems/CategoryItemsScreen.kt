@@ -25,8 +25,9 @@ import com.listo.app.R
 import com.listo.app.ui.components.LisToTopBar
 import com.listo.app.ui.navigation.Screen
 import com.listo.app.ui.viewmodel.CategoryItemsViewModel
-import com.listo.app.utils.GroceryCatalog
+import com.listo.app.utils.categoryLabel
 import com.listo.app.utils.iconForItem
+import com.listo.app.utils.rememberItemCatalog
 import com.listo.app.utils.toComposeColor
 
 @Composable
@@ -36,24 +37,26 @@ fun CategoryItemsScreen(
 ) {
     val category by viewModel.category.collectAsStateWithLifecycle()
     val accent = category?.color?.toComposeColor() ?: MaterialTheme.colorScheme.primary
-    val catalogItems = remember(category?.name) {
-        category?.name?.let { GroceryCatalog.itemsForCategory(it) } ?: emptyList()
+    val catalog = rememberItemCatalog()
+    val catalogItems = remember(category?.name, catalog) {
+        category?.name?.let { catalog.itemsForCategory(it) } ?: emptyList()
     }
+    val title = category?.name?.let { categoryLabel(it) } ?: ""
 
     val selections = remember { mutableStateMapOf<String, Int>() }
     var listName by remember { mutableStateOf("") }
-    LaunchedEffect(category?.name) {
-        if (listName.isBlank()) category?.name?.let { listName = it }
+    LaunchedEffect(title) {
+        if (listName.isBlank()) listName = title
     }
     val anyChosen = selections.values.any { it > 0 }
 
     Scaffold(
-        topBar = { LisToTopBar(title = category?.name ?: "", navController = navController) },
+        topBar = { LisToTopBar(title = title, navController = navController) },
         bottomBar = {
             Surface(tonalElevation = 3.dp, shadowElevation = 8.dp) {
                 Button(
                     onClick = {
-                        viewModel.createList(listName.ifBlank { category?.name ?: "List" }, selections.toMap()) {
+                        viewModel.createList(listName.ifBlank { title.ifBlank { "List" } }, selections.toMap()) {
                             // Return to My Lists so the new (active) list is visible there.
                             navController.popBackStack(Screen.Home.route, inclusive = false)
                         }
@@ -104,9 +107,11 @@ fun CategoryItemsScreen(
                     colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = accent)
                 )
             }
-            items(catalogItems, key = { it }) { name ->
+            items(catalogItems, key = { it.key }) { entry ->
+                val name = entry.name
                 CatalogItemRow(
                     name = name,
+                    iconKey = entry.key,
                     accent = accent,
                     count = selections[name] ?: 0,
                     onCountChange = { c -> if (c <= 0) selections.remove(name) else selections[name] = c }
@@ -119,6 +124,7 @@ fun CategoryItemsScreen(
 @Composable
 private fun CatalogItemRow(
     name: String,
+    iconKey: String,
     accent: Color,
     count: Int,
     onCountChange: (Int) -> Unit
@@ -142,7 +148,7 @@ private fun CatalogItemRow(
                     .background(accent.copy(alpha = 0.15f)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(iconForItem(name), contentDescription = null, tint = accent, modifier = Modifier.size(20.dp))
+                Icon(iconForItem(iconKey), contentDescription = null, tint = accent, modifier = Modifier.size(20.dp))
             }
             Spacer(Modifier.width(12.dp))
             Text(

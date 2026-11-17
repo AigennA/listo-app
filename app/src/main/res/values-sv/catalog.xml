@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Same order and length as values/catalog.xml. -->
+<resources>
+    <string name="category_builtin_produce">Frukt &amp; grönt</string>
+    <string name="category_builtin_dairy">Mejeri</string>
+    <string name="category_builtin_meat">Kött &amp; fisk</string>
+    <string name="category_builtin_bakery">Bröd</string>
+    <string name="category_builtin_drinks">Dryck</string>
+    <string name="category_builtin_snacks">Snacks</string>
+    <string name="category_builtin_cleaning">Städ &amp; hygien</string>
+    <string name="category_builtin_breakfast">Frukost</string>
+    <string name="category_builtin_pantry">Skafferi</string>
+    <string name="category_other">Övrigt</string>
+
+    <string-array name="catalog_produce">
+        <item>Tomat</item>
+        <item>Gurka</item>
+        <item>Sallad</item>
+        <item>Paprika</item>
+        <item>Potatis</item>
+        <item>Lök</item>
+        <item>Vitlök</item>
+        <item>Morot</item>
+        <item>Äpple</item>
+        <item>Banan</item>
+        <item>Apelsin</item>
+        <item>Citron</item>
+        <item>Jordgubbar</item>
+        <item>Vindruvor</item>
+        <item>Vattenmelon</item>
+        <item>Aubergine</item>
+        <item>Spenat</item>
+        <item>Persilja</item>
+        <item>Avokado</item>
+        <item>Svamp</item>
+    </string-array>
+
+    <string-array name="catalog_dairy">
+        <item>Mjölk</item>
+        <item>Yoghurt</item>
+        <item>Ost</item>
+        <item>Smör</item>
+        <item>Grädde</item>
+        <item>Gräddfil</item>
+        <item>Keso</item>
+    </string-array>
+
+    <string-array name="catalog_meat">
+        <item>Kyckling</item>
+        <item>Nötfärs</item>
+        <item>Biff</item>
+        <item>Fisk</item>
+        <item>Lax</item>
+        <item>Korv</item>
+        <item>Köttbullar</item>
+        <item>Kalkon</item>
+        <item>Bacon</item>
+        <item>Räkor</item>
+    </string-array>
+
+    <string-array name="catalog_bakery">
+        <item>Bröd</item>
+        <item>Bagel</item>
+        <item>Baguette</item>
+        <item>Croissant</item>
+        <item>Tortilla</item>
+        <item>Rostbröd</item>
+        <item>Bullar</item>
+    </string-array>
+
+    <string-array name="catalog_drinks">
+        <item>Vatten</item>
+        <item>Kolsyrat vatten</item>
+        <item>Cola</item>
+        <item>Juice</item>
+        <item>Te</item>
+        <item>Kaffe</item>
+        <item>Läsk</item>
+        <item>Lemonad</item>
+    </string-array>
+
+    <string-array name="catalog_snacks">
+        <item>Chips</item>
+        <item>Choklad</item>
+        <item>Kakor</item>
+        <item>Kex</item>
+        <item>Nötter</item>
+        <item>Tårta</item>
+        <item>Rån</item>
+        <item>Tuggummi</item>
+        <item>Popcorn</item>
+    </string-array>
+
+    <string-array name="catalog_cleaning">
+        <item>Tvättmedel</item>
+        <item>Diskmedel</item>
+        <item>Klorin</item>
+        <item>Tvål</item>
+        <item>Schampo</item>
+        <item>Toalettpapper</item>
+        <item>Hushållspapper</item>
+        <item>Servetter</item>
+        <item>Tandkräm</item>
+        <item>Sköljmedel</item>
+        <item>Fönsterputs</item>
+        <item>Soppåsar</item>
+    </string-array>
+
+    <string-array name="catalog_breakfast">
+        <item>Ägg</item>
+        <item>Honung</item>
+        <item>Sylt</item>
+        <item>Oliver</item>
+        <item>Flingor</item>
+        <item>Jordnötssmör</item>
+        <item>Havregryn</item>
+    </string-array>
+
+    <string-array name="catalog_pantry">
+        <item>Ris</item>
+        <item>Pasta</item>
+        <item>Mjöl</item>
+        <item>Socker</item>
+        <item>Salt</item>
+        <item>Olivolja</item>
+        <item>Solrosolja</item>
+        <item>Linser</item>
+        <item>Kikärtor</item>
+        <item>Bönor</item>
+        <item>Tomatpuré</item>
+        <item>Vinäger</item>
+        <item>Kryddor</item>
+        <item>Krossade tomater</item>
+    </string-array>
+</resources>

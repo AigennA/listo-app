@@ -7,6 +7,7 @@ import com.listo.app.data.models.Category
 import com.listo.app.data.models.ShoppingItem
 import com.listo.app.data.models.ShoppingList
 import com.listo.app.domain.usecases.*
+import com.listo.app.utils.GroceryCatalog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -23,12 +24,12 @@ data class ListDetailUiState(
     val progress: Float get() = if (items.isEmpty()) 0f else checkedCount.toFloat() / items.size
     val total: Double get() = items.sumOf { it.price ?: 0.0 }
 
-    /** Items grouped by category name (uncategorised under "Other"), checked items last. */
+    /** Items grouped by category name (uncategorised under [GroceryCatalog.UNCATEGORIZED], kept last). */
     val grouped: List<Pair<String, List<ShoppingItem>>>
         get() = items
-            .groupBy { it.categoryName ?: "Other" }
+            .groupBy { it.categoryName ?: GroceryCatalog.UNCATEGORIZED }
             .toList()
-            .sortedBy { it.first == "Other" } // keep "Other" at the end
+            .sortedBy { it.first == GroceryCatalog.UNCATEGORIZED }
 }
 
 @HiltViewModel

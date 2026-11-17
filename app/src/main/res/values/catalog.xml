@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Built-in categories and their common items. Item names are paired with the
+  English list by position: every translation must keep the same order and
+  length (CatalogResourcesTest checks this).
+-->
+<resources>
+    <string name="category_builtin_produce">Produce</string>
+    <string name="category_builtin_dairy">Dairy</string>
+    <string name="category_builtin_meat">Meat &amp; Fish</string>
+    <string name="category_builtin_bakery">Bakery</string>
+    <string name="category_builtin_drinks">Drinks</string>
+    <string name="category_builtin_snacks">Snacks</string>
+    <string name="category_builtin_cleaning">Cleaning</string>
+    <string name="category_builtin_breakfast">Breakfast</string>
+    <string name="category_builtin_pantry">Pantry</string>
+    <string name="category_other">Other</string>
+
+    <string-array name="catalog_produce">
+        <item>Tomato</item>
+        <item>Cucumber</item>
+        <item>Lettuce</item>
+        <item>Pepper</item>
+        <item>Potato</item>
+        <item>Onion</item>
+        <item>Garlic</item>
+        <item>Carrot</item>
+        <item>Apple</item>
+        <item>Banana</item>
+        <item>Orange</item>
+        <item>Lemon</item>
+        <item>Strawberry</item>
+        <item>Grapes</item>
+        <item>Watermelon</item>
+        <item>Eggplant</item>
+        <item>Spinach</item>
+        <item>Parsley</item>
+        <item>Avocado</item>
+        <item>Mushroom</item>
+    </string-array>
+
+    <string-array name="catalog_dairy">
+        <item>Milk</item>
+        <item>Yogurt</item>
+        <item>Cheese</item>
+        <item>Butter</item>
+        <item>Cream</item>
+        <item>Sour Cream</item>
+        <item>Cottage Cheese</item>
+    </string-array>
+
+    <string-array name="catalog_meat">
+        <item>Chicken</item>
+        <item>Ground Beef</item>
+        <item>Steak</item>
+        <item>Fish</item>
+        <item>Salmon</item>
+        <item>Sausage</item>
+        <item>Meatballs</item>
+        <item>Turkey</item>
+        <item>Bacon</item>
+        <item>Shrimp</item>
+    </string-array>
+
+    <string-array name="catalog_bakery">
+        <item>Bread</item>
+        <item>Bagel</item>
+        <item>Baguette</item>
+        <item>Croissant</item>
+        <item>Tortilla</item>
+        <item>Toast Bread</item>
+        <item>Buns</item>
+    </string-array>
+
+    <string-array name="catalog_drinks">
+        <item>Water</item>
+        <item>Sparkling Water</item>
+        <item>Cola</item>
+        <item>Juice</item>
+        <item>Tea</item>
+        <item>Coffee</item>
+        <item>Soda</item>
+        <item>Lemonade</item>
+    </string-array>
+
+    <string-array name="catalog_snacks">
+        <item>Chips</item>
+        <item>Chocolate</item>
+        <item>Cookies</item>
+        <item>Crackers</item>
+        <item>Nuts</item>
+        <item>Cake</item>
+        <item>Wafer</item>
+        <item>Gum</item>
+        <item>Popcorn</item>
+    </string-array>
+
+    <string-array name="catalog_cleaning">
+        <item>Detergent</item>
+        <item>Dish Soap</item>
+        <item>Bleach</item>
+        <item>Soap</item>
+        <item>Shampoo</item>
+        <item>Toilet Paper</item>
+        <item>Paper Towels</item>
+        <item>Napkins</item>
+        <item>Toothpaste</item>
+        <item>Fabric Softener</item>
+        <item>Glass Cleaner</item>
+        <item>Trash Bags</item>
+    </string-array>
+
+    <string-array name="catalog_breakfast">
+        <item>Eggs</item>
+        <item>Honey</item>
+        <item>Jam</item>
+        <item>Olives</item>
+        <item>Cereal</item>
+        <item>Peanut Butter</item>
+        <item>Oatmeal</item>
+    </string-array>
+
+    <string-array name="catalog_pantry">
+        <item>Rice</item>
+        <item>Pasta</item>
+        <item>Flour</item>
+        <item>Sugar</item>
+        <item>Salt</item>
+        <item>Olive Oil</item>
+        <item>Sunflower Oil</item>
+        <item>Lentils</item>
+        <item>Chickpeas</item>
+        <item>Beans</item>
+        <item>Tomato Paste</item>
+        <item>Vinegar</item>
+        <item>Spices</item>
+        <item>Canned Tomatoes</item>
+    </string-array>
+</resources>
