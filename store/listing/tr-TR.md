@@ -25,7 +25,7 @@ NEDEN LISTO
 YOLUNDAN ÇEKİLEN BİR UYGULAMA
 • Hesap yok, kayıt yok, bulut yok. Listelerin telefonunda kalır.
 • Tamamen çevrimdışı çalışır.
-• Açık, koyu veya sistem teması ve kolay okunan on beş vurgu rengi.
+• Açık, koyu veya sistem teması ve kolay okunan on iki vurgu rengi.
 • English, Türkçe ve Svenska dillerinde.
 
 ÜCRETSİZ

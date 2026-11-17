@@ -25,7 +25,7 @@ WHY LISTO
 MADE TO STAY OUT OF THE WAY
 • No account, no sign-up, no cloud. Your lists stay on your phone.
 • Works fully offline.
-• Light, dark or follow-the-system theme, plus fifteen accent colours tuned for easy reading.
+• Light, dark or follow-the-system theme, plus twelve accent colours tuned for easy reading.
 • Available in English, Türkçe and Svenska.
 
 FREE

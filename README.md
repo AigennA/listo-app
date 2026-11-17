@@ -37,7 +37,7 @@
   whole month in the built-in calendar.
 - **Keeps history.** Finished lists move to History rather than disappearing.
 - **Shares.** Send any list as plain text.
-- **Adapts.** Light / dark / system theme, fifteen accent colours, and three languages
+- **Adapts.** Light / dark / system theme, twelve accent colours, and three languages
   (English, Türkçe, Svenska).
 - **Stays readable.** Each accent colour is tuned to meet WCAG AA text contrast in both
   light and dark mode, and the colour picker works with TalkBack.

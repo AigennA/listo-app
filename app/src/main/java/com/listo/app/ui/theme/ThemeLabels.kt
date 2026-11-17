@@ -20,9 +20,6 @@ fun AccentColor.labelRes(): Int = when (this) {
     AccentColor.PINK   -> R.string.accent_pink
     AccentColor.RED    -> R.string.accent_red
     AccentColor.CORAL  -> R.string.accent_coral
-    AccentColor.ORANGE -> R.string.accent_orange
-    AccentColor.AMBER  -> R.string.accent_amber
-    AccentColor.LIME   -> R.string.accent_lime
     AccentColor.MOCHA  -> R.string.accent_mocha
     AccentColor.SLATE  -> R.string.accent_slate
 }

@@ -7,7 +7,8 @@ package com.listo.app.data.models
  * (see ui/theme/AccentColorLabels.kt).
  *
  * Declaration order is the picker order: by hue, neutrals last. Never rename
- * an entry — saved preferences refer to it by name.
+ * an entry — saved preferences refer to it by name; when removing one, map its
+ * name in `retired` so those users land on a similar colour.
  */
 enum class AccentColor(
     val primary: Long,
@@ -24,14 +25,18 @@ enum class AccentColor(
     PINK  (0xFFE84393, 0xFFC72C7B, 0xFFFBDDEC),
     RED   (0xFFE74C3C, 0xFFC0392B, 0xFFFAD9D5),
     CORAL (0xFFE17055, 0xFFC85A42, 0xFFFAE0D8),
-    ORANGE(0xFFE67E22, 0xFFD2691E, 0xFFFCE5D0),
-    AMBER (0xFFF39C12, 0xFFD4860B, 0xFFFDECCB),
-    LIME  (0xFF7CB342, 0xFF558B2F, 0xFFE5F2D6),
     MOCHA (0xFF8D6E63, 0xFF6D4C41, 0xFFEFE5E1),
     SLATE (0xFF607D8B, 0xFF455A64, 0xFFE0E8EC);
 
     companion object {
+        /** Accents removed from the picker, mapped to the closest one still offered. */
+        private val retired: Map<String, AccentColor> = mapOf(
+            "ORANGE" to CORAL,
+            "AMBER" to CORAL,
+            "LIME" to GREEN
+        )
+
         fun fromName(name: String?): AccentColor =
-            entries.find { it.name == name } ?: GREEN
+            entries.find { it.name == name } ?: retired[name] ?: GREEN
     }
 }
