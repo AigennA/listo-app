@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  The Listo icon: a shopping-list card with the Listo sprout growing out of its
-  top. Same geometry as store/graphics/icon-512.html, drawn in its 512px
-  coordinates; the outer group applies the store file's 1.2x content scale and
-  maps 512px onto the 72dp a launcher mask shows, keeping the artwork inside
+  The Listo sprout, same geometry as store/graphics/icon-512.html and
+  SplashScreen.kt. The outer group maps the 512px store artwork onto the
+  72dp area a launcher mask shows (offset 18dp), so the sprout stays inside
   the 66dp safe zone of the 108dp adaptive icon.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
@@ -13,22 +12,24 @@
     android:viewportHeight="108">
 
     <group
-        android:translateX="10.8"
-        android:translateY="13.1625"
-        android:scaleX="0.16875"
-        android:scaleY="0.16875">
+        android:translateX="18"
+        android:translateY="18"
+        android:scaleX="0.140625"
+        android:scaleY="0.140625">
 
-        <!-- Sprout (as in SplashScreen.kt), scaled 0.4; its stem base hides behind the card. -->
+        <!-- The store artwork's inner 274x320 box, placed at (86,104) and scaled to 330px. -->
         <group
-            android:translateX="201.2"
-            android:translateY="80.88"
-            android:scaleX="0.4"
-            android:scaleY="0.4">
+            android:translateX="109.72"
+            android:translateY="150.41"
+            android:scaleX="1.03125"
+            android:scaleY="1.03125">
+
             <path
                 android:pathData="M137,260.3 Q131.52,150.7 137,82.2"
                 android:strokeColor="#FFFFFF"
                 android:strokeWidth="24.66"
                 android:strokeLineCap="round" />
+
             <group
                 android:pivotX="137"
                 android:pivotY="115.08"
@@ -37,6 +38,7 @@
                     android:fillColor="#FFFFFF"
                     android:pathData="M137,115.08 Q200.29,51.79 137,0 Q73.71,51.79 137,115.08 Z" />
             </group>
+
             <group
                 android:pivotX="137"
                 android:pivotY="93.16"
@@ -46,47 +48,5 @@
                     android:pathData="M137,93.16 Q206.32,23.84 137,-32.88 Q67.68,23.84 137,93.16 Z" />
             </group>
         </group>
-
-        <!-- List card -->
-        <path
-            android:fillColor="#FFFFFF"
-            android:pathData="M164,170 L348,170 A28,28 0 0,1 376,198 L376,382 A28,28 0 0,1 348,410 L164,410 A28,28 0 0,1 136,382 L136,198 A28,28 0 0,1 164,170 Z" />
-
-        <!-- Row 1: ticked -->
-        <path
-            android:fillColor="#40916C"
-            android:pathData="M162,230 A18,18 0 1,0 198,230 A18,18 0 1,0 162,230 Z" />
-        <path
-            android:pathData="M171,230 L178,237 L190,223"
-            android:strokeColor="#FFFFFF"
-            android:strokeWidth="6"
-            android:strokeLineCap="round"
-            android:strokeLineJoin="round" />
-        <path
-            android:fillColor="#B7D3C4"
-            android:pathData="M221,223 L333,223 A7,7 0 0,1 333,237 L221,237 A7,7 0 0,1 221,223 Z" />
-
-        <!-- Row 2: ticked -->
-        <path
-            android:fillColor="#40916C"
-            android:pathData="M162,290 A18,18 0 1,0 198,290 A18,18 0 1,0 162,290 Z" />
-        <path
-            android:pathData="M171,290 L178,297 L190,283"
-            android:strokeColor="#FFFFFF"
-            android:strokeWidth="6"
-            android:strokeLineCap="round"
-            android:strokeLineJoin="round" />
-        <path
-            android:fillColor="#B7D3C4"
-            android:pathData="M221,283 L313,283 A7,7 0 0,1 313,297 L221,297 A7,7 0 0,1 221,283 Z" />
-
-        <!-- Row 3: still to buy -->
-        <path
-            android:pathData="M165,350 A15,15 0 1,0 195,350 A15,15 0 1,0 165,350 Z"
-            android:strokeColor="#95B8A6"
-            android:strokeWidth="6" />
-        <path
-            android:fillColor="#2D6A4F"
-            android:pathData="M221,343 L325,343 A7,7 0 0,1 325,357 L221,357 A7,7 0 0,1 221,343 Z" />
     </group>
 </vector>
