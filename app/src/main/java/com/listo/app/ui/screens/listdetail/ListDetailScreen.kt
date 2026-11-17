@@ -51,10 +51,12 @@ import com.listo.app.ui.viewmodel.ListDetailUiState
 import com.listo.app.ui.viewmodel.ListDetailViewModel
 import com.listo.app.utils.AppDefaults
 import com.listo.app.utils.DateUtils
-import com.listo.app.utils.GroceryCatalog
+import com.listo.app.utils.ItemCatalog
 import com.listo.app.utils.ListReminderScheduler
+import com.listo.app.utils.categoryLabel
 import com.listo.app.utils.formatPrice
 import com.listo.app.utils.iconForItem
+import com.listo.app.utils.rememberItemCatalog
 import com.listo.app.utils.toComposeColor
 import java.util.Calendar
 import java.util.Locale
@@ -68,6 +70,7 @@ fun ListDetailScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val list = uiState.list
     val context = LocalContext.current
+    val catalog = rememberItemCatalog()
 
     var showRename by remember { mutableStateOf(false) }
     var showDeleteList by remember { mutableStateOf(false) }
@@ -125,6 +128,7 @@ fun ListDetailScreen(
             if (list != null && !list.isArchived) {
                 AddItemBar(
                     categories = uiState.categories,
+                    catalog = catalog,
                     onAdd = { name, qty, catId, price -> viewModel.addItem(name, qty, catId, price) }
                 )
             }
@@ -193,6 +197,7 @@ fun ListDetailScreen(
                     items(groupItems, key = { it.id }) { item ->
                         ShoppingItemRow(
                             item = item,
+                            iconKey = catalog.keyFor(item.name) ?: item.name,
                             onToggle = { viewModel.toggleItem(item) },
                             onClick = { editItem = item },
                             onDelete = { viewModel.deleteItem(item.id) }
@@ -400,7 +405,7 @@ private fun CategoryHeader(name: String, color: Color) {
                 .background(color)
         )
         Text(
-            text = name,
+            text = categoryLabel(name),
             style = MaterialTheme.typography.labelLarge,
             fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -412,6 +417,7 @@ private fun CategoryHeader(name: String, color: Color) {
 @Composable
 private fun ShoppingItemRow(
     item: ShoppingItem,
+    iconKey: String,
     onToggle: () -> Unit,
     onClick: () -> Unit,
     onDelete: () -> Unit
@@ -467,7 +473,7 @@ private fun ShoppingItemRow(
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = iconForItem(item.name),
+                        imageVector = iconForItem(iconKey),
                         contentDescription = null,
                         tint = avatarColor,
                         modifier = Modifier.size(20.dp)
@@ -507,6 +513,7 @@ private fun ShoppingItemRow(
 @Composable
 private fun AddItemBar(
     categories: List<Category>,
+    catalog: ItemCatalog,
     onAdd: (name: String, quantity: String, categoryId: Long?, price: Double?) -> Unit
 ) {
     var name by remember { mutableStateOf("") }
@@ -521,14 +528,14 @@ private fun AddItemBar(
 
     fun submit() {
         if (name.isBlank()) return
-        val resolvedCategory = categoryId ?: categoryIdFor(GroceryCatalog.categoryFor(name))
+        val resolvedCategory = categoryId ?: categoryIdFor(catalog.categoryFor(name))
         onAdd(name, quantity, resolvedCategory, if (price > 0.0) price else null)
         name = ""; quantity = ""; price = 0.0; categoryId = null
         // keep focus so the user can keep adding items quickly
         focusRequester.requestFocus()
     }
 
-    val suggestions = remember(name) { GroceryCatalog.suggest(name) }
+    val suggestions = remember(name, catalog) { catalog.suggest(name) }
 
     Surface(
         color = MaterialTheme.colorScheme.surface,
@@ -585,7 +592,7 @@ private fun AddItemBar(
                         ) {
                             CategoryChoice(stringResource(R.string.category_none), null, categoryId == null) { categoryId = null }
                             categories.forEach { c ->
-                                CategoryChoice(c.name, c.color.toComposeColor(), categoryId == c.id) { categoryId = c.id }
+                                CategoryChoice(categoryLabel(c.name), c.color.toComposeColor(), categoryId == c.id) { categoryId = c.id }
                             }
                         }
                     }
@@ -795,7 +802,7 @@ private fun EditItemDialog(
                     ) {
                         CategoryChoice(stringResource(R.string.category_none), null, categoryId == null) { categoryId = null }
                         categories.forEach { c ->
-                            CategoryChoice(c.name, c.color.toComposeColor(), categoryId == c.id) { categoryId = c.id }
+                            CategoryChoice(categoryLabel(c.name), c.color.toComposeColor(), categoryId == c.id) { categoryId = c.id }
                         }
                     }
                 }

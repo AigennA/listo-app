@@ -28,6 +28,7 @@ import com.listo.app.ui.components.LisToTopBar
 import com.listo.app.ui.components.PrimaryButton
 import com.listo.app.ui.theme.*
 import com.listo.app.ui.viewmodel.CategoriesViewModel
+import com.listo.app.utils.categoryLabel
 import com.listo.app.utils.toComposeColor
 
 private val categoryColors = listOf(
@@ -122,7 +123,7 @@ fun CategoriesScreen(
                             }
                             Spacer(modifier = Modifier.height(12.dp))
                             Text(
-                                text = category.name,
+                                text = categoryLabel(category.name),
                                 style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.SemiBold,
                                 color = catColor

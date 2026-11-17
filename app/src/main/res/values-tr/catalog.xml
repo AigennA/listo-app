@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Same order and length as values/catalog.xml. -->
+<resources>
+    <string name="category_builtin_produce">Meyve &amp; Sebze</string>
+    <string name="category_builtin_dairy">Süt Ürünleri</string>
+    <string name="category_builtin_meat">Et &amp; Balık</string>
+    <string name="category_builtin_bakery">Fırın</string>
+    <string name="category_builtin_drinks">İçecekler</string>
+    <string name="category_builtin_snacks">Atıştırmalık</string>
+    <string name="category_builtin_cleaning">Temizlik</string>
+    <string name="category_builtin_breakfast">Kahvaltılık</string>
+    <string name="category_builtin_pantry">Kiler</string>
+    <string name="category_other">Diğer</string>
+
+    <string-array name="catalog_produce">
+        <item>Domates</item>
+        <item>Salatalık</item>
+        <item>Marul</item>
+        <item>Biber</item>
+        <item>Patates</item>
+        <item>Soğan</item>
+        <item>Sarımsak</item>
+        <item>Havuç</item>
+        <item>Elma</item>
+        <item>Muz</item>
+        <item>Portakal</item>
+        <item>Limon</item>
+        <item>Çilek</item>
+        <item>Üzüm</item>
+        <item>Karpuz</item>
+        <item>Patlıcan</item>
+        <item>Ispanak</item>
+        <item>Maydanoz</item>
+        <item>Avokado</item>
+        <item>Mantar</item>
+    </string-array>
+
+    <string-array name="catalog_dairy">
+        <item>Süt</item>
+        <item>Yoğurt</item>
+        <item>Peynir</item>
+        <item>Tereyağı</item>
+        <item>Krema</item>
+        <item>Ekşi Krema</item>
+        <item>Lor Peyniri</item>
+    </string-array>
+
+    <string-array name="catalog_meat">
+        <item>Tavuk</item>
+        <item>Kıyma</item>
+        <item>Biftek</item>
+        <item>Balık</item>
+        <item>Somon</item>
+        <item>Sosis</item>
+        <item>Köfte</item>
+        <item>Hindi</item>
+        <item>Pastırma</item>
+        <item>Karides</item>
+    </string-array>
+
+    <string-array name="catalog_bakery">
+        <item>Ekmek</item>
+        <item>Simit</item>
+        <item>Baget</item>
+        <item>Kruvasan</item>
+        <item>Lavaş</item>
+        <item>Tost Ekmeği</item>
+        <item>Poğaça</item>
+    </string-array>
+
+    <string-array name="catalog_drinks">
+        <item>Su</item>
+        <item>Maden Suyu</item>
+        <item>Kola</item>
+        <item>Meyve Suyu</item>
+        <item>Çay</item>
+        <item>Kahve</item>
+        <item>Gazoz</item>
+        <item>Limonata</item>
+    </string-array>
+
+    <string-array name="catalog_snacks">
+        <item>Cips</item>
+        <item>Çikolata</item>
+        <item>Kurabiye</item>
+        <item>Kraker</item>
+        <item>Kuruyemiş</item>
+        <item>Kek</item>
+        <item>Gofret</item>
+        <item>Sakız</item>
+        <item>Patlamış Mısır</item>
+    </string-array>
+
+    <string-array name="catalog_cleaning">
+        <item>Deterjan</item>
+        <item>Bulaşık Deterjanı</item>
+        <item>Çamaşır Suyu</item>
+        <item>Sabun</item>
+        <item>Şampuan</item>
+        <item>Tuvalet Kağıdı</item>
+        <item>Kağıt Havlu</item>
+        <item>Peçete</item>
+        <item>Diş Macunu</item>
+        <item>Yumuşatıcı</item>
+        <item>Cam Temizleyici</item>
+        <item>Çöp Poşeti</item>
+    </string-array>
+
+    <string-array name="catalog_breakfast">
+        <item>Yumurta</item>
+        <item>Bal</item>
+        <item>Reçel</item>
+        <item>Zeytin</item>
+        <item>Mısır Gevreği</item>
+        <item>Fıstık Ezmesi</item>
+        <item>Yulaf</item>
+    </string-array>
+
+    <string-array name="catalog_pantry">
+        <item>Pirinç</item>
+        <item>Makarna</item>
+        <item>Un</item>
+        <item>Şeker</item>
+        <item>Tuz</item>
+        <item>Zeytinyağı</item>
+        <item>Ayçiçek Yağı</item>
+        <item>Mercimek</item>
+        <item>Nohut</item>
+        <item>Fasulye</item>
+        <item>Salça</item>
+        <item>Sirke</item>
+        <item>Baharat</item>
+        <item>Konserve Domates</item>
+    </string-array>
+</resources>

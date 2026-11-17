@@ -14,6 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.listo.app.data.models.Category
+import com.listo.app.utils.categoryLabel
 import com.listo.app.utils.toComposeColor
 
 @Composable
@@ -49,7 +50,7 @@ fun CategoryChip(
                 .background(catColor)
         )
         Text(
-            text = category.name,
+            text = categoryLabel(category.name),
             style = MaterialTheme.typography.labelMedium,
             color = if (isSelected) catColor else MaterialTheme.colorScheme.onSurfaceVariant
         )
