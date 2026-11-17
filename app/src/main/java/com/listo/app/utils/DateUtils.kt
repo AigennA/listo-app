@@ -5,12 +5,20 @@ import java.util.*
 
 object DateUtils {
 
-    private val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
-    private val timeFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
-    private val timeOnlyFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-    private val shortDateFormat = SimpleDateFormat("MMM dd", Locale.getDefault())
+    private const val DATE_PATTERN = "MMM dd, yyyy"
+    private const val TIME_12H_PATTERN = "hh:mm a"
+    private const val TIME_PATTERN = "HH:mm"
+    private const val SHORT_DATE_PATTERN = "MMM dd"
 
-    fun formatTime(millis: Long): String = timeOnlyFormat.format(Date(millis))
+    /**
+     * A formatter in the locale in force right now. Not cached: the in-app
+     * language can change at runtime, and a cached formatter would keep the
+     * language of first use (e.g. "Nov 19" in a Swedish UI).
+     */
+    private fun format(pattern: String, millis: Long): String =
+        SimpleDateFormat(pattern, Locale.getDefault()).format(Date(millis))
+
+    fun formatTime(millis: Long): String = format(TIME_PATTERN, millis)
 
     fun todayRange(): Pair<Long, Long> {
         val cal = Calendar.getInstance()
@@ -46,12 +54,12 @@ object DateUtils {
         return cal.timeInMillis
     }
 
-    fun formatDate(millis: Long): String = dateFormat.format(Date(millis))
+    fun formatDate(millis: Long): String = format(DATE_PATTERN, millis)
 
-    fun formatShortDate(millis: Long): String = shortDateFormat.format(Date(millis))
+    fun formatShortDate(millis: Long): String = format(SHORT_DATE_PATTERN, millis)
 
     fun formatDateTime(millis: Long): String =
-        "${dateFormat.format(Date(millis))} ${timeFormat.format(Date(millis))}"
+        "${format(DATE_PATTERN, millis)} ${format(TIME_12H_PATTERN, millis)}"
 
     fun isOverdue(dueDate: Long?): Boolean =
         dueDate != null && dueDate < System.currentTimeMillis()
