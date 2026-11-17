@@ -21,18 +21,24 @@
 
 ## Screenshots
 
-| Lists | Auto-sorted items | Calendar | Accent colours |
-|---|---|---|---|
-| <img src="store/screenshots/phone-en/02-my-lists.png" width="200"> | <img src="store/screenshots/phone-en/03-list-detail.png" width="200"> | <img src="store/screenshots/phone-en/05-calendar.png" width="200"> | <img src="store/screenshots/phone-en/06-settings.png" width="200"> |
+| Lists | Auto-sorted items | Budget |
+|---|---|---|
+| <img src="store/screenshots/phone-en/02-my-lists.png" width="220"> | <img src="store/screenshots/phone-en/03-list-detail.png" width="220"> | <img src="store/screenshots/phone-en/07-budget.png" width="220"> |
+
+| Categories | Calendar | Accent colours |
+|---|---|---|
+| <img src="store/screenshots/phone-en/04-categories.png" width="220"> | <img src="store/screenshots/phone-en/05-calendar.png" width="220"> | <img src="store/screenshots/phone-en/06-settings.png" width="220"> |
 
 ## What it does
 
 - **Sorts itself.** Type an item and Listo files it under the matching aisle —
   produce, dairy, bakery, meat & fish, drinks, pantry, cleaning, breakfast, snacks.
-- **Tracks progress.** Tick items as you shop; ticked ones drop to the bottom and a
-  progress bar shows how much is left.
+- **Tracks progress.** Tick items as you shop; ticked ones move to a Bought section at
+  the bottom and a progress bar shows how much is left.
 - **Watches the budget.** Give items a price and the list a budget; Listo shows what's
-  left or how far over you are.
+  left or how far over you are, in your phone's currency.
+- **Reuses lists.** Rename, share, copy or delete a list from My Lists — tap ⋮ or swipe
+  it left. A copy comes back with every item unticked, ready for next week.
 - **Plans ahead.** Schedule a list for a date with an optional reminder, and see the
   whole month in the built-in calendar.
 - **Keeps history.** Finished lists move to History rather than disappearing.

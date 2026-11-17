@@ -5,11 +5,11 @@ still need work. Items marked **BLOCKER** must be fixed before a public release.
 
 ## 1. Store assets — done
 
-- [x] Phone screenshots (6), English — `store/screenshots/phone-en/`
+- [x] Phone screenshots (7), English — `store/screenshots/phone-en/`
       (02–06 retaken on 15 September 2026 after the accent-colour update, with a clean
       demo-mode status bar; 01 onboarding does not use the accent and is unchanged).
       These are the raw captures and are **not** what Play accepts — see below.
-- [x] Play-ready phone screenshots (6), English — `store/screenshots/play-phone-en/`
+- [x] Play-ready phone screenshots (7), English — `store/screenshots/play-phone-en/`
       **Upload these.** 1080×1920 (9:16), 24-bit PNG without alpha, each screen framed
       in a phone with a short caption, rendered from the raw captures by
       `store/graphics/render-play-screenshots.ps1` (frame: `play-screenshot.html`).
@@ -18,8 +18,10 @@ still need work. Items marked **BLOCKER** must be fixed before a public release.
       9:16 at 1080×1920 or larger is also what large-format promotion asks for.
 - [x] App icon 512×512 PNG — `store/graphics/icon-512.png` (the sprout; same artwork as the
       launcher icon and the splash screen)
-- [ ] Re-capture the phone screenshots: they predate the Poppins titles, the region
-      currency (prices were always shown in ₺) and the translated categories (17 November 2026).
+- [x] Phone screenshots re-captured on 17 November 2026 (7 shots, 07 = budget) after the
+      Poppins titles, region currency, translated categories, bottom navigation, Bought
+      section and list actions. 02/03/07 use the Green accent, 04-06 Purple, to show theming.
+      Demo data comes from the debug-only DemoDataReceiver (see its KDoc for the adb command).
 - [x] Feature graphic 1024×500 PNG — `store/graphics/feature-graphic-1024x500.png`
 - [x] Listing copy in English, Turkish, Swedish — `store/listing/`
 - [x] Privacy policy page — `docs/privacy-policy.html`
