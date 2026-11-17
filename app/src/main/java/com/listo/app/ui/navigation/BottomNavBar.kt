@@ -1,10 +1,10 @@
 package com.listo.app.ui.navigation
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.Category
 import androidx.compose.material.icons.rounded.History
-import androidx.compose.material.icons.rounded.ListAlt
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -15,17 +15,39 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
+import com.listo.app.R
+import com.listo.app.ui.theme.sproutToneFor
 
-private val BottomTab.icon: ImageVector
-    get() = when (this) {
-        BottomTab.Lists -> Icons.Rounded.ListAlt
-        BottomTab.Categories -> Icons.Rounded.Category
-        BottomTab.Calendar -> Icons.Rounded.CalendarMonth
-        BottomTab.History -> Icons.Rounded.History
-        BottomTab.Settings -> Icons.Rounded.Settings
+@Composable
+private fun TabIcon(tab: BottomTab) {
+    when (tab) {
+        BottomTab.Lists -> ListsTabIcon()
+        BottomTab.Categories -> Icon(Icons.Rounded.Category, contentDescription = null)
+        BottomTab.Calendar -> Icon(Icons.Rounded.CalendarMonth, contentDescription = null)
+        BottomTab.History -> Icon(Icons.Rounded.History, contentDescription = null)
+        BottomTab.Settings -> Icon(Icons.Rounded.Settings, contentDescription = null)
     }
+}
+
+/**
+ * A list card with the Listo sprout growing out of it. The card takes the tab
+ * tint like every other icon; the sprout keeps its own colour, which turns warm
+ * when the accent is green so it never blends in.
+ */
+@Composable
+private fun ListsTabIcon() {
+    Box {
+        Icon(ImageVector.vectorResource(R.drawable.ic_tab_list), contentDescription = null)
+        Icon(
+            ImageVector.vectorResource(R.drawable.ic_tab_sprout),
+            contentDescription = null,
+            tint = sproutToneFor(MaterialTheme.colorScheme.primary)
+        )
+    }
+}
 
 @Composable
 fun BottomNavBar(navController: NavController, currentRoute: String?) {
@@ -34,7 +56,7 @@ fun BottomNavBar(navController: NavController, currentRoute: String?) {
             NavigationBarItem(
                 selected = tab.route == currentRoute,
                 onClick = { navController.navigateToTab(tab) },
-                icon = { Icon(tab.icon, contentDescription = null) },
+                icon = { TabIcon(tab) },
                 label = {
                     // labelSmall so the longest label ("Inställningar") fits five tabs on a phone.
                     Text(
