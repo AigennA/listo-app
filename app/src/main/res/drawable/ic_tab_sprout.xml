@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Lists tab icon, layer 2: the Listo sprout growing out of the top of the card
+  in ic_tab_list.xml (same 24dp grid). Same shapes as SplashScreen.kt, scaled up
+  with a shorter, thicker stem so the leaves read at icon size; the stem ends on
+  the card's top edge. Tinted separately (SproutTone.kt).
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <group
+        android:translateX="6.246"
+        android:translateY="1.47"
+        android:scaleX="0.042"
+        android:scaleY="0.042">
+
+        <path
+            android:pathData="M137,215 Q133.5,145 137,82.2"
+            android:strokeColor="#FF000000"
+            android:strokeWidth="38"
+            android:strokeLineCap="round" />
+
+        <group
+            android:pivotX="137"
+            android:pivotY="115.08"
+            android:rotation="-38">
+            <path
+                android:fillColor="#FF000000"
+                android:pathData="M137,115.08 Q200.29,51.79 137,0 Q73.71,51.79 137,115.08 Z" />
+        </group>
+
+        <group
+            android:pivotX="137"
+            android:pivotY="93.16"
+            android:rotation="32">
+            <path
+                android:fillColor="#FF000000"
+                android:pathData="M137,93.16 Q206.32,23.84 137,-32.88 Q67.68,23.84 137,93.16 Z" />
+        </group>
+    </group>
+</vector>
