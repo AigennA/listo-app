@@ -138,4 +138,11 @@
     <string name="onb_skip">Hoppa över</string>
     <string name="onb_next">Nästa</string>
     <string name="onb_start">Kom igång</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_lists">Listor</string>
+    <string name="nav_categories">Kategorier</string>
+    <string name="nav_calendar">Kalender</string>
+    <string name="nav_history">Historik</string>
+    <string name="nav_settings">Inställningar</string>
 </resources>

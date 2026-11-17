@@ -38,7 +38,7 @@ fun HistoryScreen(
     var pendingDelete by remember { mutableStateOf<ShoppingList?>(null) }
 
     Scaffold(
-        topBar = { LisToTopBar(title = stringResource(R.string.history_title), navController = navController) },
+        topBar = { LisToTopBar(title = stringResource(R.string.history_title)) },
         containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         if (uiState.lists.isEmpty() && !uiState.isLoading) {

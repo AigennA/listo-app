@@ -100,7 +100,7 @@ fun SettingsScreen(
     }
 
     Scaffold(
-        topBar = { LisToTopBar(title = stringResource(R.string.settings_title), navController = navController) },
+        topBar = { LisToTopBar(title = stringResource(R.string.settings_title)) },
         containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         Column(

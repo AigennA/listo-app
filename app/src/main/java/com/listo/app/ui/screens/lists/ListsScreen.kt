@@ -4,7 +4,6 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -18,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -29,12 +27,10 @@ import androidx.navigation.NavController
 import com.listo.app.R
 import com.listo.app.data.models.ShoppingList
 import com.listo.app.ui.components.AdBanner
-import com.listo.app.ui.components.BrandColors
 import com.listo.app.ui.components.EmptyState
 import com.listo.app.ui.components.ThemedMeshBackground
 import com.listo.app.ui.navigation.Screen
 import com.listo.app.ui.theme.PoppinsFontFamily
-import com.listo.app.ui.theme.LisPurple
 import com.listo.app.ui.viewmodel.ListsViewModel
 import com.listo.app.utils.DateUtils
 import com.listo.app.utils.formatPrice
@@ -59,7 +55,8 @@ fun ListsScreen(
                     text = { Text(stringResource(R.string.lists_new), fontWeight = FontWeight.SemiBold) }
                 )
             },
-            bottomBar = { AdBanner(modifier = Modifier.navigationBarsPadding()) },
+            // Sits directly above the bottom navigation bar, never over it.
+            bottomBar = { AdBanner() },
             containerColor = Color.Transparent
         ) { padding ->
             LazyColumn(
@@ -68,7 +65,7 @@ fun ListsScreen(
                     .padding(padding),
                 contentPadding = PaddingValues(bottom = 100.dp)
             ) {
-                item { ListsHeader(navController) }
+                item { ListsHeader() }
 
                 if (uiState.lists.isEmpty() && !uiState.isLoading) {
                     item {
@@ -113,60 +110,32 @@ fun ListsScreen(
     }
 }
 
+/** Date and title only: the other screens are in the bottom navigation bar. */
 @Composable
-private fun ListsHeader(navController: NavController) {
+private fun ListsHeader() {
     val today = remember {
         SimpleDateFormat("EEEE, MMM d", Locale.getDefault()).format(Date())
     }
-    Row(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
             .padding(top = 24.dp, bottom = 18.dp)
-            .statusBarsPadding(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+            .statusBarsPadding()
     ) {
-        Column {
-            Text(
-                text = today,
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.Medium
-            )
-            Spacer(Modifier.height(2.dp))
-            Text(
-                text = stringResource(R.string.lists_title),
-                fontFamily = PoppinsFontFamily,
-                fontWeight = FontWeight.Bold,
-                fontSize = 34.sp,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-        }
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            HeaderIcon(Icons.Rounded.CalendarMonth, stringResource(R.string.cd_calendar), BrandColors.Coral) { navController.navigate(Screen.Calendar.route) }
-            HeaderIcon(Icons.Rounded.History, stringResource(R.string.cd_history), BrandColors.Amber) { navController.navigate(Screen.History.route) }
-            HeaderIcon(Icons.Rounded.Category, stringResource(R.string.cd_categories), LisPurple) { navController.navigate(Screen.Categories.route) }
-            HeaderIcon(Icons.Rounded.Settings, stringResource(R.string.cd_settings), BrandColors.Sprout) { navController.navigate(Screen.Settings.route) }
-        }
-    }
-}
-
-@Composable
-private fun HeaderIcon(icon: ImageVector, desc: String, color: Color, onClick: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .size(46.dp)
-            .clip(RoundedCornerShape(15.dp))
-            .background(color.copy(alpha = 0.18f))
-            .clickable(onClick = onClick),
-        contentAlignment = Alignment.Center
-    ) {
-        Icon(
-            icon,
-            contentDescription = desc,
-            tint = color,
-            modifier = Modifier.size(24.dp)
+        Text(
+            text = today,
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.Medium
+        )
+        Spacer(Modifier.height(2.dp))
+        Text(
+            text = stringResource(R.string.lists_title),
+            fontFamily = PoppinsFontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 34.sp,
+            color = MaterialTheme.colorScheme.onBackground
         )
     }
 }

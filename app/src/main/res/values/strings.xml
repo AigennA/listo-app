@@ -141,4 +141,11 @@
     <string name="onb_skip">Skip</string>
     <string name="onb_next">Next</string>
     <string name="onb_start">Get Started</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_lists">Lists</string>
+    <string name="nav_categories">Categories</string>
+    <string name="nav_calendar">Calendar</string>
+    <string name="nav_history">History</string>
+    <string name="nav_settings">Settings</string>
 </resources>
