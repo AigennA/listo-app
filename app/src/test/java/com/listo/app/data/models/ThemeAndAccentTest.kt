@@ -26,11 +26,23 @@ class ThemeAndAccentTest {
         assertTrue(AccentColor.entries.map { it.name }.containsAll(PERSISTED_ACCENT_NAMES))
     }
 
+    @Test
+    fun `retired accents move to the closest remaining colour`() {
+        assertEquals(AccentColor.CORAL, AccentColor.fromName("ORANGE"))
+        assertEquals(AccentColor.CORAL, AccentColor.fromName("AMBER"))
+        assertEquals(AccentColor.GREEN, AccentColor.fromName("LIME"))
+    }
+
+    @Test
+    fun `the picker shows two full rows of six`() {
+        assertEquals(12, AccentColor.entries.size)
+    }
+
     private companion object {
         /** Names already written to users' preferences; renaming one resets their choice. */
         val PERSISTED_ACCENT_NAMES = listOf(
-            "GREEN", "TEAL", "BLUE", "INDIGO", "PURPLE", "PINK", "RED", "CORAL", "ORANGE", "AMBER",
-            "CYAN", "ORCHID", "LIME", "MOCHA", "SLATE"
+            "GREEN", "TEAL", "BLUE", "INDIGO", "PURPLE", "PINK", "RED", "CORAL",
+            "CYAN", "ORCHID", "MOCHA", "SLATE"
         )
     }
 }

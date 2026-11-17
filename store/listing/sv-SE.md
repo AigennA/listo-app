@@ -26,7 +26,7 @@ DÄRFÖR LISTO
 BYGGD FÖR ATT INTE VARA I VÄGEN
 • Inget konto, ingen registrering, inget moln. Listorna stannar i telefonen.
 • Fungerar helt offline.
-• Ljust, mörkt eller systemets tema, plus femton lättlästa accentfärger.
+• Ljust, mörkt eller systemets tema, plus tolv lättlästa accentfärger.
 • Finns på English, Türkçe och Svenska.
 
 GRATIS
