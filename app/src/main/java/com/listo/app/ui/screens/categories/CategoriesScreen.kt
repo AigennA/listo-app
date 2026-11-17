@@ -44,7 +44,7 @@ fun CategoriesScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
-        topBar = { LisToTopBar(title = stringResource(R.string.categories_title), navController = navController) },
+        topBar = { LisToTopBar(title = stringResource(R.string.categories_title)) },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = viewModel::showDialog,

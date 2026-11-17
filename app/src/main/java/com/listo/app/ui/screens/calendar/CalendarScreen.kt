@@ -82,7 +82,7 @@ fun CalendarScreen(
 
     ThemedMeshBackground {
         Scaffold(
-            topBar = { LisToTopBar(title = stringResource(R.string.calendar_title), navController = navController) },
+            topBar = { LisToTopBar(title = stringResource(R.string.calendar_title)) },
             containerColor = Color.Transparent
         ) { padding ->
             Column(

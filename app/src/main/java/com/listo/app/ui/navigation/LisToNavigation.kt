@@ -2,10 +2,18 @@ package com.listo.app.ui.navigation
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.listo.app.ui.screens.calendar.CalendarScreen
@@ -21,21 +29,53 @@ import com.listo.app.ui.screens.splash.SplashScreen
 @Composable
 fun LisToNavigation() {
     val navController = rememberNavController()
+    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
+    // No content insets here: screens keep handling the status bar themselves. The
+    // padding is just the bar's height, consumed so tab screens don't add the
+    // navigation-bar inset a second time.
+    Scaffold(
+        bottomBar = {
+            if (BottomTab.showsBar(currentRoute)) BottomNavBar(navController, currentRoute)
+        },
+        contentWindowInsets = WindowInsets(0, 0, 0, 0)
+    ) { padding ->
+        LisToNavHost(
+            navController = navController,
+            modifier = Modifier
+                .padding(padding)
+                .consumeWindowInsets(padding)
+        )
+    }
+}
+
+private const val TAB_FADE_MS = 200
+
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.isTabSwitch(): Boolean =
+    BottomTab.showsBar(initialState.destination.route) && BottomTab.showsBar(targetState.destination.route)
+
+@Composable
+private fun LisToNavHost(navController: NavHostController, modifier: Modifier) {
     NavHost(
         navController = navController,
         startDestination = Screen.Splash.route,
+        modifier = modifier,
+        // Tabs cross-fade; screens opened on top of a tab slide in from the side.
         enterTransition = {
-            slideInHorizontally(initialOffsetX = { it }, animationSpec = tween(300)) + fadeIn(tween(300))
+            if (isTabSwitch()) fadeIn(tween(TAB_FADE_MS))
+            else slideInHorizontally(initialOffsetX = { it }, animationSpec = tween(300)) + fadeIn(tween(300))
         },
         exitTransition = {
-            slideOutHorizontally(targetOffsetX = { -it / 3 }, animationSpec = tween(300)) + fadeOut(tween(300))
+            if (isTabSwitch()) fadeOut(tween(TAB_FADE_MS))
+            else slideOutHorizontally(targetOffsetX = { -it / 3 }, animationSpec = tween(300)) + fadeOut(tween(300))
         },
         popEnterTransition = {
-            slideInHorizontally(initialOffsetX = { -it / 3 }, animationSpec = tween(300)) + fadeIn(tween(300))
+            if (isTabSwitch()) fadeIn(tween(TAB_FADE_MS))
+            else slideInHorizontally(initialOffsetX = { -it / 3 }, animationSpec = tween(300)) + fadeIn(tween(300))
         },
         popExitTransition = {
-            slideOutHorizontally(targetOffsetX = { it }, animationSpec = tween(300)) + fadeOut(tween(300))
+            if (isTabSwitch()) fadeOut(tween(TAB_FADE_MS))
+            else slideOutHorizontally(targetOffsetX = { it }, animationSpec = tween(300)) + fadeOut(tween(300))
         }
     ) {
         composable(Screen.Splash.route) {

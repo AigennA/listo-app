@@ -138,4 +138,11 @@
     <string name="onb_skip">Atla</string>
     <string name="onb_next">İleri</string>
     <string name="onb_start">Başla</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_lists">Listeler</string>
+    <string name="nav_categories">Kategoriler</string>
+    <string name="nav_calendar">Takvim</string>
+    <string name="nav_history">Geçmiş</string>
+    <string name="nav_settings">Ayarlar</string>
 </resources>
