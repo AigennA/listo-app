@@ -4,6 +4,7 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -17,6 +18,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -27,13 +30,16 @@ import androidx.navigation.NavController
 import com.listo.app.R
 import com.listo.app.data.models.ShoppingList
 import com.listo.app.ui.components.AdBanner
+import com.listo.app.ui.components.DeleteListDialog
 import com.listo.app.ui.components.EmptyState
+import com.listo.app.ui.components.RenameListDialog
 import com.listo.app.ui.components.ThemedMeshBackground
 import com.listo.app.ui.navigation.Screen
 import com.listo.app.ui.theme.PoppinsFontFamily
 import com.listo.app.ui.viewmodel.ListsViewModel
 import com.listo.app.utils.DateUtils
 import com.listo.app.utils.formatPrice
+import com.listo.app.utils.shareList
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -43,6 +49,12 @@ fun ListsScreen(
     viewModel: ListsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+
+    // The list whose actions sheet is open, and the one being renamed / deleted.
+    var actionTarget by remember { mutableStateOf<ShoppingList?>(null) }
+    var renameTarget by remember { mutableStateOf<ShoppingList?>(null) }
+    var deleteTarget by remember { mutableStateOf<ShoppingList?>(null) }
 
     ThemedMeshBackground {
         Scaffold(
@@ -84,11 +96,16 @@ fun ListsScreen(
                     }
                 } else {
                     items(uiState.lists, key = { it.id }) { list ->
-                        ShoppingListCard(
-                            list = list,
-                            onClick = { navController.navigate(Screen.ListDetail.route(list.id)) },
+                        SwipeForActions(
+                            onSwiped = { actionTarget = list },
                             modifier = Modifier.padding(horizontal = 20.dp)
-                        )
+                        ) {
+                            ShoppingListCard(
+                                list = list,
+                                onClick = { navController.navigate(Screen.ListDetail.route(list.id)) },
+                                onMore = { actionTarget = list }
+                            )
+                        }
                         Spacer(Modifier.height(14.dp))
                     }
                 }
@@ -108,6 +125,123 @@ fun ListsScreen(
             onDismiss = viewModel::hideCreateDialog
         )
     }
+
+    actionTarget?.let { list ->
+        val copyName = stringResource(R.string.list_copy_name, list.name)
+        ListActionsSheet(
+            listName = list.name,
+            onRename = { actionTarget = null; renameTarget = list },
+            onShare = {
+                actionTarget = null
+                viewModel.withItems(list) { items -> shareList(context, list, items) }
+            },
+            onCopy = { actionTarget = null; viewModel.duplicateList(list, copyName) },
+            onDelete = { actionTarget = null; deleteTarget = list },
+            onDismiss = { actionTarget = null }
+        )
+    }
+
+    renameTarget?.let { list ->
+        RenameListDialog(
+            initial = list.name,
+            onConfirm = { name -> viewModel.renameList(list.id, name); renameTarget = null },
+            onDismiss = { renameTarget = null }
+        )
+    }
+
+    deleteTarget?.let { list ->
+        DeleteListDialog(
+            name = list.name,
+            onConfirm = { viewModel.deleteList(list.id); deleteTarget = null },
+            onDismiss = { deleteTarget = null }
+        )
+    }
+}
+
+/**
+ * Swiping the card to the left opens its actions instead of dismissing it:
+ * the card springs back and [onSwiped] fires, like tapping its ⋮ button.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SwipeForActions(
+    onSwiped: () -> Unit,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    val state = rememberSwipeToDismissBoxState(
+        confirmValueChange = { value ->
+            if (value == SwipeToDismissBoxValue.EndToStart) onSwiped()
+            false
+        }
+    )
+    SwipeToDismissBox(
+        state = state,
+        modifier = modifier,
+        enableDismissFromStartToEnd = false,
+        backgroundContent = {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(24.dp))
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                Icon(
+                    Icons.Rounded.MoreHoriz,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(end = 24.dp)
+                )
+            }
+        }
+    ) { content() }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ListActionsSheet(
+    listName: String,
+    onRename: () -> Unit,
+    onShare: () -> Unit,
+    onCopy: () -> Unit,
+    onDelete: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    ModalBottomSheet(onDismissRequest = onDismiss) {
+        Column(modifier = Modifier.navigationBarsPadding().padding(bottom = 12.dp)) {
+            Text(
+                text = listName,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
+            )
+            ListActionRow(Icons.Rounded.Edit, stringResource(R.string.list_action_rename), onRename)
+            ListActionRow(Icons.Rounded.Share, stringResource(R.string.list_action_share), onShare)
+            ListActionRow(Icons.Rounded.ContentCopy, stringResource(R.string.list_action_copy), onCopy)
+            ListActionRow(
+                Icons.Rounded.DeleteOutline,
+                stringResource(R.string.action_delete),
+                onDelete,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+    }
+}
+
+@Composable
+private fun ListActionRow(
+    icon: ImageVector,
+    label: String,
+    onClick: () -> Unit,
+    color: Color = MaterialTheme.colorScheme.onSurface
+) {
+    ListItem(
+        headlineContent = { Text(label, color = color) },
+        leadingContent = { Icon(icon, contentDescription = null, tint = color) },
+        colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+        modifier = Modifier.clickable(onClick = onClick)
+    )
 }
 
 /** Date and title only: the other screens are in the bottom navigation bar. */
@@ -144,6 +278,7 @@ private fun ListsHeader() {
 private fun ShoppingListCard(
     list: ShoppingList,
     onClick: () -> Unit,
+    onMore: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val animatedProgress by animateFloatAsState(
@@ -231,6 +366,13 @@ private fun ShoppingListCard(
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
                         color = if (list.isOverBudget) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+                    )
+                }
+                IconButton(onClick = onMore, modifier = Modifier.offset(x = 8.dp)) {
+                    Icon(
+                        Icons.Rounded.MoreVert,
+                        contentDescription = stringResource(R.string.cd_list_actions),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }

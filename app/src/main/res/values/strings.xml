@@ -150,4 +150,11 @@
     <string name="detail_bought">Bought (%1$d)</string>
     <string name="cd_show_bought">Show bought items</string>
     <string name="cd_hide_bought">Hide bought items</string>
+
+    <!-- List actions (My Lists: swipe left or the ⋮ button) -->
+    <string name="list_action_rename">Rename</string>
+    <string name="list_action_share">Share</string>
+    <string name="list_action_copy">Copy</string>
+    <string name="list_copy_name">%1$s (copy)</string>
+    <string name="cd_list_actions">List options</string>
 </resources>

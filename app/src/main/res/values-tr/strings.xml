@@ -147,4 +147,11 @@
     <string name="detail_bought">Alındı (%1$d)</string>
     <string name="cd_show_bought">Alınanları göster</string>
     <string name="cd_hide_bought">Alınanları gizle</string>
+
+    <!-- List actions (My Lists: swipe left or the ⋮ button) -->
+    <string name="list_action_rename">Yeniden adlandır</string>
+    <string name="list_action_share">Paylaş</string>
+    <string name="list_action_copy">Kopyala</string>
+    <string name="list_copy_name">%1$s (kopya)</string>
+    <string name="cd_list_actions">Liste seçenekleri</string>
 </resources>
