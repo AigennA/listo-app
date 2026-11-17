@@ -142,4 +142,9 @@
     <string name="nav_calendar">Takvim</string>
     <string name="nav_history">Geçmiş</string>
     <string name="nav_settings">Ayarlar</string>
+
+    <!-- Bought section -->
+    <string name="detail_bought">Alındı (%1$d)</string>
+    <string name="cd_show_bought">Alınanları göster</string>
+    <string name="cd_hide_bought">Alınanları gizle</string>
 </resources>

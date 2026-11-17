@@ -142,4 +142,9 @@
     <string name="nav_calendar">Kalender</string>
     <string name="nav_history">Historik</string>
     <string name="nav_settings">Inställningar</string>
+
+    <!-- Bought section -->
+    <string name="detail_bought">Köpt (%1$d)</string>
+    <string name="cd_show_bought">Visa köpta varor</string>
+    <string name="cd_hide_bought">Dölj köpta varor</string>
 </resources>

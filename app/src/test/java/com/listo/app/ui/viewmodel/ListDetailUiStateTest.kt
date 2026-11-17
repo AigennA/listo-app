@@ -50,4 +50,34 @@ class ListDetailUiStateTest {
         assertTrue(keys.contains("Dairy"))
         assertEquals("Other", keys.last())
     }
+
+    @Test
+    fun `checked items leave their category for the bought section`() {
+        val state = ListDetailUiState(
+            items = listOf(
+                item(1, "milk", checked = true, category = "Dairy"),
+                item(2, "cheese", checked = false, category = "Dairy"),
+                item(3, "bread", checked = true, category = "Bakery")
+            ),
+            isLoading = false
+        )
+        assertEquals(listOf("Dairy" to listOf("cheese")), state.grouped.map { (k, v) -> k to v.map { it.name } })
+        assertEquals(listOf("milk", "bread"), state.bought.map { it.name })
+    }
+
+    @Test
+    fun `a category with everything bought disappears from the to-buy groups`() {
+        val state = ListDetailUiState(
+            items = listOf(item(1, "bread", checked = true, category = "Bakery")),
+            isLoading = false
+        )
+        assertTrue(state.grouped.isEmpty())
+        assertEquals(1, state.bought.size)
+    }
+
+    @Test
+    fun `nothing bought means an empty bought section`() {
+        val state = ListDetailUiState(items = listOf(item(1, "a")), isLoading = false)
+        assertTrue(state.bought.isEmpty())
+    }
 }
