@@ -16,8 +16,8 @@ still need work. Items marked **BLOCKER** must be fixed before a public release.
       The raw captures are 1280×2856 (1:2.23) with an alpha channel, and Play requires
       JPEG or 24-bit PNG without alpha whose long side is at most twice the short side;
       9:16 at 1080×1920 or larger is also what large-format promotion asks for.
-- [x] App icon 512×512 PNG — `store/graphics/icon-512.png` (list card with the sprout,
-      17 November 2026; same artwork as the launcher icon)
+- [x] App icon 512×512 PNG — `store/graphics/icon-512.png` (the sprout; same artwork as the
+      launcher icon and the splash screen)
 - [ ] Re-capture the phone screenshots: they predate the Poppins titles, the region
       currency (prices were always shown in ₺) and the translated categories (17 November 2026).
 - [x] Feature graphic 1024×500 PNG — `store/graphics/feature-graphic-1024x500.png`
@@ -103,7 +103,7 @@ still need work. Items marked **BLOCKER** must be fixed before a public release.
 
 ## 6. Nice to have before launch
 
-- [x] The launcher icon now matches the store icon (list card with the sprout), fills
+- [x] The launcher icon now matches the store icon (the sprout), fills
       the whole mask (no dark corners on the Android 12+ splash) and has an Android 7.x
       fallback and a themed monochrome version.
 - [ ] The system date picker renders in stock teal rather than the app's accent colour.
