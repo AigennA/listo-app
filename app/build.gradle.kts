@@ -135,8 +135,9 @@ dependencies {
     implementation(libs.play.services.ads)
     implementation(libs.user.messaging.platform)
 
-    // Unit tests
+    // Unit tests: JUnit, MockK for test doubles
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
 
     // Instrumented / behaviour tests (data layer; no Espresso/Compose UI —
     // the installed emulator images are an API preview Espresso can't drive)
