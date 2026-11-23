@@ -81,7 +81,7 @@ preparation, with links into the code — is described in [SKILLS.md](SKILLS.md)
 | Persistence | Room (lists, items, categories), DataStore (settings) |
 | Async | Kotlin Coroutines + Flow |
 | Ads | Google AdMob banner (a single banner on the list screen) |
-| Min / target SDK | 24 / 35 |
+| Min / target SDK | 24 / 36 |
 
 Source layout:
 
@@ -101,7 +101,7 @@ app/src/main/java/com/listo/app/
 
 ## Building
 
-Requirements: JDK 17+, Android SDK with API 35, Android Studio Koala or newer.
+Requirements: JDK 17+, Android SDK with API 36, Android Studio Koala or newer.
 
 ```bash
 git clone https://github.com/AigennA/listo-app.git

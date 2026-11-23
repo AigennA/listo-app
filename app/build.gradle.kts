@@ -21,15 +21,15 @@ val hasReleaseKeystore = keystorePropertiesFile.exists()
 
 android {
     namespace = "com.listo.app"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         // Play Store identity (com.listo.app was taken). The code package
         // stays com.listo.app — see namespace above.
         applicationId = "com.mopilappar.listo"
         minSdk = 24
-        targetSdk = 35
-        versionCode = 2
+        targetSdk = 36
+        versionCode = 3
         versionName = "1.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
