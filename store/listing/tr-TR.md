@@ -14,19 +14,21 @@ içecek, kiler ve daha fazlası. Markete vardığında listen çoktan sıralanm�
 NEDEN LISTO
 • Sen yaz, sıralamayı Listo yapsın. Ürünler otomatik olarak kategorilere ayrılır.
 • Alışveriş yaparken işaretle. İlerleme çubuğu ne kadar kaldığını gösterir;
-  işaretlenen ürünler alta iner, kalanlar üstte durur.
+  işaretlenen ürünler Alındı bölümüne geçer, kalanlar üstte durur.
 • Ne kadar tuttuğunu bil. Ürünlere fiyat gir, listeye bütçe koy — Listo ne kadar
-  kaldığını ya da bütçeyi ne kadar aştığını gösterir.
+  kaldığını ya da bütçeyi ne kadar aştığını telefonunun para biriminde gösterir.
 • Önceden planla. Listeye tarih ve istersen hatırlatıcı ver, ayın tamamını
   uygulamadaki takvimde gör.
 • Kaydını tut. Biten listeler silinmez, Geçmiş'e taşınır.
+• Listelerini yeniden kullan. Yeniden adlandır, paylaş, kopyala ya da sil — ⋮ simgesine
+  dokun veya listeyi sola kaydır. Kopya, tüm ürünler işaretsiz olarak gelir.
 • Tek dokunuşla paylaş. Herhangi bir listeyi düz metin olarak gönder.
 
 YOLUNDAN ÇEKİLEN BİR UYGULAMA
 • Hesap yok, kayıt yok, bulut yok. Listelerin telefonunda kalır.
 • Tamamen çevrimdışı çalışır.
 • Açık, koyu veya sistem teması ve kolay okunan on iki vurgu rengi.
-• English, Türkçe ve Svenska dillerinde.
+• English, Türkçe ve Svenska dillerinde — kategoriler ve ürün önerileri de.
 
 ÜCRETSİZ
 Listo ücretsizdir ve tek bir küçük banner reklamla desteklenir. Satın alınacak
@@ -37,4 +39,4 @@ bir şey, abonelik veya ücretli özellik yoktur.
 • İnternet — banner reklamı yüklemek için.
 • Açılışta çalıştır — telefon yeniden başladığında hatırlatıcılarını geri yüklemek için.
 
-Listo açık kaynaklıdır. Geri bildirim ve hata bildirimleri GitHub'da beklenir.
+Soru veya fikirlerin mi var? Ayarlar'daki Yardım ve geri bildirim bölümünü kullan.
