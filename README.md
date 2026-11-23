@@ -29,6 +29,23 @@
 |---|---|---|
 | <img src="store/screenshots/phone-en/04-categories.png" width="220"> | <img src="store/screenshots/phone-en/05-calendar.png" width="220"> | <img src="store/screenshots/phone-en/06-settings.png" width="220"> |
 
+## Try it
+
+Download the latest APK from **[Releases](https://github.com/AigennA/listo-app/releases/latest)**
+and open it on an Android phone (Android 7.0 or newer). Because it is not installed from
+Google Play, the phone may ask you to allow installs from this source — that is normal
+for apps installed directly.
+
+## Privacy
+
+- **Your lists stay on your phone.** No account, no sign-up, no server, no analytics.
+- **One banner ad from Google AdMob.** In the EEA, the UK and Switzerland Listo asks for
+  consent first, and the choice can be changed any time in Settings.
+- **Feedback is opt-in.** *Help & feedback* opens your own email app; if you write to us,
+  the email is used only to reply and is deleted within 12 months.
+
+Full text: **[Privacy Policy](https://aigenna.github.io/privacy-policy/listo.html)**.
+
 ## What it does
 
 - **Sorts itself.** Type an item and Listo files it under the matching aisle —
@@ -106,8 +123,9 @@ generated while developing.
 
 Everything needed for the Google Play listing lives under [`store/`](store/): the
 512×512 icon, the 1024×500 feature graphic and the listing copy in English, Turkish
-and Swedish. The privacy policy is at
-[`docs/privacy-policy.html`](docs/privacy-policy.html).
+and Swedish. The privacy policy is published at
+[aigenna.github.io/privacy-policy/listo.html](https://aigenna.github.io/privacy-policy/listo.html)
+(source: [`docs/privacy-policy.html`](docs/privacy-policy.html)).
 
 Screenshots come in two sets: `store/screenshots/phone-en/` holds the raw emulator
 captures (used above), and `store/screenshots/play-phone-en/` holds the 1080×1920
