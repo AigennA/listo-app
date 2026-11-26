@@ -24,6 +24,13 @@ data class ListDetailUiState(
     val progress: Float get() = if (items.isEmpty()) 0f else checkedCount.toFloat() / items.size
     val total: Double get() = items.sumOf { it.price ?: 0.0 }
 
+    /**
+     * The list may move to History only once everything is bought, so a list
+     * the user is still shopping from never disappears from the home screen.
+     */
+    val canFinish: Boolean
+        get() = list?.isArchived == false && items.isNotEmpty() && items.all { it.isChecked }
+
     /** Items already in the basket, shown in their own section at the bottom. */
     val bought: List<ShoppingItem> get() = items.filter { it.isChecked }
 

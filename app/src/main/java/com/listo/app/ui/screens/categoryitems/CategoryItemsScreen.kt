@@ -112,6 +112,7 @@ fun CategoryItemsScreen(
                 CatalogItemRow(
                     name = name,
                     iconKey = entry.key,
+                    category = entry.category,
                     accent = accent,
                     count = selections[name] ?: 0,
                     onCountChange = { c -> if (c <= 0) selections.remove(name) else selections[name] = c }
@@ -125,6 +126,7 @@ fun CategoryItemsScreen(
 private fun CatalogItemRow(
     name: String,
     iconKey: String,
+    category: String,
     accent: Color,
     count: Int,
     onCountChange: (Int) -> Unit
@@ -148,7 +150,7 @@ private fun CatalogItemRow(
                     .background(accent.copy(alpha = 0.15f)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(iconForItem(iconKey), contentDescription = null, tint = accent, modifier = Modifier.size(20.dp))
+                Icon(iconForItem(iconKey, category), contentDescription = null, tint = accent, modifier = Modifier.size(20.dp))
             }
             Spacer(Modifier.width(12.dp))
             Text(

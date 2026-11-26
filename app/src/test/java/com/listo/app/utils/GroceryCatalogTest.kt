@@ -90,6 +90,89 @@ class GroceryCatalogTest {
         assertEquals(listOf("Tomato", "Apple"), broken.itemsForCategory(GroceryCatalog.PRODUCE).map { it.name })
     }
 
+    // A small catalog with real-looking names for matching rules.
+    private val words = ItemCatalog.of(
+        english = mapOf(
+            GroceryCatalog.PRODUCE to listOf("Pineapple", "Pumpkin", "Onion", "Green Onion"),
+            GroceryCatalog.BREAKFAST to listOf("Honey"),
+            GroceryCatalog.DAIRY to listOf("Milk")
+        ),
+        localized = mapOf(
+            GroceryCatalog.PRODUCE to listOf("Ananas", "Bal Kabağı", "Soğan", "Yeşil Soğan"),
+            GroceryCatalog.BREAKFAST to listOf("Bal"),
+            GroceryCatalog.DAIRY to listOf("Süt")
+        )
+    )
+
+    @Test
+    fun `suggest waits for two letters`() {
+        assertTrue(words.suggest("a").isEmpty())
+        assertEquals("Ananas", words.suggest("an").first().name)
+    }
+
+    @Test
+    fun `suggest tolerates a typo`() {
+        assertEquals("Ananas", words.suggest("annas").first().name)
+    }
+
+    @Test
+    fun `suggest ignores turkish letters the user did not type`() {
+        assertEquals("Soğan", words.suggest("sogan").first().name)
+    }
+
+    @Test
+    fun `suggest puts an exact match first`() {
+        assertEquals("Bal", words.suggest("bal").first().name)
+    }
+
+    @Test
+    fun `categoryFor prefers the longest known name`() {
+        // "Bal Kabağı" (pumpkin) must not be taken for "Bal" (honey).
+        assertEquals(GroceryCatalog.PRODUCE, words.categoryFor("Bal kabağı"))
+        assertEquals(GroceryCatalog.PRODUCE, words.categoryFor("organik bal kabağı"))
+    }
+
+    @Test
+    fun `categoryFor still finds the shorter name on its own`() {
+        assertEquals(GroceryCatalog.BREAKFAST, words.categoryFor("çiçek bal"))
+    }
+
+    @Test
+    fun `categoryFor ignores spaces the user left out`() {
+        assertEquals(GroceryCatalog.PRODUCE, words.categoryFor("Balkabağı"))
+        assertEquals(GroceryCatalog.PRODUCE, words.categoryFor("balkabagi"))
+        assertEquals(GroceryCatalog.PRODUCE, words.categoryFor("yesilsogan"))
+    }
+
+    @Test
+    fun `suggest ignores spaces the user left out`() {
+        assertEquals("Bal Kabağı", words.suggest("balkab").first().name)
+    }
+
+    @Test
+    fun `keyFor finds the item the same way categoryFor does`() {
+        assertEquals("Pumpkin", words.keyFor("organik BAL KABAĞI"))
+        assertEquals("Pumpkin", words.keyFor("balkabagi"))
+        assertEquals("Pineapple", words.keyFor("annas"))
+        assertEquals("Honey", words.keyFor("çiçek bal"))
+    }
+
+    @Test
+    fun `categoryFor understands a typo`() {
+        assertEquals(GroceryCatalog.PRODUCE, words.categoryFor("annas"))
+    }
+
+    @Test
+    fun `categoryFor understands a name typed without turkish letters`() {
+        assertEquals(GroceryCatalog.PRODUCE, words.categoryFor("yesil sogan"))
+        assertEquals(GroceryCatalog.PRODUCE, words.categoryFor("bal kabagi"))
+    }
+
+    @Test
+    fun `categoryFor does not guess on very short words`() {
+        assertNull(words.categoryFor("sit"))
+    }
+
     @Test
     fun `default categories are non-empty and unique`() {
         val names = GroceryCatalog.defaultCategories.map { it.first }

@@ -47,6 +47,74 @@ class CatalogResourcesTest {
         translatedDirs.forEach { dir -> assertEquals(dir, expected, arraySizes(dir)) }
     }
 
+    /** Catalog arrays of [dir] keyed by category, as the app pairs them. */
+    private fun catalogArrays(dir: String): Map<String, List<String>> {
+        val categoryByArray = mapOf(
+            "catalog_produce" to GroceryCatalog.PRODUCE,
+            "catalog_dairy" to GroceryCatalog.DAIRY,
+            "catalog_meat" to GroceryCatalog.MEAT,
+            "catalog_bakery" to GroceryCatalog.BAKERY,
+            "catalog_drinks" to GroceryCatalog.DRINKS,
+            "catalog_snacks" to GroceryCatalog.SNACKS,
+            "catalog_cleaning" to GroceryCatalog.CLEANING,
+            "catalog_breakfast" to GroceryCatalog.BREAKFAST,
+            "catalog_pantry" to GroceryCatalog.PANTRY
+        )
+        return resources(dir)
+            .filter { it.tagName == "string-array" && it.getAttribute("name") in categoryByArray }
+            .associate { array ->
+                val items = array.getElementsByTagName("item")
+                categoryByArray.getValue(array.getAttribute("name")) to
+                    (0 until items.length).map { items.item(it).textContent.trim() }
+            }
+    }
+
+    private fun catalog(dir: String) = ItemCatalog.of(catalogArrays("values"), catalogArrays(dir))
+
+    @Test
+    fun `english keys are unique across the catalog`() {
+        val keys = catalogArrays("values").values.flatten()
+        val duplicates = keys.groupBy { it.lowercase() }.filterValues { it.size > 1 }.keys
+        assertTrue("duplicate keys: $duplicates", duplicates.isEmpty())
+    }
+
+    @Test
+    fun `the produce section covers the common fruit and vegetables`() {
+        assertTrue(catalogArrays("values").getValue(GroceryCatalog.PRODUCE).size >= 60)
+    }
+
+    @Test
+    fun `turkish tester items land in produce`() {
+        val tr = catalog("values-tr")
+        listOf("Bal kabağı", "Beyaz lahana", "Yeşil soğan", "Ananas", "annas").forEach {
+            assertEquals(it, GroceryCatalog.PRODUCE, tr.categoryFor(it))
+        }
+    }
+
+    @Test
+    fun `turkish names match whatever the letter case`() {
+        val tr = catalog("values-tr")
+        listOf("BALKABAĞI", "bAl KaBaK", "İNCİR", "incir", "ISPANAK", "ıspanak", "Beyaz LAHANA").forEach {
+            assertEquals(it, GroceryCatalog.PRODUCE, tr.categoryFor(it))
+        }
+        assertEquals("Ananas", tr.suggest("ANA").first().name)
+    }
+
+    @Test
+    fun `typing white cabbage in turkish suggests it`() {
+        assertEquals("Beyaz Lahana", catalog("values-tr").suggest("beyaz la").first().name)
+    }
+
+    @Test
+    fun `swedish and english fruit and vegetables land in produce`() {
+        listOf("Ananas", "Vitkål", "Pumpa", "Salladslök").forEach {
+            assertEquals(it, GroceryCatalog.PRODUCE, catalog("values-sv").categoryFor(it))
+        }
+        listOf("Pineapple", "White cabbage", "Pumpkin", "Green onion").forEach {
+            assertEquals(it, GroceryCatalog.PRODUCE, catalog("values").categoryFor(it))
+        }
+    }
+
     @Test
     fun `every translation names every built-in category`() {
         val labels = stringNames("values").filter { it.startsWith("category_builtin_") || it == "category_other" }
