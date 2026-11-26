@@ -1,7 +1,9 @@
 package com.listo.app.ui.viewmodel
 
 import com.listo.app.data.models.ShoppingItem
+import com.listo.app.data.models.ShoppingList
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -79,5 +81,42 @@ class ListDetailUiStateTest {
     fun `nothing bought means an empty bought section`() {
         val state = ListDetailUiState(items = listOf(item(1, "a")), isLoading = false)
         assertTrue(state.bought.isEmpty())
+    }
+
+    private val activeList = ShoppingList(id = 1L, name = "Weekly")
+
+    @Test
+    fun `a list cannot be finished while items are still to buy`() {
+        val state = ListDetailUiState(
+            list = activeList,
+            items = listOf(item(1, "milk", checked = true), item(2, "bread")),
+            isLoading = false
+        )
+        assertFalse(state.canFinish)
+    }
+
+    @Test
+    fun `a list can be finished once everything is bought`() {
+        val state = ListDetailUiState(
+            list = activeList,
+            items = listOf(item(1, "milk", checked = true), item(2, "bread", checked = true)),
+            isLoading = false
+        )
+        assertTrue(state.canFinish)
+    }
+
+    @Test
+    fun `an empty list cannot be finished`() {
+        assertFalse(ListDetailUiState(list = activeList, isLoading = false).canFinish)
+    }
+
+    @Test
+    fun `a list already in history cannot be finished again`() {
+        val state = ListDetailUiState(
+            list = activeList.copy(isArchived = true),
+            items = listOf(item(1, "milk", checked = true)),
+            isLoading = false
+        )
+        assertFalse(state.canFinish)
     }
 }

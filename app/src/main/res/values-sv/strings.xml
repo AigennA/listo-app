@@ -46,12 +46,15 @@
     <string name="detail_done_count">%1$d / %2$d klara</string>
     <string name="detail_total">Totalt: %1$s</string>
     <string name="detail_finish">Klar — flytta till historik</string>
+    <string name="detail_finish_title">Klar med handlingen?</string>
+    <string name="detail_finish_msg">Listan försvinner från startsidan och sparas under Historik.</string>
+    <string name="detail_finish_confirm">Flytta till historik</string>
     <string name="add_item_hint">Lägg till vara…</string>
     <string name="qty_hint">Antal (2 kg)</string>
     <string name="qty_label">Antal</string>
     <string name="price_label">Pris</string>
+    <string name="add_detail_category">Kategori</string>
     <string name="category_none">Ingen</string>
-    <string name="cd_details">Detaljer</string>
     <string name="edit_item_title">Redigera vara</string>
     <string name="name_label">Namn</string>
     <string name="cd_check">Markera</string>

@@ -3,6 +3,7 @@ package com.listo.app.ui.components
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.DeleteOutline
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -66,6 +67,24 @@ fun DeleteListDialog(name: String, onConfirm: () -> Unit, onDismiss: () -> Unit)
                     fontWeight = FontWeight.Bold
                 )
             }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } }
+    )
+}
+
+/** Confirms moving a fully bought list to History. */
+@Composable
+fun FinishListDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = { Icon(Icons.Rounded.Check, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
+        title = { Text(stringResource(R.string.detail_finish_title)) },
+        text = { Text(stringResource(R.string.detail_finish_msg)) },
+        confirmButton = {
+            Button(
+                onClick = onConfirm,
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+            ) { Text(stringResource(R.string.detail_finish_confirm)) }
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } }
     )

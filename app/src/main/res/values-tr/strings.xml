@@ -46,12 +46,15 @@
     <string name="detail_done_count">%1$d / %2$d tamamlandı</string>
     <string name="detail_total">Toplam: %1$s</string>
     <string name="detail_finish">Bitti — Geçmişe taşı</string>
+    <string name="detail_finish_title">Alışveriş bitti mi?</string>
+    <string name="detail_finish_msg">Liste ana ekrandan kalkar, Geçmiş sekmesinde durur.</string>
+    <string name="detail_finish_confirm">Geçmişe taşı</string>
     <string name="add_item_hint">Ürün ekle…</string>
     <string name="qty_hint">Miktar (2 kg)</string>
     <string name="qty_label">Miktar</string>
     <string name="price_label">Fiyat</string>
+    <string name="add_detail_category">Kategori</string>
     <string name="category_none">Yok</string>
-    <string name="cd_details">Ayrıntılar</string>
     <string name="edit_item_title">Ürünü düzenle</string>
     <string name="name_label">Ad</string>
     <string name="cd_check">İşaretle</string>

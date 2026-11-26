@@ -33,6 +33,67 @@
         <item>Persilja</item>
         <item>Avokado</item>
         <item>Svamp</item>
+        <item>Ananas</item>
+        <item>Päron</item>
+        <item>Persika</item>
+        <item>Nektarin</item>
+        <item>Aprikos</item>
+        <item>Plommon</item>
+        <item>Körsbär</item>
+        <item>Surkörsbär</item>
+        <item>Melon</item>
+        <item>Kiwi</item>
+        <item>Mango</item>
+        <item>Granatäpple</item>
+        <item>Fikon</item>
+        <item>Mandarin</item>
+        <item>Grapefrukt</item>
+        <item>Lime</item>
+        <item>Hallon</item>
+        <item>Blåbär</item>
+        <item>Björnbär</item>
+        <item>Kvitten</item>
+        <item>Kokosnöt</item>
+        <item>Papaya</item>
+        <item>Passionsfrukt</item>
+        <item>Sharonfrukt</item>
+        <item>Dadlar</item>
+        <item>Kål</item>
+        <item>Vitkål</item>
+        <item>Rödkål</item>
+        <item>Blomkål</item>
+        <item>Broccoli</item>
+        <item>Zucchini</item>
+        <item>Pumpa</item>
+        <item>Salladslök</item>
+        <item>Rödlök</item>
+        <item>Purjolök</item>
+        <item>Selleri</item>
+        <item>Rädisor</item>
+        <item>Rödbetor</item>
+        <item>Haricots verts</item>
+        <item>Ärtor</item>
+        <item>Majs</item>
+        <item>Okra</item>
+        <item>Kronärtskocka</item>
+        <item>Sötpotatis</item>
+        <item>Ingefära</item>
+        <item>Dill</item>
+        <item>Mynta</item>
+        <item>Basilika</item>
+        <item>Ruccola</item>
+        <item>Koriander</item>
+        <item>Körsbärstomater</item>
+        <item>Grön paprika</item>
+        <item>Chili</item>
+        <item>Isbergssallad</item>
+        <item>Grönkål</item>
+        <item>Brysselkål</item>
+        <item>Sparris</item>
+        <item>Portlak</item>
+        <item>Krasse</item>
+        <item>Rova</item>
+        <item>Fänkål</item>
     </string-array>
 
     <string-array name="catalog_dairy">

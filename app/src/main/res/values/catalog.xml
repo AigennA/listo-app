@@ -37,6 +37,67 @@
         <item>Parsley</item>
         <item>Avocado</item>
         <item>Mushroom</item>
+        <item>Pineapple</item>
+        <item>Pear</item>
+        <item>Peach</item>
+        <item>Nectarine</item>
+        <item>Apricot</item>
+        <item>Plum</item>
+        <item>Cherry</item>
+        <item>Sour Cherry</item>
+        <item>Melon</item>
+        <item>Kiwi</item>
+        <item>Mango</item>
+        <item>Pomegranate</item>
+        <item>Fig</item>
+        <item>Mandarin</item>
+        <item>Grapefruit</item>
+        <item>Lime</item>
+        <item>Raspberry</item>
+        <item>Blueberry</item>
+        <item>Blackberry</item>
+        <item>Quince</item>
+        <item>Coconut</item>
+        <item>Papaya</item>
+        <item>Passion Fruit</item>
+        <item>Persimmon</item>
+        <item>Dates</item>
+        <item>Cabbage</item>
+        <item>White Cabbage</item>
+        <item>Red Cabbage</item>
+        <item>Cauliflower</item>
+        <item>Broccoli</item>
+        <item>Zucchini</item>
+        <item>Pumpkin</item>
+        <item>Green Onion</item>
+        <item>Red Onion</item>
+        <item>Leek</item>
+        <item>Celery</item>
+        <item>Radish</item>
+        <item>Beetroot</item>
+        <item>Green Beans</item>
+        <item>Peas</item>
+        <item>Corn</item>
+        <item>Okra</item>
+        <item>Artichoke</item>
+        <item>Sweet Potato</item>
+        <item>Ginger</item>
+        <item>Dill</item>
+        <item>Mint</item>
+        <item>Basil</item>
+        <item>Arugula</item>
+        <item>Coriander</item>
+        <item>Cherry Tomatoes</item>
+        <item>Green Pepper</item>
+        <item>Chili Pepper</item>
+        <item>Iceberg Lettuce</item>
+        <item>Kale</item>
+        <item>Brussels Sprouts</item>
+        <item>Asparagus</item>
+        <item>Purslane</item>
+        <item>Cress</item>
+        <item>Turnip</item>
+        <item>Fennel</item>
     </string-array>
 
     <string-array name="catalog_dairy">

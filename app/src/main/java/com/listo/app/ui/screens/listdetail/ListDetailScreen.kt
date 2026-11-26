@@ -48,6 +48,7 @@ import com.listo.app.data.models.Category
 import com.listo.app.data.models.ShoppingItem
 import com.listo.app.data.models.ShoppingList
 import com.listo.app.ui.components.DeleteListDialog
+import com.listo.app.ui.components.FinishListDialog
 import com.listo.app.ui.components.LisToTopBar
 import com.listo.app.ui.components.RenameListDialog
 import com.listo.app.ui.viewmodel.ListDetailUiState
@@ -78,6 +79,7 @@ fun ListDetailScreen(
 
     var showRename by remember { mutableStateOf(false) }
     var showDeleteList by remember { mutableStateOf(false) }
+    var showFinishList by remember { mutableStateOf(false) }
     var showBudget by remember { mutableStateOf(false) }
     var showSchedule by remember { mutableStateOf(false) }
     var showMenu by remember { mutableStateOf(false) }
@@ -232,11 +234,11 @@ fun ListDetailScreen(
                 }
             }
 
-            if (!list.isArchived && uiState.items.isNotEmpty()) {
+            if (uiState.canFinish) {
                 item {
                     Spacer(Modifier.height(20.dp))
                     Button(
-                        onClick = { viewModel.archiveList { navController.navigateUp() } },
+                        onClick = { showFinishList = true },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 20.dp)
@@ -281,6 +283,16 @@ fun ListDetailScreen(
                 showSchedule = false
             },
             onDismiss = { showSchedule = false }
+        )
+    }
+
+    if (showFinishList) {
+        FinishListDialog(
+            onConfirm = {
+                showFinishList = false
+                viewModel.archiveList { navController.navigateUp() }
+            },
+            onDismiss = { showFinishList = false }
         )
     }
 
@@ -527,7 +539,7 @@ private fun ShoppingItemRow(
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = iconForItem(iconKey),
+                        imageVector = iconForItem(iconKey, item.categoryName),
                         contentDescription = null,
                         tint = avatarColor,
                         modifier = Modifier.size(20.dp)
@@ -574,7 +586,7 @@ private fun AddItemBar(
     var quantity by remember { mutableStateOf("") }
     var price by remember { mutableStateOf(0.0) }
     var categoryId by remember { mutableStateOf<Long?>(null) }
-    var expanded by remember { mutableStateOf(false) }
+    var details by remember { mutableStateOf(AddItemDetails()) }
     val focusRequester = remember { FocusRequester() }
 
     fun categoryIdFor(catName: String?): Long? =
@@ -585,6 +597,7 @@ private fun AddItemBar(
         val resolvedCategory = categoryId ?: categoryIdFor(catalog.categoryFor(name))
         onAdd(name, quantity, resolvedCategory, if (price > 0.0) price else null)
         name = ""; quantity = ""; price = 0.0; categoryId = null
+        details = AddItemDetails()
         // keep focus so the user can keep adding items quickly
         focusRequester.requestFocus()
     }
@@ -626,42 +639,64 @@ private fun AddItemBar(
                 }
             }
 
-            AnimatedVisibility(visible = expanded) {
-                Column {
-                    OutlinedTextField(
-                        value = quantity,
-                        onValueChange = { quantity = it },
-                        placeholder = { Text(stringResource(R.string.qty_hint)) },
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(12.dp)
-                    )
-                    Spacer(Modifier.height(8.dp))
+            AnimatedVisibility(visible = details.isOpen(ItemDetail.QUANTITY)) {
+                OutlinedTextField(
+                    value = quantity,
+                    onValueChange = { quantity = it },
+                    placeholder = { Text(stringResource(R.string.qty_hint)) },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                    shape = RoundedCornerShape(12.dp)
+                )
+            }
+            AnimatedVisibility(visible = details.isOpen(ItemDetail.PRICE)) {
+                Box(Modifier.padding(bottom = 8.dp)) {
                     PriceStepper(value = price, onChange = { price = it })
-                    if (categories.isNotEmpty()) {
-                        Spacer(Modifier.height(8.dp))
-                        Row(
-                            modifier = Modifier.horizontalScroll(rememberScrollState()),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            CategoryChoice(stringResource(R.string.category_none), null, categoryId == null) { categoryId = null }
-                            categories.forEach { c ->
-                                CategoryChoice(categoryLabel(c.name), c.color.toComposeColor(), categoryId == c.id) { categoryId = c.id }
-                            }
-                        }
+                }
+            }
+            AnimatedVisibility(visible = details.isOpen(ItemDetail.CATEGORY) && categories.isNotEmpty()) {
+                Row(
+                    modifier = Modifier
+                        .horizontalScroll(rememberScrollState())
+                        .padding(bottom = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    CategoryChoice(stringResource(R.string.category_none), null, categoryId == null) { categoryId = null }
+                    categories.forEach { c ->
+                        CategoryChoice(categoryLabel(c.name), c.color.toComposeColor(), categoryId == c.id) { categoryId = c.id }
                     }
-                    Spacer(Modifier.height(8.dp))
+                }
+            }
+
+            // Labelled buttons for the optional fields, so users can see they exist
+            AnimatedVisibility(visible = details.showButtons(name)) {
+                Row(
+                    modifier = Modifier
+                        .horizontalScroll(rememberScrollState())
+                        .padding(bottom = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    ItemDetail.entries
+                        .filter { it != ItemDetail.CATEGORY || categories.isNotEmpty() }
+                        .forEach { detail ->
+                            val open = details.isOpen(detail)
+                            FilterChip(
+                                selected = open,
+                                onClick = { details = details.toggle(detail) },
+                                label = { Text(stringResource(detail.labelRes)) },
+                                leadingIcon = {
+                                    Icon(
+                                        if (open) Icons.Rounded.Check else Icons.Rounded.Add,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                }
+                            )
+                        }
                 }
             }
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { expanded = !expanded }) {
-                    Icon(
-                        if (expanded) Icons.Rounded.ExpandMore else Icons.Rounded.Tune,
-                        contentDescription = stringResource(R.string.cd_details),
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                }
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
@@ -689,6 +724,13 @@ private fun AddItemBar(
         }
     }
 }
+
+private val ItemDetail.labelRes: Int
+    get() = when (this) {
+        ItemDetail.QUANTITY -> R.string.qty_label
+        ItemDetail.PRICE -> R.string.price_label
+        ItemDetail.CATEGORY -> R.string.add_detail_category
+    }
 
 @Composable
 private fun CategoryChoice(label: String, color: Color?, selected: Boolean, onClick: () -> Unit) {
