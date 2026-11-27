@@ -14,4 +14,15 @@ sealed class Screen(val route: String) {
         fun route(categoryId: Long) = "category_items/$categoryId"
     }
     data object Settings    : Screen("settings")
+
+    /** My stores; with a list id it picks the store to shop that list in. */
+    data object Stores : Screen("stores?listId={listId}") {
+        fun route(listId: Long) = "stores?listId=$listId"
+    }
+    data object StoreMapEditor : Screen("store_map/{storeId}") {
+        fun route(storeId: Long) = "store_map/$storeId"
+    }
+    data object StoreShopping : Screen("store_shop/{listId}/{storeId}") {
+        fun route(listId: Long, storeId: Long) = "store_shop/$listId/$storeId"
+    }
 }

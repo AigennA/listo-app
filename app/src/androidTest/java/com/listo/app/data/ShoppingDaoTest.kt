@@ -54,6 +54,16 @@ class ShoppingDaoTest {
     }
 
     @Test
+    fun listTotal_multipliesPriceByAmount() = runBlocking {
+        val listId = listDao.insert(ShoppingListEntity(name = "Groceries"))
+        itemDao.insert(ShoppingItemEntity(listId = listId, name = "Milk", price = 15.0, amount = 2.0, unit = "pcs"))
+        itemDao.insert(ShoppingItemEntity(listId = listId, name = "Cheese", price = 120.0, amount = 250.0, unit = "g"))
+        itemDao.insert(ShoppingItemEntity(listId = listId, name = "Bread", price = 25.0))
+
+        assertEquals(85.0, listDao.getActiveLists().first().single().totalPrice, 0.001)
+    }
+
+    @Test
     fun pendingCount_countsOnlyUncheckedItemsInActiveLists() = runBlocking {
         val active = listDao.insert(ShoppingListEntity(name = "Active"))
         itemDao.insert(ShoppingItemEntity(listId = active, name = "x", isChecked = false))

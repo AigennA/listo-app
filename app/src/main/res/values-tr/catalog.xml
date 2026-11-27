@@ -107,7 +107,11 @@
     </string-array>
 
     <string-array name="catalog_meat">
+        <item>Et</item>
         <item>Tavuk</item>
+        <item>Tavuk Göğsü</item>
+        <item>Kuzu Eti</item>
+        <item>Ton Balığı</item>
         <item>Kıyma</item>
         <item>Biftek</item>
         <item>Balık</item>

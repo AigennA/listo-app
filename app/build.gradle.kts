@@ -90,6 +90,15 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    // Exported Room schemas let instrumented tests prove each migration keeps user data.
+    sourceSets {
+        getByName("androidTest").assets.srcDir("$projectDir/schemas")
+    }
+}
+
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
 }
 
 dependencies {
@@ -138,9 +147,11 @@ dependencies {
     // Unit tests: JUnit, MockK for test doubles
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
+    testImplementation(libs.coroutines.test)
 
     // Instrumented / behaviour tests (data layer; no Espresso/Compose UI —
     // the installed emulator images are an API preview Espresso can't drive)
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.room.testing)
 }

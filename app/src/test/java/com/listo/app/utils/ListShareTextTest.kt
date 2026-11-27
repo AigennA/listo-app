@@ -1,6 +1,7 @@
 package com.listo.app.utils
 
 import com.listo.app.data.models.ShoppingItem
+import com.listo.app.data.models.QuantityUnit
 import com.listo.app.data.models.ShoppingList
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -21,6 +22,15 @@ class ListShareTextTest {
             "Weekly\n\n[x] Milk\n[ ] Eggs (12)\n\n4.5 EUR",
             buildShareText(list, items, price)
         )
+    }
+
+    @Test
+    fun `items with an amount show it, and the total multiplies the price`() {
+        val items = listOf(
+            ShoppingItem(listId = 1, name = "Milk", price = 15.0, amount = 2.0, unit = QuantityUnit.PIECE)
+        )
+        val label: (ShoppingItem) -> String = { "2 pcs" }
+        assertEquals("Weekly\n\n[ ] Milk (2 pcs)\n\n30.0 EUR", buildShareText(list, items, price, label))
     }
 
     @Test

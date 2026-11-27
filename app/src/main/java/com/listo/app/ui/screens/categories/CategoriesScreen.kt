@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -29,6 +30,7 @@ import com.listo.app.ui.components.PrimaryButton
 import com.listo.app.ui.theme.*
 import com.listo.app.ui.viewmodel.CategoriesViewModel
 import com.listo.app.utils.categoryLabel
+import com.listo.app.utils.emojiForCategory
 import com.listo.app.utils.toComposeColor
 
 private val categoryColors = listOf(
@@ -97,17 +99,13 @@ fun CategoriesScreen(
                             ) {
                                 Box(
                                     modifier = Modifier
-                                        .size(36.dp)
+                                        .size(40.dp)
                                         .clip(CircleShape)
-                                        .background(catColor),
+                                        .background(catColor.copy(alpha = 0.22f)),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    Icon(
-                                        Icons.Rounded.Folder,
-                                        contentDescription = null,
-                                        tint = Color.White,
-                                        modifier = Modifier.size(20.dp)
-                                    )
+                                    // The aisle's own picture; categories the user made get a basket.
+                                    Text(emojiForCategory(category.name), fontSize = 22.sp)
                                 }
                                 IconButton(
                                     onClick = { viewModel.deleteCategory(category.id) },

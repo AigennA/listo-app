@@ -25,6 +25,10 @@ import com.listo.app.ui.screens.lists.ListsScreen
 import com.listo.app.ui.screens.onboarding.OnboardingScreen
 import com.listo.app.ui.screens.settings.SettingsScreen
 import com.listo.app.ui.screens.splash.SplashScreen
+import com.listo.app.ui.screens.stores.StoreMapEditorScreen
+import com.listo.app.ui.screens.stores.StoreShoppingScreen
+import com.listo.app.ui.screens.stores.StoresScreen
+import com.listo.app.ui.viewmodel.StoreArgs
 
 @Composable
 fun LisToNavigation() {
@@ -118,6 +122,36 @@ private fun LisToNavHost(navController: NavHostController, modifier: Modifier) {
 
         composable(Screen.Settings.route) {
             SettingsScreen(navController = navController)
+        }
+
+        composable(
+            route = Screen.Stores.route,
+            arguments = listOf(navArgument(StoreArgs.LIST_ID) {
+                type = NavType.LongType
+                defaultValue = StoreArgs.NO_LIST
+            })
+        ) { entry ->
+            StoresScreen(
+                navController = navController,
+                listId = entry.arguments?.getLong(StoreArgs.LIST_ID) ?: StoreArgs.NO_LIST
+            )
+        }
+
+        composable(
+            route = Screen.StoreMapEditor.route,
+            arguments = listOf(navArgument(StoreArgs.STORE_ID) { type = NavType.LongType })
+        ) {
+            StoreMapEditorScreen(navController = navController)
+        }
+
+        composable(
+            route = Screen.StoreShopping.route,
+            arguments = listOf(
+                navArgument(StoreArgs.LIST_ID) { type = NavType.LongType },
+                navArgument(StoreArgs.STORE_ID) { type = NavType.LongType }
+            )
+        ) {
+            StoreShoppingScreen(navController = navController)
         }
     }
 }

@@ -27,6 +27,7 @@ import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,18 +40,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.listo.app.R
+import com.listo.app.ui.navigation.Screen
 import com.listo.app.data.models.Category
+import com.listo.app.data.models.QuantityUnit
 import com.listo.app.data.models.ShoppingItem
 import com.listo.app.data.models.ShoppingList
+import com.listo.app.ui.components.AmountEditor
 import com.listo.app.ui.components.DeleteListDialog
 import com.listo.app.ui.components.FinishListDialog
 import com.listo.app.ui.components.LisToTopBar
+import com.listo.app.ui.components.PriceEditor
 import com.listo.app.ui.components.RenameListDialog
+import com.listo.app.ui.components.quantityText
 import com.listo.app.ui.viewmodel.ListDetailUiState
 import com.listo.app.ui.viewmodel.ListDetailViewModel
 import com.listo.app.utils.AppDefaults
@@ -59,7 +66,7 @@ import com.listo.app.utils.ItemCatalog
 import com.listo.app.utils.ListReminderScheduler
 import com.listo.app.utils.categoryLabel
 import com.listo.app.utils.formatPrice
-import com.listo.app.utils.iconForItem
+import com.listo.app.utils.emojiForItem
 import com.listo.app.utils.rememberItemCatalog
 import com.listo.app.utils.shareList
 import com.listo.app.utils.toComposeColor
@@ -86,17 +93,46 @@ fun ListDetailScreen(
     var editItem by remember { mutableStateOf<ShoppingItem?>(null) }
     var showBought by rememberSaveable { mutableStateOf(true) }
 
+    // Ticking an item offers a quick undo, for taps made by mistake.
+    val snackbarHost = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val undoLabel = stringResource(R.string.action_undo)
+    fun toggleWithUndo(item: ShoppingItem) {
+        viewModel.toggleItem(item)
+        if (item.isChecked) return
+        scope.launch {
+            snackbarHost.currentSnackbarData?.dismiss()
+            val result = snackbarHost.showSnackbar(
+                message = context.getString(R.string.tick_done, item.name),
+                actionLabel = undoLabel,
+                duration = SnackbarDuration.Short
+            )
+            if (result == SnackbarResult.ActionPerformed) viewModel.undoTick(item)
+        }
+    }
+
     val notifPermissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { }
 
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHost) },
         topBar = {
             LisToTopBar(
                 title = list?.name ?: stringResource(R.string.detail_default_title),
                 navController = navController,
                 actions = {
                     if (list != null) {
+                        if (!list.isArchived) {
+                            IconButton(onClick = {
+                                // A list with a store goes straight to that store's map.
+                                val route = list.storeId?.let { Screen.StoreShopping.route(list.id, it) }
+                                    ?: Screen.Stores.route(list.id)
+                                navController.navigate(route)
+                            }) {
+                                Icon(Icons.Rounded.Storefront, contentDescription = stringResource(R.string.cd_in_store))
+                            }
+                        }
                         IconButton(onClick = { shareList(context, list, uiState.items) }) {
                             Icon(Icons.Rounded.Share, contentDescription = stringResource(R.string.cd_share))
                         }
@@ -115,6 +151,13 @@ fun ListDetailScreen(
                                     leadingIcon = { Icon(Icons.Rounded.Edit, contentDescription = null) },
                                     onClick = { showMenu = false; showRename = true }
                                 )
+                                if (!list.isArchived) {
+                                    DropdownMenuItem(
+                                        text = { Text(stringResource(R.string.detail_store)) },
+                                        leadingIcon = { Icon(Icons.Rounded.Storefront, contentDescription = null) },
+                                        onClick = { showMenu = false; navController.navigate(Screen.Stores.route(list.id)) }
+                                    )
+                                }
                                 DropdownMenuItem(
                                     text = { Text(stringResource(R.string.budget_title)) },
                                     leadingIcon = { Icon(Icons.Rounded.AccountBalanceWallet, contentDescription = null) },
@@ -136,7 +179,7 @@ fun ListDetailScreen(
                 AddItemBar(
                     categories = uiState.categories,
                     catalog = catalog,
-                    onAdd = { name, qty, catId, price -> viewModel.addItem(name, qty, catId, price) }
+                    onAdd = { name, amount, unit, catId, price -> viewModel.addItem(name, amount, unit, catId, price) }
                 )
             }
         },
@@ -205,7 +248,7 @@ fun ListDetailScreen(
                         ShoppingItemRow(
                             item = item,
                             iconKey = catalog.keyFor(item.name) ?: item.name,
-                            onToggle = { viewModel.toggleItem(item) },
+                            onToggle = { toggleWithUndo(item) },
                             onClick = { editItem = item },
                             onDelete = { viewModel.deleteItem(item.id) }
                         )
@@ -225,7 +268,7 @@ fun ListDetailScreen(
                             ShoppingItemRow(
                                 item = item,
                                 iconKey = catalog.keyFor(item.name) ?: item.name,
-                                onToggle = { viewModel.toggleItem(item) },
+                                onToggle = { toggleWithUndo(item) },
                                 onClick = { editItem = item },
                                 onDelete = { viewModel.deleteItem(item.id) }
                             )
@@ -538,12 +581,7 @@ private fun ShoppingItemRow(
                         .background(avatarColor.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        imageVector = iconForItem(iconKey, item.categoryName),
-                        contentDescription = null,
-                        tint = avatarColor,
-                        modifier = Modifier.size(20.dp)
-                    )
+                    Text(emojiForItem(iconKey, item.categoryName), fontSize = 20.sp)
                 }
                 Spacer(Modifier.width(12.dp))
                 Column(modifier = Modifier.weight(1f)) {
@@ -554,17 +592,18 @@ private fun ShoppingItemRow(
                         color = if (item.isChecked) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
                         textDecoration = if (item.isChecked) TextDecoration.LineThrough else null
                     )
-                    if (item.quantity.isNotBlank()) {
+                    val quantity = quantityText(item)
+                    if (quantity.isNotBlank()) {
                         Text(
-                            text = item.quantity,
+                            text = quantity,
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
-                item.price?.let { p ->
+                if (item.price != null) {
                     Text(
-                        text = formatPrice(p),
+                        text = formatPrice(item.lineTotal),
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface
@@ -580,11 +619,12 @@ private fun ShoppingItemRow(
 private fun AddItemBar(
     categories: List<Category>,
     catalog: ItemCatalog,
-    onAdd: (name: String, quantity: String, categoryId: Long?, price: Double?) -> Unit
+    onAdd: (name: String, amount: Double?, unit: QuantityUnit?, categoryId: Long?, price: Double?) -> Unit
 ) {
     var name by remember { mutableStateOf("") }
-    var quantity by remember { mutableStateOf("") }
-    var price by remember { mutableStateOf(0.0) }
+    var amount by remember { mutableStateOf<Double?>(null) }
+    var unit by remember { mutableStateOf(QuantityUnit.PIECE) }
+    var price by remember { mutableStateOf<Double?>(null) }
     var categoryId by remember { mutableStateOf<Long?>(null) }
     var details by remember { mutableStateOf(AddItemDetails()) }
     val focusRequester = remember { FocusRequester() }
@@ -595,8 +635,9 @@ private fun AddItemBar(
     fun submit() {
         if (name.isBlank()) return
         val resolvedCategory = categoryId ?: categoryIdFor(catalog.categoryFor(name))
-        onAdd(name, quantity, resolvedCategory, if (price > 0.0) price else null)
-        name = ""; quantity = ""; price = 0.0; categoryId = null
+        // A unit only counts once an amount is given; an untouched item stays "one of it".
+        onAdd(name, amount, if (amount != null) unit else null, resolvedCategory, price)
+        name = ""; amount = null; unit = QuantityUnit.PIECE; price = null; categoryId = null
         details = AddItemDetails()
         // keep focus so the user can keep adding items quickly
         focusRequester.requestFocus()
@@ -640,18 +681,13 @@ private fun AddItemBar(
             }
 
             AnimatedVisibility(visible = details.isOpen(ItemDetail.QUANTITY)) {
-                OutlinedTextField(
-                    value = quantity,
-                    onValueChange = { quantity = it },
-                    placeholder = { Text(stringResource(R.string.qty_hint)) },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
-                    shape = RoundedCornerShape(12.dp)
-                )
+                Box(Modifier.padding(bottom = 8.dp)) {
+                    AmountEditor(amount = amount, unit = unit) { a, u -> amount = a; unit = u }
+                }
             }
             AnimatedVisibility(visible = details.isOpen(ItemDetail.PRICE)) {
                 Box(Modifier.padding(bottom = 8.dp)) {
-                    PriceStepper(value = price, onChange = { price = it })
+                    PriceEditor(price = price, unit = unit, step = AppDefaults.PRICE_STEP) { price = it }
                 }
             }
             AnimatedVisibility(visible = details.isOpen(ItemDetail.CATEGORY) && categories.isNotEmpty()) {
@@ -753,38 +789,6 @@ private fun CategoryChoice(label: String, color: Color?, selected: Boolean, onCl
 
 
 @Composable
-private fun PriceStepper(
-    value: Double,
-    onChange: (Double) -> Unit,
-    step: Double = AppDefaults.PRICE_STEP
-) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Text(
-            stringResource(R.string.price_label),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-        Spacer(Modifier.weight(1f))
-        FilledTonalIconButton(
-            onClick = { onChange((value - step).coerceAtLeast(0.0)) },
-            modifier = Modifier.size(36.dp)
-        ) { Icon(Icons.Rounded.Remove, contentDescription = "−", modifier = Modifier.size(18.dp)) }
-        Text(
-            text = if (value > 0.0) formatPrice(value) else "—",
-            modifier = Modifier.widthIn(min = 64.dp),
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-            style = MaterialTheme.typography.titleSmall,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-        FilledTonalIconButton(
-            onClick = { onChange(value + step) },
-            modifier = Modifier.size(36.dp)
-        ) { Icon(Icons.Rounded.Add, contentDescription = "+", modifier = Modifier.size(18.dp)) }
-    }
-}
-
-@Composable
 private fun BudgetDialog(
     current: Double?,
     onConfirm: (Double?) -> Unit,
@@ -846,8 +850,9 @@ private fun EditItemDialog(
     onDismiss: () -> Unit
 ) {
     var name by remember { mutableStateOf(item.name) }
-    var quantity by remember { mutableStateOf(item.quantity) }
-    var price by remember { mutableStateOf(item.price ?: 0.0) }
+    var amount by remember { mutableStateOf(item.amount) }
+    var unit by remember { mutableStateOf(item.unit ?: QuantityUnit.PIECE) }
+    var price by remember { mutableStateOf(item.price) }
     var categoryId by remember { mutableStateOf(item.categoryId) }
 
     AlertDialog(
@@ -860,12 +865,16 @@ private fun EditItemDialog(
                     label = { Text(stringResource(R.string.name_label)) }, singleLine = true,
                     shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth()
                 )
-                OutlinedTextField(
-                    value = quantity, onValueChange = { quantity = it },
-                    label = { Text(stringResource(R.string.qty_label)) }, singleLine = true,
-                    shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth()
-                )
-                PriceStepper(value = price, onChange = { price = it })
+                if (amount == null && item.quantity.isNotBlank()) {
+                    // Written before units existed; setting an amount below replaces it.
+                    Text(
+                        item.quantity,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                AmountEditor(amount = amount, unit = unit) { a, u -> amount = a; unit = u }
+                PriceEditor(price = price, unit = if (amount != null) unit else null, step = AppDefaults.PRICE_STEP) { price = it }
                 if (categories.isNotEmpty()) {
                     Row(
                         modifier = Modifier.horizontalScroll(rememberScrollState()),
@@ -885,8 +894,10 @@ private fun EditItemDialog(
                     onConfirm(
                         item.copy(
                             name = name.trim(),
-                            quantity = quantity.trim(),
-                            price = if (price > 0.0) price else null,
+                            quantity = if (amount != null) "" else item.quantity,
+                            amount = amount,
+                            unit = if (amount != null) unit else null,
+                            price = price?.takeIf { it > 0.0 },
                             categoryId = categoryId
                         )
                     )

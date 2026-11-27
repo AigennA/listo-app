@@ -9,6 +9,7 @@ data class ShoppingList(
     val budget: Double? = null,
     val scheduledDate: Long? = null,
     val reminderAt: Long? = null,
+    val storeId: Long? = null,
     val itemCount: Int = 0,
     val checkedCount: Int = 0,
     val totalPrice: Double = 0.0

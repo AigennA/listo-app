@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -26,7 +27,7 @@ import com.listo.app.ui.components.LisToTopBar
 import com.listo.app.ui.navigation.Screen
 import com.listo.app.ui.viewmodel.CategoryItemsViewModel
 import com.listo.app.utils.categoryLabel
-import com.listo.app.utils.iconForItem
+import com.listo.app.utils.emojiForItem
 import com.listo.app.utils.rememberItemCatalog
 import com.listo.app.utils.toComposeColor
 
@@ -150,7 +151,7 @@ private fun CatalogItemRow(
                     .background(accent.copy(alpha = 0.15f)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(iconForItem(iconKey, category), contentDescription = null, tint = accent, modifier = Modifier.size(20.dp))
+                Text(emojiForItem(iconKey, category), fontSize = 20.sp)
             }
             Spacer(Modifier.width(12.dp))
             Text(

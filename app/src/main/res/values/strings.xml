@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Listo</string>
-    <string name="app_tagline">Your shopping, sorted.</string>
+    <string name="app_tagline">Make your list. The rest is easy.</string>
 
     <!-- Common actions -->
     <string name="action_save">Save</string>
@@ -50,7 +50,6 @@
     <string name="detail_finish_msg">The list leaves the home screen and is kept under History.</string>
     <string name="detail_finish_confirm">Move to History</string>
     <string name="add_item_hint">Add item…</string>
-    <string name="qty_hint">Qty (2 kg)</string>
     <string name="qty_label">Qty</string>
     <string name="price_label">Price</string>
     <string name="add_detail_category">Category</string>
@@ -168,4 +167,45 @@
     <string name="settings_feedback_sub">Questions, ideas or a bug? Write to us</string>
     <string name="feedback_subject">Listo feedback (%1$s)</string>
     <string name="feedback_body">\n\n—\nListo %1$s · Android %2$s</string>
+
+    <!-- Stores and store maps -->
+    <string name="stores_title">My stores</string>
+    <string name="stores_add">Add store</string>
+    <string name="stores_name_hint">e.g. Willys Tornby</string>
+    <string name="stores_empty_title">No stores yet</string>
+    <string name="stores_empty_subtitle">Add the stores you shop at and lay out their aisles once. Then shop aisle by aisle.</string>
+    <string name="stores_pick_subtitle">Which store are you in?</string>
+    <string name="store_edit_map">Edit map</string>
+    <string name="store_rename">Rename</string>
+    <string name="store_color">Color</string>
+    <string name="store_delete">Delete store</string>
+    <string name="store_delete_msg">\"%1$s\" and its map will be removed. Your lists stay.</string>
+    <string name="settings_stores_sub">Store maps for shopping aisle by aisle</string>
+    <string name="cd_in_store">Shop in a store</string>
+    <string name="map_edit_hint">Drag the aisles to where they are in the store. The top left is the entrance.</string>
+    <string name="map_add_aisle">Add an aisle</string>
+    <string name="map_all_placed">Every category is on the map.</string>
+    <string name="map_save">Done</string>
+    <string name="map_entrance">Entrance</string>
+    <string name="cd_remove_aisle">Remove %1$s</string>
+    <string name="shop_progress">%1$d / %2$d in the basket</string>
+    <string name="shop_hint">Tap an aisle to see what to get there.</string>
+    <string name="shop_other">Not on the map</string>
+    <string name="shop_aisle_empty">Nothing from this aisle on your list.</string>
+    <string name="shop_next_aisle">Done, next aisle</string>
+    <string name="lists_store_label">Store (optional)</string>
+    <string name="lists_store_new">Add \"%1$s\" as a new store</string>
+    <string name="detail_store">Store</string>
+    <string name="shop_add_hint">Forgot something? Add it here</string>
+    <!-- Units and price basis -->
+    <string name="unit_piece">pcs</string>
+    <string name="unit_pack">pack</string>
+    <string name="unit_kilo">kg</string>
+    <string name="unit_gram">g</string>
+    <string name="unit_litre">L</string>
+    <string name="unit_millilitre">ml</string>
+    <string name="price_per_unit">Price / %1$s</string>
+    <string name="tick_done">%1$s is in the basket</string>
+    <string name="action_undo">Undo</string>
+    <string name="history_restore">Move back to My Lists</string>
 </resources>

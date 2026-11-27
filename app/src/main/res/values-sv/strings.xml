@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Listo</string>
-    <string name="app_tagline">Din shopping, organiserad.</string>
+    <string name="app_tagline">Gör din lista. Resten är enkelt.</string>
 
     <!-- Common actions -->
     <string name="action_save">Spara</string>
@@ -50,7 +50,6 @@
     <string name="detail_finish_msg">Listan försvinner från startsidan och sparas under Historik.</string>
     <string name="detail_finish_confirm">Flytta till historik</string>
     <string name="add_item_hint">Lägg till vara…</string>
-    <string name="qty_hint">Antal (2 kg)</string>
     <string name="qty_label">Antal</string>
     <string name="price_label">Pris</string>
     <string name="add_detail_category">Kategori</string>
@@ -163,4 +162,45 @@
     <string name="settings_feedback_sub">Frågor, idéer eller en bugg? Skriv till oss</string>
     <string name="feedback_subject">Listo – feedback (%1$s)</string>
     <string name="feedback_body">\n\n—\nListo %1$s · Android %2$s</string>
+
+    <!-- Stores and store maps -->
+    <string name="stores_title">Mina butiker</string>
+    <string name="stores_add">Lägg till butik</string>
+    <string name="stores_name_hint">T.ex. Willys Tornby</string>
+    <string name="stores_empty_title">Inga butiker än</string>
+    <string name="stores_empty_subtitle">Lägg till butikerna du handlar i och placera gångarna en gång. Handla sedan gång för gång.</string>
+    <string name="stores_pick_subtitle">Vilken butik är du i?</string>
+    <string name="store_edit_map">Redigera karta</string>
+    <string name="store_rename">Byt namn</string>
+    <string name="store_color">Färg</string>
+    <string name="store_delete">Ta bort butik</string>
+    <string name="store_delete_msg">\"%1$s\" och dess karta tas bort. Dina listor finns kvar.</string>
+    <string name="settings_stores_sub">Butikskartor för att handla gång för gång</string>
+    <string name="cd_in_store">Handla i en butik</string>
+    <string name="map_edit_hint">Dra gångarna dit de finns i butiken. Övre vänstra hörnet är ingången.</string>
+    <string name="map_add_aisle">Lägg till gång</string>
+    <string name="map_all_placed">Alla kategorier finns på kartan.</string>
+    <string name="map_save">Klart</string>
+    <string name="map_entrance">Ingång</string>
+    <string name="cd_remove_aisle">Ta bort %1$s</string>
+    <string name="shop_progress">%1$d / %2$d i korgen</string>
+    <string name="shop_hint">Tryck på en gång för att se vad du ska ta där.</string>
+    <string name="shop_other">Inte på kartan</string>
+    <string name="shop_aisle_empty">Inget från den här gången på din lista.</string>
+    <string name="shop_next_aisle">Klart, nästa gång</string>
+    <string name="lists_store_label">Butik (valfritt)</string>
+    <string name="lists_store_new">Lägg till \"%1$s\" som ny butik</string>
+    <string name="detail_store">Butik</string>
+    <string name="shop_add_hint">Glömt något? Lägg till här</string>
+    <!-- Units and price basis -->
+    <string name="unit_piece">st</string>
+    <string name="unit_pack">förp</string>
+    <string name="unit_kilo">kg</string>
+    <string name="unit_gram">g</string>
+    <string name="unit_litre">l</string>
+    <string name="unit_millilitre">ml</string>
+    <string name="price_per_unit">Pris / %1$s</string>
+    <string name="tick_done">%1$s ligger i korgen</string>
+    <string name="action_undo">Ångra</string>
+    <string name="history_restore">Flytta tillbaka till Mina listor</string>
 </resources>

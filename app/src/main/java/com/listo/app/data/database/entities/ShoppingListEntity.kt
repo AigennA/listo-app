@@ -14,7 +14,9 @@ data class ShoppingListEntity(
     val archivedAt: Long? = null,
     val budget: Double? = null,
     val scheduledDate: Long? = null,
-    val reminderAt: Long? = null
+    val reminderAt: Long? = null,
+    /** The store this list is usually shopped in, or null. */
+    val storeId: Long? = null
 )
 
 /** Projection used by list queries to carry aggregate counts/total alongside the row. */
@@ -34,6 +36,7 @@ fun ShoppingListWithStats.toDomain() = ShoppingList(
     budget = list.budget,
     scheduledDate = list.scheduledDate,
     reminderAt = list.reminderAt,
+    storeId = list.storeId,
     itemCount = itemCount,
     checkedCount = checkedCount,
     totalPrice = totalPrice
@@ -47,7 +50,8 @@ fun ShoppingListEntity.toDomain() = ShoppingList(
     archivedAt = archivedAt,
     budget = budget,
     scheduledDate = scheduledDate,
-    reminderAt = reminderAt
+    reminderAt = reminderAt,
+    storeId = storeId
 )
 
 fun ShoppingList.toEntity() = ShoppingListEntity(
@@ -58,5 +62,6 @@ fun ShoppingList.toEntity() = ShoppingListEntity(
     archivedAt = archivedAt,
     budget = budget,
     scheduledDate = scheduledDate,
-    reminderAt = reminderAt
+    reminderAt = reminderAt,
+    storeId = storeId
 )

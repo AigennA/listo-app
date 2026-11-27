@@ -111,7 +111,11 @@
     </string-array>
 
     <string-array name="catalog_meat">
+        <item>Meat</item>
         <item>Chicken</item>
+        <item>Chicken Breast</item>
+        <item>Lamb</item>
+        <item>Tuna</item>
         <item>Ground Beef</item>
         <item>Steak</item>
         <item>Fish</item>

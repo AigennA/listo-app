@@ -173,6 +173,38 @@ class GroceryCatalogTest {
         assertNull(words.categoryFor("sit"))
     }
 
+    // An English catalog that also knows the Turkish names.
+    private val multilingual = ItemCatalog.of(
+        english = mapOf(GroceryCatalog.MEAT to listOf("Meat", "Chicken")),
+        localized = mapOf(GroceryCatalog.MEAT to listOf("Meat", "Chicken")),
+        otherLanguages = listOf(mapOf(GroceryCatalog.MEAT to listOf("Et", "Tavuk")))
+    )
+
+    @Test
+    fun `a name in another supported language is still understood`() {
+        assertEquals(GroceryCatalog.MEAT, multilingual.categoryFor("Tavuk"))
+        assertEquals("Chicken", multilingual.keyFor("tavuk"))
+        assertEquals("Meat", multilingual.keyFor("Et"))
+    }
+
+    @Test
+    fun `a very short name only matches as a whole word`() {
+        val short = ItemCatalog.of(
+            english = mapOf(GroceryCatalog.PANTRY to listOf("Flour"), GroceryCatalog.MEAT to listOf("Meat")),
+            localized = mapOf(GroceryCatalog.PANTRY to listOf("Un"), GroceryCatalog.MEAT to listOf("Et"))
+        )
+        assertNull(short.categoryFor("Unicorn"))
+        assertNull(short.categoryFor("Ethanol"))
+        assertEquals(GroceryCatalog.PANTRY, short.categoryFor("tam un"))
+        assertEquals(GroceryCatalog.MEAT, short.categoryFor("dana et"))
+    }
+
+    @Test
+    fun `suggestions stay in the app's language`() {
+        assertTrue(multilingual.suggest("ta").isEmpty())
+        assertEquals("Chicken", multilingual.suggest("chi").single().name)
+    }
+
     @Test
     fun `default categories are non-empty and unique`() {
         val names = GroceryCatalog.defaultCategories.map { it.first }

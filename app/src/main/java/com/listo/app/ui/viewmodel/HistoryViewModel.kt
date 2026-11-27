@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.listo.app.data.models.ShoppingList
 import com.listo.app.domain.usecases.DeleteShoppingListUseCase
 import com.listo.app.domain.usecases.GetShoppingListsUseCase
+import com.listo.app.domain.usecases.UpdateShoppingListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -18,7 +19,8 @@ data class HistoryUiState(
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
     getShoppingListsUseCase: GetShoppingListsUseCase,
-    private val deleteListUseCase: DeleteShoppingListUseCase
+    private val deleteListUseCase: DeleteShoppingListUseCase,
+    private val updateListUseCase: UpdateShoppingListUseCase
 ) : ViewModel() {
 
     val uiState: StateFlow<HistoryUiState> = getShoppingListsUseCase.archived()
@@ -31,5 +33,10 @@ class HistoryViewModel @Inject constructor(
 
     fun deleteList(id: Long) {
         viewModelScope.launch { deleteListUseCase(id) }
+    }
+
+    /** Puts a list finished by mistake back on the home screen. */
+    fun restoreList(id: Long) {
+        viewModelScope.launch { updateListUseCase.unarchive(id) }
     }
 }

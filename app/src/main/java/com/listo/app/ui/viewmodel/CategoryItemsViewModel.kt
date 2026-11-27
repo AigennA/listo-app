@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.listo.app.data.models.Category
+import com.listo.app.data.models.QuantityUnit
 import com.listo.app.data.models.ShoppingItem
 import com.listo.app.domain.usecases.AddShoppingItemUseCase
 import com.listo.app.domain.usecases.CreateShoppingListUseCase
@@ -45,7 +46,8 @@ class CategoryItemsViewModel @Inject constructor(
                     ShoppingItem(
                         listId = listId,
                         name = name,
-                        quantity = if (qty > 1) qty.toString() else "",
+                        amount = if (qty > 1) qty.toDouble() else null,
+                        unit = if (qty > 1) QuantityUnit.PIECE else null,
                         categoryId = categoryId
                     )
                 )

@@ -45,6 +45,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.listo.app.BuildConfig
 import com.listo.app.R
+import com.listo.app.ui.navigation.Screen
+import com.listo.app.ui.viewmodel.StoreArgs
 import com.listo.app.data.models.AccentColor
 import com.listo.app.data.models.ThemeMode
 import com.listo.app.ui.components.LisToTopBar
@@ -136,6 +138,14 @@ fun SettingsScreen(
                 subtitle = languageLabel(currentLang),
                 iconColor = MaterialTheme.colorScheme.primary,
                 onClick = { showLanguageDialog = true }
+            )
+
+            SettingsClickItem(
+                icon = Icons.Rounded.Storefront,
+                label = stringResource(R.string.stores_title),
+                subtitle = stringResource(R.string.settings_stores_sub),
+                iconColor = MaterialTheme.colorScheme.primary,
+                onClick = { navController.navigate(Screen.Stores.route(StoreArgs.NO_LIST)) }
             )
 
             SettingsSectionHeader(stringResource(R.string.settings_notifications))
