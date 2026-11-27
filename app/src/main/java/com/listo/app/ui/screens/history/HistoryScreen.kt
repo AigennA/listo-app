@@ -66,6 +66,7 @@ fun HistoryScreen(
                     HistoryCard(
                         list = list,
                         onOpen = { navController.navigate(Screen.ListDetail.route(list.id)) },
+                        onRestore = { viewModel.restoreList(list.id) },
                         onDelete = { pendingDelete = list }
                     )
                 }
@@ -94,6 +95,7 @@ fun HistoryScreen(
 private fun HistoryCard(
     list: ShoppingList,
     onOpen: () -> Unit,
+    onRestore: () -> Unit,
     onDelete: () -> Unit
 ) {
     Card(
@@ -124,6 +126,14 @@ private fun HistoryCard(
                         if (list.totalPrice > 0.0) "  ·  ${formatPrice(list.totalPrice)}" else "",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            // A list finished by mistake goes back to My Lists.
+            IconButton(onClick = onRestore) {
+                Icon(
+                    Icons.Rounded.Unarchive,
+                    contentDescription = stringResource(R.string.history_restore),
+                    tint = MaterialTheme.colorScheme.primary
                 )
             }
             IconButton(onClick = onDelete) {

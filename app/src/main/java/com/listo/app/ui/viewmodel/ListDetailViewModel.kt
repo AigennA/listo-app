@@ -100,6 +100,11 @@ class ListDetailViewModel @Inject constructor(
         viewModelScope.launch { updateItemUseCase.toggle(item.id, !item.isChecked) }
     }
 
+    /** Takes back a tick made by mistake. */
+    fun undoTick(item: ShoppingItem) {
+        viewModelScope.launch { updateItemUseCase.toggle(item.id, false) }
+    }
+
     fun updateItem(item: ShoppingItem) {
         viewModelScope.launch { updateItemUseCase(item) }
     }

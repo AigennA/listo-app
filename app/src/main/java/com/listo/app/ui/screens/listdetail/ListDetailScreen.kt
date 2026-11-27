@@ -27,6 +27,7 @@ import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -91,11 +92,30 @@ fun ListDetailScreen(
     var editItem by remember { mutableStateOf<ShoppingItem?>(null) }
     var showBought by rememberSaveable { mutableStateOf(true) }
 
+    // Ticking an item offers a quick undo, for taps made by mistake.
+    val snackbarHost = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val undoLabel = stringResource(R.string.action_undo)
+    fun toggleWithUndo(item: ShoppingItem) {
+        viewModel.toggleItem(item)
+        if (item.isChecked) return
+        scope.launch {
+            snackbarHost.currentSnackbarData?.dismiss()
+            val result = snackbarHost.showSnackbar(
+                message = context.getString(R.string.tick_done, item.name),
+                actionLabel = undoLabel,
+                duration = SnackbarDuration.Short
+            )
+            if (result == SnackbarResult.ActionPerformed) viewModel.undoTick(item)
+        }
+    }
+
     val notifPermissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { }
 
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHost) },
         topBar = {
             LisToTopBar(
                 title = list?.name ?: stringResource(R.string.detail_default_title),
@@ -227,7 +247,7 @@ fun ListDetailScreen(
                         ShoppingItemRow(
                             item = item,
                             iconKey = catalog.keyFor(item.name) ?: item.name,
-                            onToggle = { viewModel.toggleItem(item) },
+                            onToggle = { toggleWithUndo(item) },
                             onClick = { editItem = item },
                             onDelete = { viewModel.deleteItem(item.id) }
                         )
@@ -247,7 +267,7 @@ fun ListDetailScreen(
                             ShoppingItemRow(
                                 item = item,
                                 iconKey = catalog.keyFor(item.name) ?: item.name,
-                                onToggle = { viewModel.toggleItem(item) },
+                                onToggle = { toggleWithUndo(item) },
                                 onClick = { editItem = item },
                                 onDelete = { viewModel.deleteItem(item.id) }
                             )

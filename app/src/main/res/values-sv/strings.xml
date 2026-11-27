@@ -200,4 +200,7 @@
     <string name="unit_litre">l</string>
     <string name="unit_millilitre">ml</string>
     <string name="price_per_unit">Pris / %1$s</string>
+    <string name="tick_done">%1$s ligger i korgen</string>
+    <string name="action_undo">Ångra</string>
+    <string name="history_restore">Flytta tillbaka till Mina listor</string>
 </resources>
