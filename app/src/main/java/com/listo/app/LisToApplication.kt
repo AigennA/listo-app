@@ -1,6 +1,7 @@
 package com.listo.app
 
 import android.app.Application
+import com.listo.app.utils.CurrencySetting
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
@@ -13,6 +14,7 @@ class LisToApplication : Application() {
         super.onCreate()
         // The ads SDK is started by AdsConsentController once consent allows it.
         createNotificationChannels()
+        CurrencySetting.apply(this)
     }
 
     private fun createNotificationChannels() {

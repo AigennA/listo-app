@@ -238,4 +238,7 @@
     <string name="csv_category">Category</string>
     <string name="csv_store">Store</string>
     <string name="csv_amount">Amount</string>
+    <string name="settings_currency">Currency</string>
+    <string name="currency_auto">Automatic (phone region)</string>
+    <string name="currency_note">Only the symbol changes; amounts are not converted.</string>
 </resources>

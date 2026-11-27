@@ -233,4 +233,7 @@
     <string name="csv_category">Kategori</string>
     <string name="csv_store">Butik</string>
     <string name="csv_amount">Belopp</string>
+    <string name="settings_currency">Valuta</string>
+    <string name="currency_auto">Automatisk (telefonens region)</string>
+    <string name="currency_note">Bara symbolen ändras, belopp räknas inte om.</string>
 </resources>

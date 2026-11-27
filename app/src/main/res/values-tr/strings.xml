@@ -233,4 +233,7 @@
     <string name="csv_category">Kategori</string>
     <string name="csv_store">Market</string>
     <string name="csv_amount">Tutar</string>
+    <string name="settings_currency">Para birimi</string>
+    <string name="currency_auto">Otomatik (telefonun bölgesi)</string>
+    <string name="currency_note">Sadece sembol değişir, tutarlar çevrilmez.</string>
 </resources>

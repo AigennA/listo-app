@@ -54,8 +54,12 @@ import com.listo.app.ui.theme.*
 import com.listo.app.ui.viewmodel.AdsViewModel
 import com.listo.app.ui.viewmodel.SettingsViewModel
 import com.listo.app.utils.DailyReminderScheduler
+import com.listo.app.utils.CurrencyChoices
+import com.listo.app.utils.CurrencySetting
 import com.listo.app.utils.LocaleHelper
+import com.listo.app.utils.PriceLocale
 import com.listo.app.utils.composeFeedbackEmail
+import java.util.Currency
 import java.util.Locale
 
 @Composable
@@ -69,6 +73,8 @@ fun SettingsScreen(
     val context = LocalContext.current
     var showLanguageDialog by remember { mutableStateOf(false) }
     val currentLang = remember { LocaleHelper.getLanguage(context) }
+    var showCurrencyDialog by remember { mutableStateOf(false) }
+    val currentCurrency = remember { CurrencySetting.get(context) }
 
     val notifPermissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -138,6 +144,14 @@ fun SettingsScreen(
                 subtitle = languageLabel(currentLang),
                 iconColor = MaterialTheme.colorScheme.primary,
                 onClick = { showLanguageDialog = true }
+            )
+
+            SettingsClickItem(
+                icon = Icons.Rounded.Payments,
+                label = stringResource(R.string.settings_currency),
+                subtitle = currencyLabel(currentCurrency),
+                iconColor = MaterialTheme.colorScheme.primary,
+                onClick = { showCurrencyDialog = true }
             )
 
             SettingsClickItem(
@@ -221,6 +235,21 @@ fun SettingsScreen(
 
             Spacer(modifier = Modifier.height(40.dp))
         }
+    }
+
+    if (showCurrencyDialog) {
+        CurrencyDialog(
+            current = currentCurrency,
+            onSelect = { code ->
+                showCurrencyDialog = false
+                if (code != currentCurrency) {
+                    CurrencySetting.set(context, code)
+                    // Redraw every screen with the new symbol.
+                    context.findActivity()?.recreate()
+                }
+            },
+            onDismiss = { showCurrencyDialog = false }
+        )
     }
 
     if (showLanguageDialog) {
@@ -537,4 +566,58 @@ private fun Context.findActivity(): Activity? {
         ctx = ctx.baseContext
     }
     return null
+}
+
+/** "kr · Swedish krona", or "Automatic (phone region) · kr" for no choice. */
+@Composable
+private fun currencyLabel(code: String?): String {
+    val locale = Locale.getDefault()
+    return if (code == null) {
+        val regional = PriceLocale.regional()
+        val symbol = PriceLocale.currencyOf(regional)?.getSymbol(regional)
+        listOfNotNull(stringResource(R.string.currency_auto), symbol).joinToString(" · ")
+    } else {
+        val currency = Currency.getInstance(code)
+        val symbol = currency.getSymbol(PriceLocale.resolve(locale.language, "", code))
+        "$symbol · ${currency.getDisplayName(locale).replaceFirstChar { it.titlecase(locale) }}"
+    }
+}
+
+@Composable
+private fun CurrencyDialog(
+    current: String?,
+    onSelect: (String?) -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = { Icon(Icons.Rounded.Payments, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
+        title = { Text(stringResource(R.string.settings_currency), fontWeight = FontWeight.Bold) },
+        text = {
+            Column(Modifier.verticalScroll(rememberScrollState())) {
+                Text(
+                    stringResource(R.string.currency_note),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+                CurrencyChoices.all.forEach { code ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp))
+                            .selectable(selected = code == current, onClick = { onSelect(code) })
+                            .padding(vertical = 10.dp, horizontal = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(selected = code == current, onClick = null)
+                        Spacer(Modifier.width(12.dp))
+                        Text(currencyLabel(code), style = MaterialTheme.typography.bodyLarge)
+                    }
+                }
+            }
+        },
+        confirmButton = {},
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } }
+    )
 }
