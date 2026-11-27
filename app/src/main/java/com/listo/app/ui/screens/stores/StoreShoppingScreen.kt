@@ -12,6 +12,7 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.GridView
 import androidx.compose.material.icons.rounded.RadioButtonUnchecked
+import androidx.compose.material.icons.rounded.Remove
 import androidx.compose.material.icons.rounded.ShoppingBasket
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -28,9 +29,12 @@ import androidx.navigation.NavController
 import com.listo.app.R
 import com.listo.app.data.models.ShoppingItem
 import com.listo.app.ui.components.LisToTopBar
+import com.listo.app.ui.components.RepeatingStepButton
+import com.listo.app.ui.components.quantityText
 import com.listo.app.ui.navigation.Screen
 import com.listo.app.ui.viewmodel.StoreShoppingViewModel
 import com.listo.app.utils.categoryLabel
+import com.listo.app.utils.formatPrice
 import com.listo.app.utils.iconForCategory
 import com.listo.app.utils.rememberItemCatalog
 import com.listo.app.utils.toComposeColor
@@ -154,6 +158,7 @@ fun StoreShoppingScreen(
             icon = icon,
             items = items,
             onToggle = viewModel::toggle,
+            onStep = viewModel::step,
             onAdd = { name ->
                 val aisle = (which as? OpenAisle.Aisle)?.categoryId
                 viewModel.addItem(name, aisle, if (aisle == null) catalog.categoryFor(name) else null)
@@ -177,6 +182,7 @@ private fun AisleSheet(
     icon: androidx.compose.ui.graphics.vector.ImageVector?,
     items: List<ShoppingItem>,
     onToggle: (ShoppingItem) -> Unit,
+    onStep: (ShoppingItem, Boolean) -> Unit,
     onAdd: (String) -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -223,10 +229,21 @@ private fun AisleSheet(
                             textDecoration = if (item.isChecked) TextDecoration.LineThrough else null,
                             color = if (item.isChecked) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface
                         )
-                        if (item.quantity.isNotBlank()) {
-                            Text(item.quantity, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        val quantity = quantityText(item)
+                        if (quantity.isNotBlank()) {
+                            Text(quantity, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        if (item.price != null) {
+                            Text(
+                                formatPrice(item.lineTotal),
+                                style = MaterialTheme.typography.labelMedium,
+                                fontWeight = FontWeight.SemiBold
+                            )
                         }
                     }
+                    RepeatingStepButton(Icons.Rounded.Remove, "−") { onStep(item, false) }
+                    Spacer(Modifier.width(8.dp))
+                    RepeatingStepButton(Icons.Rounded.Add, "+") { onStep(item, true) }
                 }
                 HorizontalDivider()
             }

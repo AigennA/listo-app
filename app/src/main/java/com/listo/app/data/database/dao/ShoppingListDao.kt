@@ -13,7 +13,7 @@ interface ShoppingListDao {
         SELECT l.*,
             (SELECT COUNT(*) FROM shopping_items i WHERE i.listId = l.id) AS itemCount,
             (SELECT COUNT(*) FROM shopping_items i WHERE i.listId = l.id AND i.isChecked = 1) AS checkedCount,
-            (SELECT COALESCE(SUM(i.price), 0) FROM shopping_items i WHERE i.listId = l.id) AS totalPrice
+            (SELECT COALESCE(SUM(i.price * COALESCE(i.amount, 1) * CASE WHEN i.unit IN ('g', 'ml') THEN 0.001 ELSE 1 END), 0) FROM shopping_items i WHERE i.listId = l.id) AS totalPrice
         FROM shopping_lists l
         WHERE l.isArchived = 0
         ORDER BY l.createdAt DESC
@@ -26,7 +26,7 @@ interface ShoppingListDao {
         SELECT l.*,
             (SELECT COUNT(*) FROM shopping_items i WHERE i.listId = l.id) AS itemCount,
             (SELECT COUNT(*) FROM shopping_items i WHERE i.listId = l.id AND i.isChecked = 1) AS checkedCount,
-            (SELECT COALESCE(SUM(i.price), 0) FROM shopping_items i WHERE i.listId = l.id) AS totalPrice
+            (SELECT COALESCE(SUM(i.price * COALESCE(i.amount, 1) * CASE WHEN i.unit IN ('g', 'ml') THEN 0.001 ELSE 1 END), 0) FROM shopping_items i WHERE i.listId = l.id) AS totalPrice
         FROM shopping_lists l
         WHERE l.isArchived = 1
         ORDER BY l.archivedAt DESC

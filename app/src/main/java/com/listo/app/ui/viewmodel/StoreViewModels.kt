@@ -183,6 +183,11 @@ class StoreShoppingViewModel @Inject constructor(
         viewModelScope.launch { updateItem.toggle(item.id, !item.isChecked) }
     }
 
+    /** One −/+ step on an item's amount while shopping. */
+    fun step(item: ShoppingItem, up: Boolean) {
+        viewModelScope.launch { updateItem(item.stepped(up)) }
+    }
+
     /** Adds a forgotten item while shopping, into [aisleCategoryId] or the category its name suggests. */
     fun addItem(name: String, aisleCategoryId: Long?, guessedCategory: String?) {
         val trimmed = name.trim()

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.listo.app.data.models.Category
 import com.listo.app.data.models.ShoppingItem
+import com.listo.app.data.models.QuantityUnit
 import com.listo.app.data.models.ShoppingList
 import com.listo.app.domain.usecases.*
 import com.listo.app.utils.GroceryCatalog
@@ -22,7 +23,7 @@ data class ListDetailUiState(
     val itemCount: Int get() = items.size
     val checkedCount: Int get() = items.count { it.isChecked }
     val progress: Float get() = if (items.isEmpty()) 0f else checkedCount.toFloat() / items.size
-    val total: Double get() = items.sumOf { it.price ?: 0.0 }
+    val total: Double get() = items.sumOf { it.lineTotal }
 
     /**
      * The list may move to History only once everything is bought, so a list
@@ -78,7 +79,7 @@ class ListDetailViewModel @Inject constructor(
         initialValue = ListDetailUiState()
     )
 
-    fun addItem(name: String, quantity: String, categoryId: Long?, price: Double?) {
+    fun addItem(name: String, amount: Double?, unit: QuantityUnit?, categoryId: Long?, price: Double?) {
         val trimmed = name.trim()
         if (trimmed.isBlank()) return
         viewModelScope.launch {
@@ -86,7 +87,8 @@ class ListDetailViewModel @Inject constructor(
                 ShoppingItem(
                     listId = listId,
                     name = trimmed,
-                    quantity = quantity.trim(),
+                    amount = amount,
+                    unit = unit,
                     categoryId = categoryId,
                     price = price
                 )

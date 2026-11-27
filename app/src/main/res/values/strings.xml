@@ -50,7 +50,6 @@
     <string name="detail_finish_msg">The list leaves the home screen and is kept under History.</string>
     <string name="detail_finish_confirm">Move to History</string>
     <string name="add_item_hint">Add item…</string>
-    <string name="qty_hint">Qty (2 kg)</string>
     <string name="qty_label">Qty</string>
     <string name="price_label">Price</string>
     <string name="add_detail_category">Category</string>
@@ -198,4 +197,12 @@
     <string name="lists_store_new">Add \"%1$s\" as a new store</string>
     <string name="detail_store">Store</string>
     <string name="shop_add_hint">Forgot something? Add it here</string>
+    <!-- Units and price basis -->
+    <string name="unit_piece">pcs</string>
+    <string name="unit_pack">pack</string>
+    <string name="unit_kilo">kg</string>
+    <string name="unit_gram">g</string>
+    <string name="unit_litre">L</string>
+    <string name="unit_millilitre">ml</string>
+    <string name="price_per_unit">Price / %1$s</string>
 </resources>

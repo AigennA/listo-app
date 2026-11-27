@@ -32,7 +32,10 @@ data class ShoppingItemEntity(
     val categoryId: Long? = null,
     val price: Double? = null,
     val isChecked: Boolean = false,
-    val createdAt: Long = System.currentTimeMillis()
+    val createdAt: Long = System.currentTimeMillis(),
+    val amount: Double? = null,
+    /** [com.listo.app.data.models.QuantityUnit.code], or null. */
+    val unit: String? = null
 )
 
 fun ShoppingItemEntity.toDomain(
@@ -48,7 +51,9 @@ fun ShoppingItemEntity.toDomain(
     categoryColor = categoryColor,
     price = price,
     isChecked = isChecked,
-    createdAt = createdAt
+    createdAt = createdAt,
+    amount = amount,
+    unit = com.listo.app.data.models.QuantityUnit.fromCode(unit)
 )
 
 fun ShoppingItem.toEntity() = ShoppingItemEntity(
@@ -59,5 +64,7 @@ fun ShoppingItem.toEntity() = ShoppingItemEntity(
     categoryId = categoryId,
     price = price,
     isChecked = isChecked,
-    createdAt = createdAt
+    createdAt = createdAt,
+    amount = amount,
+    unit = unit?.code
 )

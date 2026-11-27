@@ -50,7 +50,6 @@
     <string name="detail_finish_msg">Liste ana ekrandan kalkar, Geçmiş sekmesinde durur.</string>
     <string name="detail_finish_confirm">Geçmişe taşı</string>
     <string name="add_item_hint">Ürün ekle…</string>
-    <string name="qty_hint">Miktar (2 kg)</string>
     <string name="qty_label">Miktar</string>
     <string name="price_label">Fiyat</string>
     <string name="add_detail_category">Kategori</string>
@@ -193,4 +192,12 @@
     <string name="lists_store_new">\"%1$s\" yeni market olarak eklensin</string>
     <string name="detail_store">Market</string>
     <string name="shop_add_hint">Unuttuğun bir şey mi var? Buraya ekle</string>
+    <!-- Units and price basis -->
+    <string name="unit_piece">adet</string>
+    <string name="unit_pack">paket</string>
+    <string name="unit_kilo">kg</string>
+    <string name="unit_gram">g</string>
+    <string name="unit_litre">L</string>
+    <string name="unit_millilitre">ml</string>
+    <string name="price_per_unit">Fiyat / %1$s</string>
 </resources>

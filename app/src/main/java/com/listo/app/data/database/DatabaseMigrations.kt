@@ -56,7 +56,16 @@ object DatabaseMigrations {
         }
     }
 
-    const val LATEST = 6
+    /** v6 -> v7 gives items a numeric amount and a unit; the old quantity text stays as it was. */
+    val MIGRATION_6_7 = object : Migration(6, 7) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE shopping_items ADD COLUMN amount REAL")
+            db.execSQL("ALTER TABLE shopping_items ADD COLUMN unit TEXT")
+        }
+    }
 
-    val ALL: Array<Migration> = arrayOf(MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
+    const val LATEST = 7
+
+    val ALL: Array<Migration> =
+        arrayOf(MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
 }

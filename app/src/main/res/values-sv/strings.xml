@@ -50,7 +50,6 @@
     <string name="detail_finish_msg">Listan försvinner från startsidan och sparas under Historik.</string>
     <string name="detail_finish_confirm">Flytta till historik</string>
     <string name="add_item_hint">Lägg till vara…</string>
-    <string name="qty_hint">Antal (2 kg)</string>
     <string name="qty_label">Antal</string>
     <string name="price_label">Pris</string>
     <string name="add_detail_category">Kategori</string>
@@ -193,4 +192,12 @@
     <string name="lists_store_new">Lägg till \"%1$s\" som ny butik</string>
     <string name="detail_store">Butik</string>
     <string name="shop_add_hint">Glömt något? Lägg till här</string>
+    <!-- Units and price basis -->
+    <string name="unit_piece">st</string>
+    <string name="unit_pack">förp</string>
+    <string name="unit_kilo">kg</string>
+    <string name="unit_gram">g</string>
+    <string name="unit_litre">l</string>
+    <string name="unit_millilitre">ml</string>
+    <string name="price_per_unit">Pris / %1$s</string>
 </resources>

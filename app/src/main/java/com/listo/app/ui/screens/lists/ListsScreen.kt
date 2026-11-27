@@ -41,6 +41,7 @@ import com.listo.app.ui.components.ThemedMeshBackground
 import com.listo.app.ui.navigation.Screen
 import com.listo.app.ui.theme.PoppinsFontFamily
 import com.listo.app.ui.viewmodel.ListsViewModel
+import com.listo.app.ui.viewmodel.StoreArgs
 import com.listo.app.utils.DateUtils
 import com.listo.app.utils.formatPrice
 import com.listo.app.utils.shareList
@@ -81,7 +82,7 @@ fun ListsScreen(
                     .padding(padding),
                 contentPadding = PaddingValues(bottom = 100.dp)
             ) {
-                item { ListsHeader() }
+                item { ListsHeader(onStores = { navController.navigate(Screen.Stores.route(StoreArgs.NO_LIST)) }) }
 
                 if (uiState.lists.isEmpty() && !uiState.isLoading) {
                     item {
@@ -254,7 +255,7 @@ private fun ListActionRow(
 
 /** Date and title only: the other screens are in the bottom navigation bar. */
 @Composable
-private fun ListsHeader() {
+private fun ListsHeader(onStores: () -> Unit) {
     val today = remember {
         SimpleDateFormat("EEEE, MMM d", Locale.getDefault()).format(Date())
     }
@@ -272,13 +273,22 @@ private fun ListsHeader() {
             fontWeight = FontWeight.Medium
         )
         Spacer(Modifier.height(2.dp))
-        Text(
-            text = stringResource(R.string.lists_title),
-            fontFamily = PoppinsFontFamily,
-            fontWeight = FontWeight.Bold,
-            fontSize = 34.sp,
-            color = MaterialTheme.colorScheme.onBackground
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = stringResource(R.string.lists_title),
+                fontFamily = PoppinsFontFamily,
+                fontWeight = FontWeight.Bold,
+                fontSize = 34.sp,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.weight(1f)
+            )
+            // My stores, one tap from home.
+            AssistChip(
+                onClick = onStores,
+                label = { Text(stringResource(R.string.stores_title)) },
+                leadingIcon = { Icon(Icons.Rounded.Storefront, contentDescription = null, modifier = Modifier.size(18.dp)) }
+            )
+        }
     }
 }
 

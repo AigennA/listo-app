@@ -1,6 +1,7 @@
 package com.listo.app.ui.viewmodel
 
 import com.listo.app.data.models.ShoppingItem
+import com.listo.app.data.models.QuantityUnit
 import com.listo.app.data.models.ShoppingList
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -81,6 +82,18 @@ class ListDetailUiStateTest {
     fun `nothing bought means an empty bought section`() {
         val state = ListDetailUiState(items = listOf(item(1, "a")), isLoading = false)
         assertTrue(state.bought.isEmpty())
+    }
+
+    @Test
+    fun `the total multiplies each price by its amount`() {
+        val state = ListDetailUiState(
+            items = listOf(
+                ShoppingItem(listId = 1, name = "Milk", price = 15.0, amount = 2.0, unit = QuantityUnit.PIECE),
+                ShoppingItem(listId = 1, name = "Cheese", price = 120.0, amount = 250.0, unit = QuantityUnit.GRAM)
+            ),
+            isLoading = false
+        )
+        assertEquals(60.0, state.total, 0.001)
     }
 
     private val activeList = ShoppingList(id = 1L, name = "Weekly")

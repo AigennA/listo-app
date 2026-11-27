@@ -65,6 +65,30 @@ class StoreMigrationTest {
     }
 
     @Test
+    fun migrating6To7_keepsItemsAndTheirOldQuantityText() {
+        helper.createDatabase(dbName, 6).apply {
+            execSQL("INSERT INTO shopping_lists (id, name, createdAt, isArchived) VALUES (1, 'Weekly', 100, 0)")
+            execSQL(
+                "INSERT INTO shopping_items (id, listId, name, quantity, isChecked, createdAt, price) " +
+                    "VALUES (1, 1, 'Rice', '2 kg', 0, 100, 30.0)"
+            )
+            close()
+        }
+
+        helper.runMigrationsAndValidate(dbName, 7, true, *DatabaseMigrations.ALL)
+
+        val db = openLatest()
+        runBlocking {
+            val item = db.shoppingItemDao().getItemsForList(1).first().single()
+            assertEquals("2 kg", item.quantity)
+            assertNull(item.amount)
+            assertNull(item.unit)
+            assertEquals(30.0, db.shoppingListDao().getActiveLists().first().single().totalPrice, 0.001)
+        }
+        db.close()
+    }
+
+    @Test
     fun migrating5To6_keepsStoresAndTheirMaps() {
         helper.createDatabase(dbName, 5).apply {
             execSQL("INSERT INTO categories (id, name, color) VALUES (1, 'Produce', '#2ECC71')")
