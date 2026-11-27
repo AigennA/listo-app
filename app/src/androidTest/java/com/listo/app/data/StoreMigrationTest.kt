@@ -113,7 +113,7 @@ class StoreMigrationTest {
     @Test
     fun migrating7To8_givesExistingStoresTheDefaultEntranceAndCheckout() {
         helper.createDatabase(dbName, 7).apply {
-            execSQL("INSERT INTO stores (id, name, color, createdAt) VALUES (1, 'Willys', '#E17055', 100)")
+            execSQL("INSERT INTO stores (id, name, color, createdAt) VALUES (1, 'City Market', '#E17055', 100)")
             close()
         }
 
@@ -122,7 +122,7 @@ class StoreMigrationTest {
         val db = openLatest()
         runBlocking {
             val store = db.storeDao().observeStores().first().single()
-            assertEquals("Willys", store.name)
+            assertEquals("City Market", store.name)
             assertEquals(0 to 0, store.entranceX to store.entranceY)
             assertEquals(5 to 8, store.checkoutX to store.checkoutY)
         }
@@ -133,7 +133,7 @@ class StoreMigrationTest {
     fun migrating5To6_keepsStoresAndTheirMaps() {
         helper.createDatabase(dbName, 5).apply {
             execSQL("INSERT INTO categories (id, name, color) VALUES (1, 'Produce', '#2ECC71')")
-            execSQL("INSERT INTO stores (id, name, color, createdAt) VALUES (1, 'Willys', '#E17055', 100)")
+            execSQL("INSERT INTO stores (id, name, color, createdAt) VALUES (1, 'City Market', '#E17055', 100)")
             execSQL("INSERT INTO store_aisles (id, storeId, categoryId, x, y) VALUES (1, 1, 1, 0, 1)")
             execSQL("INSERT INTO shopping_lists (id, name, createdAt, isArchived) VALUES (1, 'Weekly', 100, 0)")
             close()
@@ -143,7 +143,7 @@ class StoreMigrationTest {
 
         val db = openLatest()
         runBlocking {
-            assertEquals("Willys", db.storeDao().observeStores().first().single().name)
+            assertEquals("City Market", db.storeDao().observeStores().first().single().name)
             assertEquals(1, db.storeDao().observeAisles(1).first().size)
             assertEquals("Weekly", db.shoppingListDao().getById(1)?.name)
         }

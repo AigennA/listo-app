@@ -28,7 +28,7 @@ class SpendingExportTest {
         byStore = "By store",
         unpriced = { n -> "$n without a price" },
         category = { it ?: "Other" },
-        store = { if (it == 1L) "Willys" else "No store" },
+        store = { if (it == 1L) "City Market" else "No store" },
         money = { "%.0f kr".format(Locale.US, it) }
     )
 
@@ -46,7 +46,7 @@ class SpendingExportTest {
             Other: 30 kr (8%)
 
             By store
-            Willys: 380 kr (100%)
+            City Market: 380 kr (100%)
 
             1 without a price
             """.trimIndent(),
@@ -72,7 +72,7 @@ class SpendingExportTest {
         val csv = SpendingExport.csv(items, columns, labels, Locale.US, TimeZone.getTimeZone("UTC"))
         assertEquals(
             "Date,Item,Category,Store,Amount\n" +
-                "2025-12-01,Milk,Dairy,Willys,15.50\n" +
+                "2025-12-01,Milk,Dairy,City Market,15.50\n" +
                 "2025-12-02,\"Bread, white\",Other,No store,\n",
             csv
         )
@@ -81,7 +81,7 @@ class SpendingExportTest {
     @Test
     fun `csv uses semicolon and comma where the decimal sign is a comma`() {
         val csv = SpendingExport.csv(items.take(1), columns, labels, Locale.forLanguageTag("sv-SE"), TimeZone.getTimeZone("UTC"))
-        assertEquals("Date;Item;Category;Store;Amount\n2025-12-01;Milk;Dairy;Willys;15,50\n", csv)
+        assertEquals("Date;Item;Category;Store;Amount\n2025-12-01;Milk;Dairy;City Market;15,50\n", csv)
     }
 
     @Test

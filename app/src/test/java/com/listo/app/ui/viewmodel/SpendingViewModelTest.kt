@@ -45,7 +45,7 @@ class SpendingViewModelTest {
         Dispatchers.setMain(UnconfinedTestDispatcher())
         val shopping = mockk<ShoppingRepository> { every { getBoughtItems() } returns flowOf(items) }
         val stores = mockk<StoreRepository> {
-            every { observeStores() } returns flowOf(listOf(Store(id = 1, name = "Willys", color = "#E17055")))
+            every { observeStores() } returns flowOf(listOf(Store(id = 1, name = "City Market", color = "#E17055")))
         }
         viewModel = SpendingViewModel(shopping, stores, calendar) { now }
     }
@@ -89,7 +89,7 @@ class SpendingViewModelTest {
 
     @Test
     fun `store names come from My stores`() {
-        assertEquals("Willys", state.storeNames[1L])
+        assertEquals("City Market", state.storeNames[1L])
         assertTrue(state.canGoForward.not())
     }
 }

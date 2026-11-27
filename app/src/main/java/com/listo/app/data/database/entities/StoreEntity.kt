@@ -11,7 +11,7 @@ import com.listo.app.data.models.StoreAisle
 import com.listo.app.data.models.StoreLayout
 
 /**
- * A store the user shops at, e.g. "Willys Tornby", shown in its own [color],
+ * A store the user shops at, e.g. "City Market North", shown in its own [color],
  * with the cells of its entrance and checkout on the map. The column
  * defaults match [StoreLayout.DEFAULT_ENTRANCE] and [StoreLayout.DEFAULT_CHECKOUT].
  */
