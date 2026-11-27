@@ -166,7 +166,7 @@
     <!-- Stores and store maps -->
     <string name="stores_title">Marketlerim</string>
     <string name="stores_add">Market ekle</string>
-    <string name="stores_name_hint">Örn. Migros Kadıköy</string>
+    <string name="stores_name_hint">Örn. Mahalle Market</string>
     <string name="stores_empty_title">Henüz market yok</string>
     <string name="stores_empty_subtitle">Gittiğin marketleri ekle, reyonlarını bir kez diz. Sonra reyon reyon alışveriş yap.</string>
     <string name="stores_pick_subtitle">Hangi marketteysin?</string>

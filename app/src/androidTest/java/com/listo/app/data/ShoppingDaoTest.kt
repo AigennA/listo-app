@@ -68,7 +68,7 @@ class ShoppingDaoTest {
     @Test
     fun boughtItems_carryCategoryStoreAndWhen() = runBlocking {
         val category = db.categoryDao().insertCategory(com.listo.app.data.database.entities.CategoryEntity(name = "Dairy", color = "#0984E3"))
-        val store = db.storeDao().insertStore(com.listo.app.data.database.entities.StoreEntity(name = "Willys", color = "#E17055"))
+        val store = db.storeDao().insertStore(com.listo.app.data.database.entities.StoreEntity(name = "City Market", color = "#E17055"))
         val listId = listDao.insert(ShoppingListEntity(name = "Weekly", storeId = store, isArchived = true, archivedAt = 5_000L))
         val ticked = itemDao.insert(ShoppingItemEntity(listId = listId, name = "Milk", price = 15.0, amount = 2.0, unit = "pcs", categoryId = category))
         itemDao.setChecked(ticked, checked = true, now = 3_000L)
@@ -89,17 +89,17 @@ class ShoppingDaoTest {
     @Test
     fun aisleTicks_comeFromListsShoppedInThatStore() = runBlocking {
         val produce = db.categoryDao().insertCategory(com.listo.app.data.database.entities.CategoryEntity(name = "Produce"))
-        val willys = db.storeDao().insertStore(com.listo.app.data.database.entities.StoreEntity(name = "Willys", color = "#E17055"))
-        val ica = db.storeDao().insertStore(com.listo.app.data.database.entities.StoreEntity(name = "ICA", color = "#0984E3"))
-        val atWillys = listDao.insert(ShoppingListEntity(name = "A", storeId = willys))
-        val atIca = listDao.insert(ShoppingListEntity(name = "B", storeId = ica))
-        val tomato = itemDao.insert(ShoppingItemEntity(listId = atWillys, name = "Tomato", categoryId = produce))
-        val apple = itemDao.insert(ShoppingItemEntity(listId = atIca, name = "Apple", categoryId = produce))
-        itemDao.insert(ShoppingItemEntity(listId = atWillys, name = "No aisle"))
+        val cityMarket = db.storeDao().insertStore(com.listo.app.data.database.entities.StoreEntity(name = "City Market", color = "#E17055"))
+        val cornerShop = db.storeDao().insertStore(com.listo.app.data.database.entities.StoreEntity(name = "Corner Shop", color = "#0984E3"))
+        val atCityMarket = listDao.insert(ShoppingListEntity(name = "A", storeId = cityMarket))
+        val atCornerShop = listDao.insert(ShoppingListEntity(name = "B", storeId = cornerShop))
+        val tomato = itemDao.insert(ShoppingItemEntity(listId = atCityMarket, name = "Tomato", categoryId = produce))
+        val apple = itemDao.insert(ShoppingItemEntity(listId = atCornerShop, name = "Apple", categoryId = produce))
+        itemDao.insert(ShoppingItemEntity(listId = atCityMarket, name = "No aisle"))
         itemDao.setChecked(tomato, checked = true, now = 10L)
         itemDao.setChecked(apple, checked = true, now = 20L)
 
-        val ticks = itemDao.getAisleTicks(willys).first()
+        val ticks = itemDao.getAisleTicks(cityMarket).first()
 
         assertEquals(1, ticks.size)
         assertEquals(produce, ticks.single().categoryId)

@@ -47,30 +47,30 @@ class StoreDaoTest {
 
     @Test
     fun stores_areListedByName() = runBlocking {
-        storeDao.insertStore(StoreEntity(name = "Willys Tornby", color = "#E17055"))
-        storeDao.insertStore(StoreEntity(name = "ICA Maxi Tornby", color = "#0984E3"))
+        storeDao.insertStore(StoreEntity(name = "City Market North", color = "#E17055"))
+        storeDao.insertStore(StoreEntity(name = "Big Basket Mall", color = "#0984E3"))
 
         assertEquals(
-            listOf("ICA Maxi Tornby", "Willys Tornby"),
+            listOf("Big Basket Mall", "City Market North"),
             storeDao.observeStores().first().map { it.name }
         )
     }
 
     @Test
     fun aisles_belongToTheirStore() = runBlocking {
-        val willys = storeDao.insertStore(StoreEntity(name = "Willys", color = "#E17055"))
-        val ica = storeDao.insertStore(StoreEntity(name = "ICA", color = "#0984E3"))
-        storeDao.replaceAisles(willys, listOf(StoreAisleEntity(storeId = willys, categoryId = produce, x = 0, y = 1)))
-        storeDao.replaceAisles(ica, listOf(StoreAisleEntity(storeId = ica, categoryId = dairy, x = 3, y = 2)))
+        val cityMarket = storeDao.insertStore(StoreEntity(name = "City Market", color = "#E17055"))
+        val cornerShop = storeDao.insertStore(StoreEntity(name = "Corner Shop", color = "#0984E3"))
+        storeDao.replaceAisles(cityMarket, listOf(StoreAisleEntity(storeId = cityMarket, categoryId = produce, x = 0, y = 1)))
+        storeDao.replaceAisles(cornerShop, listOf(StoreAisleEntity(storeId = cornerShop, categoryId = dairy, x = 3, y = 2)))
 
-        val aisles = storeDao.observeAisles(willys).first()
+        val aisles = storeDao.observeAisles(cityMarket).first()
         assertEquals(1, aisles.size)
         assertEquals(produce, aisles.single().categoryId)
     }
 
     @Test
     fun replaceAisles_savesTheWholeNewMap() = runBlocking {
-        val id = storeDao.insertStore(StoreEntity(name = "Willys", color = "#E17055"))
+        val id = storeDao.insertStore(StoreEntity(name = "City Market", color = "#E17055"))
         storeDao.replaceAisles(id, listOf(
             StoreAisleEntity(storeId = id, categoryId = produce, x = 0, y = 1),
             StoreAisleEntity(storeId = id, categoryId = dairy, x = 2, y = 1)
@@ -86,7 +86,7 @@ class StoreDaoTest {
 
     @Test
     fun entranceAndCheckout_areSavedWithTheStore() = runBlocking {
-        val id = storeDao.insertStore(StoreEntity(name = "Willys", color = "#E17055"))
+        val id = storeDao.insertStore(StoreEntity(name = "City Market", color = "#E17055"))
 
         storeDao.setLandmarks(id, entranceX = 2, entranceY = 0, checkoutX = 0, checkoutY = 8)
 
@@ -97,18 +97,18 @@ class StoreDaoTest {
 
     @Test
     fun renamingAStore_keepsItsMap() = runBlocking {
-        val id = storeDao.insertStore(StoreEntity(name = "Willys", color = "#E17055"))
+        val id = storeDao.insertStore(StoreEntity(name = "City Market", color = "#E17055"))
         storeDao.replaceAisles(id, listOf(StoreAisleEntity(storeId = id, categoryId = produce, x = 0, y = 1)))
 
-        storeDao.rename(id, "Willys Tornby")
+        storeDao.rename(id, "City Market North")
 
-        assertEquals("Willys Tornby", storeDao.observeStores().first().single().name)
+        assertEquals("City Market North", storeDao.observeStores().first().single().name)
         assertEquals(1, storeDao.observeAisles(id).first().size)
     }
 
     @Test
     fun deletingAStore_removesItsMap() = runBlocking {
-        val id = storeDao.insertStore(StoreEntity(name = "Willys", color = "#E17055"))
+        val id = storeDao.insertStore(StoreEntity(name = "City Market", color = "#E17055"))
         storeDao.replaceAisles(id, listOf(StoreAisleEntity(storeId = id, categoryId = produce, x = 0, y = 1)))
 
         storeDao.deleteStore(id)
@@ -119,7 +119,7 @@ class StoreDaoTest {
 
     @Test
     fun aListRemembersItsStore() = runBlocking {
-        val store = storeDao.insertStore(StoreEntity(name = "Willys", color = "#E17055"))
+        val store = storeDao.insertStore(StoreEntity(name = "City Market", color = "#E17055"))
         val list = db.shoppingListDao().insert(ShoppingListEntity(name = "Weekly", storeId = store))
 
         assertEquals(store, db.shoppingListDao().getById(list)?.storeId)
@@ -130,7 +130,7 @@ class StoreDaoTest {
 
     @Test
     fun deletingAStore_unlinksItsListsButKeepsThem() = runBlocking {
-        val store = storeDao.insertStore(StoreEntity(name = "Willys", color = "#E17055"))
+        val store = storeDao.insertStore(StoreEntity(name = "City Market", color = "#E17055"))
         val list = db.shoppingListDao().insert(ShoppingListEntity(name = "Weekly", storeId = store))
 
         storeDao.deleteStore(store)
@@ -142,7 +142,7 @@ class StoreDaoTest {
 
     @Test
     fun deletingACategory_removesItsAisleFromEveryMap() = runBlocking {
-        val id = storeDao.insertStore(StoreEntity(name = "Willys", color = "#E17055"))
+        val id = storeDao.insertStore(StoreEntity(name = "City Market", color = "#E17055"))
         storeDao.replaceAisles(id, listOf(
             StoreAisleEntity(storeId = id, categoryId = produce, x = 0, y = 1),
             StoreAisleEntity(storeId = id, categoryId = dairy, x = 2, y = 1)
@@ -155,8 +155,8 @@ class StoreDaoTest {
 
     @Test
     fun storeColors_areReadForPickingTheNextOne() = runBlocking {
-        storeDao.insertStore(StoreEntity(name = "Willys", color = "#E17055"))
-        storeDao.insertStore(StoreEntity(name = "ICA", color = "#0984E3"))
+        storeDao.insertStore(StoreEntity(name = "City Market", color = "#E17055"))
+        storeDao.insertStore(StoreEntity(name = "Corner Shop", color = "#0984E3"))
 
         assertEquals(setOf("#E17055", "#0984E3"), storeDao.getStoreColors().toSet())
     }

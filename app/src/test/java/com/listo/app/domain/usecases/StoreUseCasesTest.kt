@@ -39,15 +39,15 @@ class StoreUseCasesTest {
 
     @Test
     fun `adding a store trims its name and picks an unused color`() = runBlocking {
-        val id = addStore("  Willys Tornby  ")
+        val id = addStore("  City Market North  ")
 
         assertEquals(42L, id)
-        coVerify { stores.createStore("Willys Tornby", StoreColors.palette[1], any()) }
+        coVerify { stores.createStore("City Market North", StoreColors.palette[1], any()) }
     }
 
     @Test
     fun `a new store starts with the default map of every category`() = runBlocking {
-        addStore("ICA Maxi Tornby")
+        addStore("Big Basket Mall")
 
         coVerify { stores.createStore(any(), any(), DefaultStoreLayout.layout(categories)) }
     }
@@ -62,14 +62,14 @@ class StoreUseCasesTest {
     fun `renaming trims the name and ignores a blank one`() = runBlocking {
         val update = UpdateStoreUseCase(stores)
 
-        update.rename(7, "  Lidl  ")
+        update.rename(7, "  Fresh Corner  ")
         update.rename(7, "  ")
 
         coVerify(exactly = 1) { stores.rename(any(), any()) }
-        coVerify { stores.rename(7, "Lidl") }
+        coVerify { stores.rename(7, "Fresh Corner") }
     }
 
-    private val existing = listOf(Store(id = 5, name = "ICA Maxi Tornby", color = "#0984E3"))
+    private val existing = listOf(Store(id = 5, name = "Big Basket Mall", color = "#0984E3"))
 
     private fun resolver(): ResolveStoreUseCase {
         every { stores.observeStores() } returns flowOf(existing)
@@ -83,14 +83,14 @@ class StoreUseCasesTest {
 
     @Test
     fun `a store already in My stores is reused, whatever the case`() = runBlocking {
-        assertEquals(5L, resolver()("  ica maxi TORNBY "))
+        assertEquals(5L, resolver()("  big basket MALL "))
         coVerify(exactly = 0) { stores.createStore(any(), any(), any()) }
     }
 
     @Test
     fun `a new store name adds the store`() = runBlocking {
-        assertEquals(42L, resolver()("Lidl Kungsängen"))
-        coVerify { stores.createStore("Lidl Kungsängen", any(), any()) }
+        assertEquals(42L, resolver()("Fresh Corner East"))
+        coVerify { stores.createStore("Fresh Corner East", any(), any()) }
     }
 
     @Test

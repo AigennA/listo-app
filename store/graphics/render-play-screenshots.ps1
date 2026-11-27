@@ -15,13 +15,14 @@ $outDir = Join-Path (Split-Path $PSScriptRoot -Parent) 'screenshots\play-phone-e
 $userData = Join-Path $env:TEMP 'listo-render-profile'
 
 $shots = @(
-    @{ shot = '01-onboarding';  title = 'Your shopping, sorted.';     sub = 'A free shopping list that keeps itself tidy' },
-    @{ shot = '02-my-lists';    title = 'All your lists at a glance'; sub = 'Progress, dates and reminders in one view' },
-    @{ shot = '03-list-detail'; title = "Type it, don't organise it"; sub = 'Every item lands in the right aisle by itself' },
-    @{ shot = '04-categories';  title = 'Aisles your way';            sub = 'Add your own categories and colours' },
-    @{ shot = '05-calendar';    title = 'Plan the week ahead';        sub = 'Give a list a date and a reminder' },
-    @{ shot = '06-settings';    title = 'Make it yours';              sub = 'Light or dark, 12 accent colours, 3 languages' },
-    @{ shot = '07-budget';      title = 'Stay on budget';             sub = 'Set a limit and see what is left as you shop' }
+    @{ shot = '01-onboarding';  title = "Make your list.`nThe rest is easy."; sub = 'A free shopping list that keeps itself tidy' },
+    @{ shot = '02-my-lists';    title = 'All your lists at a glance';  sub = 'Progress, dates, stores and reminders in one view' },
+    @{ shot = '03-list-detail'; title = "Type it, don't organise it";  sub = 'Every item lands in the right aisle by itself' },
+    @{ shot = '05-calendar';    title = 'Plan the week ahead';         sub = 'Give a list a date and a reminder' },
+    @{ shot = '06-settings';    title = 'Make it yours';               sub = 'Light or dark, 12 accent colours, any currency' },
+    @{ shot = '07-budget';      title = 'Stay on budget';              sub = 'Set a limit and see what is left as you shop' },
+    @{ shot = '08-store-map';   title = 'Shop aisle by aisle';         sub = 'Map your store; Listo learns the way you walk it' },
+    @{ shot = '09-spending';    title = 'See where the money goes';    sub = 'Spending by week, month or any days you pick' }
 )
 
 if (-not $Chrome) {

@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center">Listo</h1>
-<p align="center"><em>Your shopping, sorted.</em></p>
+<p align="center"><em>Make your list. The rest is easy.</em></p>
 
 <p align="center">
   A fast, offline-first Android shopping list that files every item under the right
@@ -25,9 +25,9 @@
 |---|---|---|
 | <img src="store/screenshots/phone-en/02-my-lists.png" width="220"> | <img src="store/screenshots/phone-en/03-list-detail.png" width="220"> | <img src="store/screenshots/phone-en/07-budget.png" width="220"> |
 
-| Categories | Calendar | Accent colours |
+| Store map | Spending | Calendar |
 |---|---|---|
-| <img src="store/screenshots/phone-en/04-categories.png" width="220"> | <img src="store/screenshots/phone-en/05-calendar.png" width="220"> | <img src="store/screenshots/phone-en/06-settings.png" width="220"> |
+| <img src="store/screenshots/phone-en/08-store-map.png" width="220"> | <img src="store/screenshots/phone-en/09-spending.png" width="220"> | <img src="store/screenshots/phone-en/05-calendar.png" width="220"> |
 
 ## Try it
 
