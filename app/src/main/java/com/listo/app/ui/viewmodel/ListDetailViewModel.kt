@@ -11,6 +11,7 @@ import com.listo.app.domain.usecases.*
 import com.listo.app.utils.GroceryCatalog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,7 +19,9 @@ data class ListDetailUiState(
     val list: ShoppingList? = null,
     val items: List<ShoppingItem> = emptyList(),
     val categories: List<Category> = emptyList(),
-    val isLoading: Boolean = true
+    val isLoading: Boolean = true,
+    /** Aisles (category ids) in the order this list's store is usually walked; empty if not learned. */
+    val routeOrder: List<Long> = emptyList()
 ) {
     val itemCount: Int get() = items.size
     val checkedCount: Int get() = items.count { it.isChecked }
@@ -44,7 +47,12 @@ data class ListDetailUiState(
             .filterNot { it.isChecked }
             .groupBy { it.categoryName ?: GroceryCatalog.UNCATEGORIZED }
             .toList()
-            .sortedBy { it.first == GroceryCatalog.UNCATEGORIZED }
+            .sortedWith(
+                compareBy(
+                    { it.first == GroceryCatalog.UNCATEGORIZED },
+                    { (_, group) -> routeOrder.indexOf(group.first().categoryId).let { i -> if (i < 0) Int.MAX_VALUE else i } }
+                )
+            )
 }
 
 @HiltViewModel
@@ -62,16 +70,27 @@ class ListDetailViewModel @Inject constructor(
 
     private val listId: Long = savedStateHandle.get<Long>("listId") ?: -1L
 
+    private val list = getShoppingListsUseCase.byId(listId)
+
+    /** Aisles in the order this list's store is usually walked, so groups come in that order. */
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val route = list
+        .map { it?.storeId }
+        .distinctUntilChanged()
+        .flatMapLatest { getShoppingItemsUseCase.learnedRoute(it) }
+
     val uiState: StateFlow<ListDetailUiState> = combine(
-        getShoppingListsUseCase.byId(listId),
+        list,
         getShoppingItemsUseCase.forList(listId),
-        getCategoriesUseCase()
-    ) { list, items, categories ->
+        getCategoriesUseCase(),
+        route
+    ) { list, items, categories, route ->
         ListDetailUiState(
             list = list,
             items = items,
             categories = categories,
-            isLoading = false
+            isLoading = false,
+            routeOrder = route
         )
     }.stateIn(
         scope = viewModelScope,

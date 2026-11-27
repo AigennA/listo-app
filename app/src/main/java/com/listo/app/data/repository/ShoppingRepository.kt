@@ -8,6 +8,7 @@ import com.listo.app.data.database.entities.toDomain
 import com.listo.app.data.database.entities.toEntity
 import com.listo.app.data.models.ShoppingItem
 import com.listo.app.data.models.ShoppingList
+import com.listo.app.domain.store.LearnedRoute
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -79,6 +80,10 @@ class ShoppingRepository @Inject constructor(
     /** Every bought item, for spending over time. */
     fun getBoughtItems(): Flow<List<com.listo.app.domain.spending.BoughtItem>> =
         itemDao.getBoughtItems().map { rows -> rows.map { it.toDomain() } }
+
+    /** Aisles (category ids) in the order [storeId] is usually walked, learned from ticks. */
+    fun getLearnedRoute(storeId: Long): Flow<List<Long>> =
+        itemDao.getAisleTicks(storeId).map(LearnedRoute::order)
 
     suspend fun deleteItem(id: Long) = itemDao.deleteById(id)
 

@@ -61,10 +61,15 @@ object DefaultStoreLayout {
             compareBy<Category>({ walkOrder.indexOf(it.name).let { i -> if (i < 0) Int.MAX_VALUE else i } }, { it.name.lowercase() })
         )
         // The entrance and checkout keep their default cells.
-        val reserved = setOf(StoreLayout.DEFAULT_ENTRANCE, StoreLayout.DEFAULT_CHECKOUT).map { it.x to it.y }
-        val slots = (spacedSlots + StoreGrid.cells.filterNot { it in spacedSlots }).filterNot { it in reserved }
-        return ordered.zip(slots) { category, (x, y) -> StoreAisle(categoryId = category.id, x = x, y = y) }
+        val cells = slots(reserved = setOf(StoreLayout.DEFAULT_ENTRANCE, StoreLayout.DEFAULT_CHECKOUT))
+        return ordered.zip(cells) { category, cell -> StoreAisle(categoryId = category.id, x = cell.x, y = cell.y) }
     }
+
+    /** Cells to place aisles on, in walking order: spaced shelf spots first, then the rest. */
+    fun slots(reserved: Set<GridCell>): List<GridCell> =
+        (spacedSlots + StoreGrid.cells.filterNot { it in spacedSlots })
+            .map { (x, y) -> GridCell(x, y) }
+            .filterNot { it in reserved }
 }
 
 /** Which way an arrow points on the map, with its rotation from "right". */

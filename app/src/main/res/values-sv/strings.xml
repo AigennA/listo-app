@@ -236,4 +236,8 @@
     <string name="settings_currency">Valuta</string>
     <string name="currency_auto">Automatisk (telefonens region)</string>
     <string name="currency_note">Bara symbolen ändras, belopp räknas inte om.</string>
+    <string name="route_learned_title">Listo har lärt sig din väg</string>
+    <string name="route_learned_text">Ordna kartan i den ordning du brukar gå i den här butiken?</string>
+    <string name="route_apply">Ordna kartan</string>
+    <string name="route_not_now">Inte nu</string>
 </resources>

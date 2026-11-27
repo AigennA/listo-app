@@ -171,7 +171,7 @@
     <!-- Stores and store maps -->
     <string name="stores_title">My stores</string>
     <string name="stores_add">Add store</string>
-    <string name="stores_name_hint">e.g. Willys Tornby</string>
+    <string name="stores_name_hint">e.g. Corner market</string>
     <string name="stores_empty_title">No stores yet</string>
     <string name="stores_empty_subtitle">Add the stores you shop at and lay out their aisles once. Then shop aisle by aisle.</string>
     <string name="stores_pick_subtitle">Which store are you in?</string>
@@ -241,4 +241,8 @@
     <string name="settings_currency">Currency</string>
     <string name="currency_auto">Automatic (phone region)</string>
     <string name="currency_note">Only the symbol changes; amounts are not converted.</string>
+    <string name="route_learned_title">Listo has learned your route</string>
+    <string name="route_learned_text">Lay out the map in the order you usually walk this store?</string>
+    <string name="route_apply">Lay out map</string>
+    <string name="route_not_now">Not now</string>
 </resources>

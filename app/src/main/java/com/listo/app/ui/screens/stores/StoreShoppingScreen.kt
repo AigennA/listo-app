@@ -99,6 +99,31 @@ fun StoreShoppingScreen(
                     .height(6.dp),
                 strokeCap = androidx.compose.ui.graphics.StrokeCap.Round
             )
+            if (uiState.offerRoute) {
+                // Listo noticed the order aisles are usually visited in; offer to lay the map out so.
+                Card(
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp)
+                ) {
+                    Column(Modifier.padding(14.dp)) {
+                        Text(
+                            stringResource(R.string.route_learned_title),
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                        Text(
+                            stringResource(R.string.route_learned_text),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                        Row(Modifier.fillMaxWidth().padding(top = 8.dp), horizontalArrangement = Arrangement.End) {
+                            TextButton(onClick = viewModel::dismissRoute) { Text(stringResource(R.string.route_not_now)) }
+                            Button(onClick = viewModel::applyRoute) { Text(stringResource(R.string.route_apply)) }
+                        }
+                    }
+                }
+            }
             Text(
                 stringResource(R.string.shop_hint),
                 style = MaterialTheme.typography.bodySmall,

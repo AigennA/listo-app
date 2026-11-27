@@ -87,6 +87,26 @@ class ShoppingDaoTest {
     }
 
     @Test
+    fun aisleTicks_comeFromListsShoppedInThatStore() = runBlocking {
+        val produce = db.categoryDao().insertCategory(com.listo.app.data.database.entities.CategoryEntity(name = "Produce"))
+        val willys = db.storeDao().insertStore(com.listo.app.data.database.entities.StoreEntity(name = "Willys", color = "#E17055"))
+        val ica = db.storeDao().insertStore(com.listo.app.data.database.entities.StoreEntity(name = "ICA", color = "#0984E3"))
+        val atWillys = listDao.insert(ShoppingListEntity(name = "A", storeId = willys))
+        val atIca = listDao.insert(ShoppingListEntity(name = "B", storeId = ica))
+        val tomato = itemDao.insert(ShoppingItemEntity(listId = atWillys, name = "Tomato", categoryId = produce))
+        val apple = itemDao.insert(ShoppingItemEntity(listId = atIca, name = "Apple", categoryId = produce))
+        itemDao.insert(ShoppingItemEntity(listId = atWillys, name = "No aisle"))
+        itemDao.setChecked(tomato, checked = true, now = 10L)
+        itemDao.setChecked(apple, checked = true, now = 20L)
+
+        val ticks = itemDao.getAisleTicks(willys).first()
+
+        assertEquals(1, ticks.size)
+        assertEquals(produce, ticks.single().categoryId)
+        assertEquals(10L, ticks.single().checkedAt)
+    }
+
+    @Test
     fun listTotal_multipliesPriceByAmount() = runBlocking {
         val listId = listDao.insert(ShoppingListEntity(name = "Groceries"))
         itemDao.insert(ShoppingItemEntity(listId = listId, name = "Milk", price = 15.0, amount = 2.0, unit = "pcs"))

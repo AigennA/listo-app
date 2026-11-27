@@ -10,6 +10,8 @@ import com.listo.app.data.models.GridCell
 import com.listo.app.data.models.StoreAisle
 import com.listo.app.data.models.StoreLayout
 import com.listo.app.data.repository.StoreRepository
+import com.listo.app.domain.store.arrangedBy
+import com.listo.app.domain.store.shouldOfferRoute
 import com.listo.app.domain.usecases.AddShoppingItemUseCase
 import com.listo.app.domain.usecases.AddStoreUseCase
 import com.listo.app.domain.usecases.GetCategoriesUseCase
@@ -170,8 +172,18 @@ class StoreMapEditorViewModel @Inject constructor(
 data class StoreShoppingUiState(
     val store: Store? = null,
     val map: StoreShoppingState = StoreShoppingState(),
-    val isLoading: Boolean = true
-)
+    val isLoading: Boolean = true,
+    /** The walking order learned for this store; offered when the map differs. */
+    val learnedRoute: List<Long> = emptyList(),
+    val offerRoute: Boolean = false
+) {
+    val layout: StoreLayout
+        get() = StoreLayout(
+            map.aisles,
+            store?.entrance ?: StoreLayout.DEFAULT_ENTRANCE,
+            store?.checkout ?: StoreLayout.DEFAULT_CHECKOUT
+        )
+}
 
 /** Shopping a list aisle by aisle on a store map. */
 @HiltViewModel
@@ -181,13 +193,17 @@ class StoreShoppingViewModel @Inject constructor(
     getCategories: GetCategoriesUseCase,
     private val updateItem: UpdateShoppingItemUseCase,
     private val addItemUseCase: AddShoppingItemUseCase,
+    private val updateStore: UpdateStoreUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val storeId: Long = savedStateHandle.get<Long>(StoreArgs.STORE_ID) ?: -1L
     private val listId: Long = savedStateHandle.get<Long>(StoreArgs.LIST_ID) ?: StoreArgs.NO_LIST
 
-    val uiState: StateFlow<StoreShoppingUiState> = combine(
+    /** "Not now" on the route suggestion, for this visit. */
+    private val routeDismissed = MutableStateFlow(false)
+
+    private val mapState = combine(
         stores.observeStore(storeId),
         stores.observeAisles(storeId),
         getCategories(),
@@ -198,7 +214,23 @@ class StoreShoppingViewModel @Inject constructor(
             map = StoreShoppingState(aisles = aisles, categories = categories, items = items),
             isLoading = false
         )
+    }
+
+    val uiState: StateFlow<StoreShoppingUiState> = combine(
+        mapState,
+        getItems.learnedRoute(storeId),
+        routeDismissed
+    ) { state, route, dismissed ->
+        state.copy(learnedRoute = route, offerRoute = !dismissed && state.layout.shouldOfferRoute(route))
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), StoreShoppingUiState())
+
+    /** Lays the map out along the learned route; entrance and checkout stay put. */
+    fun applyRoute() {
+        val state = uiState.value
+        viewModelScope.launch { updateStore.saveMap(storeId, state.layout.arrangedBy(state.learnedRoute)) }
+    }
+
+    fun dismissRoute() { routeDismissed.value = true }
 
     fun toggle(item: ShoppingItem) {
         viewModelScope.launch { updateItem.toggle(item.id, !item.isChecked) }
