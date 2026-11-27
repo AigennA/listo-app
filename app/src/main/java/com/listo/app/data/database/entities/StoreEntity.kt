@@ -1,19 +1,30 @@
 package com.listo.app.data.database.entities
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.listo.app.data.models.GridCell
 import com.listo.app.data.models.Store
 import com.listo.app.data.models.StoreAisle
+import com.listo.app.data.models.StoreLayout
 
-/** A store the user shops at, e.g. "Willys Tornby", shown in its own [color]. */
+/**
+ * A store the user shops at, e.g. "Willys Tornby", shown in its own [color],
+ * with the cells of its entrance and checkout on the map. The column
+ * defaults match [StoreLayout.DEFAULT_ENTRANCE] and [StoreLayout.DEFAULT_CHECKOUT].
+ */
 @Entity(tableName = "stores")
 data class StoreEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0L,
     val name: String,
     val color: String,
-    val createdAt: Long = System.currentTimeMillis()
+    val createdAt: Long = System.currentTimeMillis(),
+    @ColumnInfo(defaultValue = "0") val entranceX: Int = StoreLayout.DEFAULT_ENTRANCE.x,
+    @ColumnInfo(defaultValue = "0") val entranceY: Int = StoreLayout.DEFAULT_ENTRANCE.y,
+    @ColumnInfo(defaultValue = "5") val checkoutX: Int = StoreLayout.DEFAULT_CHECKOUT.x,
+    @ColumnInfo(defaultValue = "8") val checkoutY: Int = StoreLayout.DEFAULT_CHECKOUT.y
 )
 
 /**
@@ -46,7 +57,13 @@ data class StoreAisleEntity(
     val y: Int
 )
 
-fun StoreEntity.toDomain() = Store(id = id, name = name, color = color)
+fun StoreEntity.toDomain() = Store(
+    id = id,
+    name = name,
+    color = color,
+    entrance = GridCell(entranceX, entranceY),
+    checkout = GridCell(checkoutX, checkoutY)
+)
 
 fun StoreAisleEntity.toDomain() = StoreAisle(categoryId = categoryId, x = x, y = y)
 

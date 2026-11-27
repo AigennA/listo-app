@@ -182,7 +182,7 @@
     <string name="store_delete_msg">\"%1$s\" and its map will be removed. Your lists stay.</string>
     <string name="settings_stores_sub">Store maps for shopping aisle by aisle</string>
     <string name="cd_in_store">Shop in a store</string>
-    <string name="map_edit_hint">Drag the aisles to where they are in the store. The top left is the entrance.</string>
+    <string name="map_edit_hint">Drag the aisles, the entrance and the checkout to where they are in the store.</string>
     <string name="map_add_aisle">Add an aisle</string>
     <string name="map_all_placed">Every category is on the map.</string>
     <string name="map_save">Done</string>
@@ -208,4 +208,5 @@
     <string name="tick_done">%1$s is in the basket</string>
     <string name="action_undo">Undo</string>
     <string name="history_restore">Move back to My Lists</string>
+    <string name="map_checkout">Checkout</string>
 </resources>

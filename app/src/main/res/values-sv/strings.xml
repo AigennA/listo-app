@@ -177,7 +177,7 @@
     <string name="store_delete_msg">\"%1$s\" och dess karta tas bort. Dina listor finns kvar.</string>
     <string name="settings_stores_sub">Butikskartor för att handla gång för gång</string>
     <string name="cd_in_store">Handla i en butik</string>
-    <string name="map_edit_hint">Dra gångarna dit de finns i butiken. Övre vänstra hörnet är ingången.</string>
+    <string name="map_edit_hint">Dra gångarna, ingången och kassan dit de finns i butiken.</string>
     <string name="map_add_aisle">Lägg till gång</string>
     <string name="map_all_placed">Alla kategorier finns på kartan.</string>
     <string name="map_save">Klart</string>
@@ -203,4 +203,5 @@
     <string name="tick_done">%1$s ligger i korgen</string>
     <string name="action_undo">Ångra</string>
     <string name="history_restore">Flytta tillbaka till Mina listor</string>
+    <string name="map_checkout">Kassa</string>
 </resources>

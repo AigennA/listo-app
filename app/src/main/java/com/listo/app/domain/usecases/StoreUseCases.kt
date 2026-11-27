@@ -1,6 +1,6 @@
 package com.listo.app.domain.usecases
 
-import com.listo.app.data.models.StoreAisle
+import com.listo.app.data.models.StoreLayout
 import com.listo.app.data.repository.CategoryRepository
 import com.listo.app.data.repository.StoreRepository
 import com.listo.app.domain.store.DefaultStoreLayout
@@ -50,7 +50,7 @@ class UpdateStoreUseCase @Inject constructor(private val stores: StoreRepository
 
     suspend fun setColor(id: Long, color: String) = stores.setColor(id, color)
 
-    suspend fun saveMap(id: Long, aisles: List<StoreAisle>) = stores.saveAisles(id, aisles)
+    suspend fun saveMap(id: Long, layout: StoreLayout) = stores.saveLayout(id, layout)
 
     suspend fun delete(id: Long) = stores.delete(id)
 }

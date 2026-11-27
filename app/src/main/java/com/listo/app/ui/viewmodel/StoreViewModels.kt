@@ -6,9 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.listo.app.data.models.Category
 import com.listo.app.data.models.ShoppingItem
 import com.listo.app.data.models.Store
+import com.listo.app.data.models.GridCell
 import com.listo.app.data.models.StoreAisle
+import com.listo.app.data.models.StoreLayout
 import com.listo.app.data.repository.StoreRepository
-import com.listo.app.domain.store.StoreGrid
 import com.listo.app.domain.usecases.AddShoppingItemUseCase
 import com.listo.app.domain.usecases.AddStoreUseCase
 import com.listo.app.domain.usecases.GetCategoriesUseCase
@@ -78,14 +79,18 @@ class StoresViewModel @Inject constructor(
     }
 }
 
-/** A store map being edited. [savedAisles] is what is stored, to spot unsaved changes. */
+/** A store map being edited. [saved] is what is stored, to spot unsaved changes. */
 data class StoreMapEditorState(
     val aisles: List<StoreAisle> = emptyList(),
     val categories: List<Category> = emptyList(),
-    val savedAisles: List<StoreAisle> = aisles,
+    val entrance: GridCell = StoreLayout.DEFAULT_ENTRANCE,
+    val checkout: GridCell = StoreLayout.DEFAULT_CHECKOUT,
+    val saved: StoreLayout = StoreLayout(aisles, entrance, checkout),
     val store: Store? = null,
     val isLoading: Boolean = false
 ) {
+    val layout: StoreLayout get() = StoreLayout(aisles, entrance, checkout)
+
     /** Aisles with their category; aisles of deleted categories are left out. */
     val placed: List<Pair<Category, StoreAisle>>
         get() {
@@ -100,7 +105,8 @@ data class StoreMapEditorState(
             return categories.filterNot { it.id in onMap }
         }
 
-    val hasChanges: Boolean get() = aisles.toSet() != savedAisles.toSet()
+    val hasChanges: Boolean
+        get() = aisles.toSet() != saved.aisles.toSet() || entrance != saved.entrance || checkout != saved.checkout
 }
 
 @HiltViewModel
@@ -118,8 +124,16 @@ class StoreMapEditorViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val saved = stores.observeAisles(storeId).first()
-            _state.update { it.copy(aisles = saved, savedAisles = saved, isLoading = false) }
+            val aisles = stores.observeAisles(storeId).first()
+            val store = stores.observeStore(storeId).first()
+            val saved = StoreLayout(
+                aisles,
+                store?.entrance ?: StoreLayout.DEFAULT_ENTRANCE,
+                store?.checkout ?: StoreLayout.DEFAULT_CHECKOUT
+            )
+            _state.update {
+                it.copy(aisles = saved.aisles, entrance = saved.entrance, checkout = saved.checkout, saved = saved, isLoading = false)
+            }
         }
         viewModelScope.launch {
             getCategories().collect { categories -> _state.update { it.copy(categories = categories) } }
@@ -129,19 +143,26 @@ class StoreMapEditorViewModel @Inject constructor(
         }
     }
 
-    fun move(categoryId: Long, x: Int, y: Int) = edit { StoreGrid.move(it, categoryId, x, y) }
+    fun move(categoryId: Long, x: Int, y: Int) = edit { it.moveAisle(categoryId, x, y) }
 
-    fun add(categoryId: Long) = edit { StoreGrid.add(it, categoryId) }
+    fun moveEntrance(x: Int, y: Int) = edit { it.moveEntrance(x, y) }
 
-    fun remove(categoryId: Long) = edit { StoreGrid.remove(it, categoryId) }
+    fun moveCheckout(x: Int, y: Int) = edit { it.moveCheckout(x, y) }
+
+    fun add(categoryId: Long) = edit { it.addAisle(categoryId) }
+
+    fun remove(categoryId: Long) = edit { it.removeAisle(categoryId) }
 
     /** Every change is saved at once, so leaving the editor never loses work. */
-    private fun edit(change: (List<StoreAisle>) -> List<StoreAisle>) {
-        _state.update { it.copy(aisles = change(it.aisles)) }
-        val aisles = _state.value.aisles
+    private fun edit(change: (StoreLayout) -> StoreLayout) {
+        _state.update {
+            val next = change(it.layout)
+            it.copy(aisles = next.aisles, entrance = next.entrance, checkout = next.checkout)
+        }
+        val layout = _state.value.layout
         viewModelScope.launch {
-            updateStore.saveMap(storeId, aisles)
-            _state.update { it.copy(savedAisles = aisles) }
+            updateStore.saveMap(storeId, layout)
+            _state.update { it.copy(saved = layout) }
         }
     }
 }

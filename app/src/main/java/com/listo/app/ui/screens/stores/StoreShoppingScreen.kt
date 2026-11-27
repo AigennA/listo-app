@@ -32,6 +32,7 @@ import com.listo.app.ui.components.LisToTopBar
 import com.listo.app.ui.components.RepeatingStepButton
 import com.listo.app.ui.components.quantityText
 import com.listo.app.ui.navigation.Screen
+import com.listo.app.domain.store.entranceDirection
 import com.listo.app.ui.viewmodel.StoreShoppingViewModel
 import com.listo.app.utils.categoryLabel
 import com.listo.app.utils.formatPrice
@@ -112,10 +113,25 @@ fun StoreShoppingScreen(
                         color = tile.color,
                         cell = cell,
                         badge = tile.remaining,
-                        dimmed = tile.remaining == 0,
+                        done = tile.isDone,
+                        quiet = !tile.hasItems,
                         modifier = Modifier
                             .offset(cell * tile.x, cell * tile.y)
                             .clickable { open = OpenAisle.Aisle(tile.categoryId) }
+                    )
+                }
+                // Signs only help finding the way; tapping them does nothing.
+                uiState.store?.let { store ->
+                    LandmarkTileView(
+                        Landmark.ENTRANCE,
+                        cell,
+                        Modifier.offset(cell * store.entrance.x, cell * store.entrance.y),
+                        entranceDirection(store.entrance)
+                    )
+                    LandmarkTileView(
+                        Landmark.CHECKOUT,
+                        cell,
+                        Modifier.offset(cell * store.checkout.x, cell * store.checkout.y)
                     )
                 }
             }

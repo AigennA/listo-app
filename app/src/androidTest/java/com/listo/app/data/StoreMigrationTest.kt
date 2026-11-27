@@ -89,6 +89,25 @@ class StoreMigrationTest {
     }
 
     @Test
+    fun migrating7To8_givesExistingStoresTheDefaultEntranceAndCheckout() {
+        helper.createDatabase(dbName, 7).apply {
+            execSQL("INSERT INTO stores (id, name, color, createdAt) VALUES (1, 'Willys', '#E17055', 100)")
+            close()
+        }
+
+        helper.runMigrationsAndValidate(dbName, 8, true, *DatabaseMigrations.ALL)
+
+        val db = openLatest()
+        runBlocking {
+            val store = db.storeDao().observeStores().first().single()
+            assertEquals("Willys", store.name)
+            assertEquals(0 to 0, store.entranceX to store.entranceY)
+            assertEquals(5 to 8, store.checkoutX to store.checkoutY)
+        }
+        db.close()
+    }
+
+    @Test
     fun migrating5To6_keepsStoresAndTheirMaps() {
         helper.createDatabase(dbName, 5).apply {
             execSQL("INSERT INTO categories (id, name, color) VALUES (1, 'Produce', '#2ECC71')")

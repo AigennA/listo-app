@@ -1,7 +1,12 @@
 package com.listo.app.ui.screens.lists
 
 import androidx.compose.animation.*
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,6 +16,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Storefront as OutlinedStorefront
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -18,6 +24,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.CompositingStrategy
+import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -286,7 +299,7 @@ private fun ListsHeader(onStores: () -> Unit) {
             AssistChip(
                 onClick = onStores,
                 label = { Text(stringResource(R.string.stores_title)) },
-                leadingIcon = { Icon(Icons.Rounded.Storefront, contentDescription = null, modifier = Modifier.size(18.dp)) }
+                leadingIcon = { AnimatedStoreIcon() }
             )
         }
     }
@@ -521,4 +534,63 @@ private fun StoreField(stores: List<Store>, value: String, onValueChange: (Strin
             }
         }
     }
+}
+
+/** Diagonal stripes on the My stores icon: yellow, red, blue and a soft silver (pure white vanished on the light chip). */
+private val storeIconColors = listOf(Color(0xFFF5B800), Color(0xFFE5383B), Color(0xFF1E6FD9), Color(0xFFA7B0BE))
+private const val STORE_ICON_SLIDE_MS = 4500
+
+/**
+ * The My stores icon striped in a few colours, the stripes slowly sliding
+ * across it, so the feature catches the eye without the icon jumping about.
+ */
+@Composable
+private fun AnimatedStoreIcon() {
+    val transition = rememberInfiniteTransition(label = "storeIcon")
+    val shift by transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(tween(STORE_ICON_SLIDE_MS, easing = LinearEasing), RepeatMode.Restart),
+        label = "storeIconShift"
+    )
+    Box(contentAlignment = Alignment.Center) {
+        StripedStoreIcon(shift)
+        // A thin dark outline on top keeps the shape clear whatever colour passes under it.
+        Icon(
+            Icons.Outlined.OutlinedStorefront,
+            contentDescription = null,
+            tint = STORE_ICON_OUTLINE,
+            modifier = Modifier.size(20.dp)
+        )
+    }
+}
+
+private val STORE_ICON_OUTLINE = Color(0xCC1F2937)
+
+@Composable
+private fun StripedStoreIcon(shift: Float) {
+    Icon(
+        Icons.Rounded.Storefront,
+        contentDescription = null,
+        modifier = Modifier
+            .size(20.dp)
+            .graphicsLayer { compositingStrategy = CompositingStrategy.Offscreen }
+            .drawWithCache {
+                // One run of the four colours spans the icon diagonally; it repeats so the stripes keep flowing.
+                val run = size.width
+                onDrawWithContent {
+                    drawContent()
+                    val offset = run * 2 * shift
+                    drawRect(
+                        brush = Brush.linearGradient(
+                            colors = storeIconColors + storeIconColors.first(),
+                            start = Offset(offset, offset),
+                            end = Offset(offset + run, offset + run),
+                            tileMode = TileMode.Repeated
+                        ),
+                        blendMode = BlendMode.SrcIn
+                    )
+                }
+            }
+    )
 }

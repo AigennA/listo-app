@@ -1,7 +1,9 @@
 package com.listo.app.ui.viewmodel
 
 import com.listo.app.data.models.Category
+import com.listo.app.data.models.GridCell
 import com.listo.app.data.models.StoreAisle
+import com.listo.app.data.models.StoreLayout
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -40,5 +42,12 @@ class StoreMapEditorStateTest {
     fun `changes are tracked until saved`() {
         assertFalse(state.hasChanges)
         assertTrue(state.copy(aisles = emptyList()).hasChanges)
+        assertTrue(state.copy(entrance = GridCell(3, 0)).hasChanges)
+    }
+
+    @Test
+    fun `the layout bundles aisles, entrance and checkout`() {
+        val moved = state.copy(checkout = GridCell(0, 8))
+        assertEquals(StoreLayout(state.aisles, state.entrance, GridCell(0, 8)), moved.layout)
     }
 }
