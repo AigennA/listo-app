@@ -30,7 +30,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.listo.app.R
 import com.listo.app.data.models.Category
+import com.listo.app.data.models.GridCell
 import com.listo.app.data.models.StoreAisle
+import com.listo.app.domain.store.entranceDirection
 import com.listo.app.ui.components.LisToTopBar
 import com.listo.app.ui.viewmodel.StoreMapEditorViewModel
 import com.listo.app.utils.categoryLabel
@@ -94,6 +96,16 @@ fun StoreMapEditorScreen(
                         )
                     }
                 }
+                key(Landmark.ENTRANCE) {
+                    DraggableOnGrid(Landmark.ENTRANCE, state.entrance, cell, onDrop = viewModel::moveEntrance) {
+                        LandmarkTileView(Landmark.ENTRANCE, cell, direction = entranceDirection(state.entrance))
+                    }
+                }
+                key(Landmark.CHECKOUT) {
+                    DraggableOnGrid(Landmark.CHECKOUT, state.checkout, cell, onDrop = viewModel::moveCheckout) {
+                        LandmarkTileView(Landmark.CHECKOUT, cell)
+                    }
+                }
             }
 
             Text(
@@ -134,26 +146,29 @@ fun StoreMapEditorScreen(
     }
 }
 
-/** An aisle that follows the finger and snaps to the nearest cell when let go. */
+/**
+ * Anything on the map that follows the finger and snaps to the nearest cell
+ * when let go: an aisle, the entrance or the checkout.
+ */
 @Composable
-private fun DraggableAisle(
-    category: Category,
-    aisle: StoreAisle,
+private fun DraggableOnGrid(
+    dragKey: Any,
+    at: GridCell,
     cell: Dp,
     onDrop: (x: Int, y: Int) -> Unit,
-    onRemove: () -> Unit
+    content: @Composable BoxScope.() -> Unit
 ) {
     val cellPx = with(LocalDensity.current) { cell.toPx() }
     var drag by remember { mutableStateOf(Offset.Zero) }
     var dragging by remember { mutableStateOf(false) }
-    val current by rememberUpdatedState(aisle)
+    val current by rememberUpdatedState(at)
 
     Box(
         modifier = Modifier
             .offset { IntOffset((current.x * cellPx + drag.x).roundToInt(), (current.y * cellPx + drag.y).roundToInt()) }
             .zIndex(if (dragging) 1f else 0f)
             .then(if (dragging) Modifier.shadow(8.dp, RoundedCornerShape(12.dp)) else Modifier)
-            .pointerInput(category.id) {
+            .pointerInput(dragKey) {
                 detectDragGestures(
                     onDragStart = { dragging = true },
                     onDragEnd = {
@@ -169,8 +184,21 @@ private fun DraggableAisle(
                         drag += amount
                     }
                 )
-            }
-    ) {
+            },
+        content = content
+    )
+}
+
+/** An aisle on the editor map, with a button to take it off. */
+@Composable
+private fun DraggableAisle(
+    category: Category,
+    aisle: StoreAisle,
+    cell: Dp,
+    onDrop: (x: Int, y: Int) -> Unit,
+    onRemove: () -> Unit
+) {
+    DraggableOnGrid(dragKey = category.id, at = aisle.cell, cell = cell, onDrop = onDrop) {
         AisleTileView(categoryName = category.name, color = category.color, cell = cell)
         Box(
             modifier = Modifier

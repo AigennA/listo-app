@@ -85,6 +85,17 @@ class StoreDaoTest {
     }
 
     @Test
+    fun entranceAndCheckout_areSavedWithTheStore() = runBlocking {
+        val id = storeDao.insertStore(StoreEntity(name = "Willys", color = "#E17055"))
+
+        storeDao.setLandmarks(id, entranceX = 2, entranceY = 0, checkoutX = 0, checkoutY = 8)
+
+        val store = storeDao.observeStore(id).first()!!
+        assertEquals(2 to 0, store.entranceX to store.entranceY)
+        assertEquals(0 to 8, store.checkoutX to store.checkoutY)
+    }
+
+    @Test
     fun renamingAStore_keepsItsMap() = runBlocking {
         val id = storeDao.insertStore(StoreEntity(name = "Willys", color = "#E17055"))
         storeDao.replaceAisles(id, listOf(StoreAisleEntity(storeId = id, categoryId = produce, x = 0, y = 1)))

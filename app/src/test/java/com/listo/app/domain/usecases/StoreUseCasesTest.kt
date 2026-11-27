@@ -1,7 +1,9 @@
 package com.listo.app.domain.usecases
 
 import com.listo.app.data.models.Category
+import com.listo.app.data.models.GridCell
 import com.listo.app.data.models.Store
+import com.listo.app.data.models.StoreLayout
 import com.listo.app.data.repository.CategoryRepository
 import com.listo.app.data.repository.ShoppingRepository
 import com.listo.app.data.repository.StoreRepository
@@ -101,12 +103,12 @@ class StoreUseCasesTest {
     }
 
     @Test
-    fun `saving a map hands the aisles to the repository`() = runBlocking {
+    fun `saving a map hands aisles, entrance and checkout to the repository`() = runBlocking {
         val update = UpdateStoreUseCase(stores)
-        val map = DefaultStoreLayout.layout(categories)
+        val map = StoreLayout(DefaultStoreLayout.layout(categories), entrance = GridCell(3, 0), checkout = GridCell(0, 8))
 
         update.saveMap(7, map)
 
-        coVerify { stores.saveAisles(7, map) }
+        coVerify { stores.saveLayout(7, map) }
     }
 }

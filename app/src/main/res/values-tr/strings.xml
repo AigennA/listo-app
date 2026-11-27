@@ -177,7 +177,7 @@
     <string name="store_delete_msg">\"%1$s\" ve haritası silinir. Listelerin kalır.</string>
     <string name="settings_stores_sub">Reyon reyon alışveriş için market haritaları</string>
     <string name="cd_in_store">Markette alışveriş</string>
-    <string name="map_edit_hint">Reyonları marketteki yerlerine sürükle. Sol üst köşe giriş.</string>
+    <string name="map_edit_hint">Reyonları, girişi ve kasayı marketteki yerlerine sürükle.</string>
     <string name="map_add_aisle">Reyon ekle</string>
     <string name="map_all_placed">Bütün kategoriler haritada.</string>
     <string name="map_save">Tamam</string>
@@ -203,4 +203,5 @@
     <string name="tick_done">%1$s sepete eklendi</string>
     <string name="action_undo">Geri al</string>
     <string name="history_restore">Listelerime geri taşı</string>
+    <string name="map_checkout">Kasa</string>
 </resources>

@@ -1,7 +1,9 @@
 package com.listo.app.domain.store
 
 import com.listo.app.data.models.Category
+import com.listo.app.data.models.GridCell
 import com.listo.app.data.models.StoreAisle
+import com.listo.app.data.models.StoreLayout
 import com.listo.app.utils.GroceryCatalog
 
 /** Colors for store icons, so every store the user adds looks different. */
@@ -32,31 +34,6 @@ object StoreGrid {
 
     /** Every cell, row by row from the entrance at the top left. */
     val cells: List<Pair<Int, Int>> = (0 until ROWS).flatMap { y -> (0 until COLUMNS).map { x -> x to y } }
-
-    /** Moves an aisle to a cell; an aisle already there swaps into its old place. */
-    fun move(aisles: List<StoreAisle>, categoryId: Long, x: Int, y: Int): List<StoreAisle> {
-        val moving = aisles.firstOrNull { it.categoryId == categoryId } ?: return aisles
-        val tx = x.coerceIn(0, COLUMNS - 1)
-        val ty = y.coerceIn(0, ROWS - 1)
-        return aisles.map {
-            when {
-                it.categoryId == categoryId -> it.copy(x = tx, y = ty)
-                it.x == tx && it.y == ty -> it.copy(x = moving.x, y = moving.y)
-                else -> it
-            }
-        }
-    }
-
-    /** Puts a category on the first free cell, unless it is already on the map or the map is full. */
-    fun add(aisles: List<StoreAisle>, categoryId: Long): List<StoreAisle> {
-        if (aisles.any { it.categoryId == categoryId }) return aisles
-        val taken = aisles.map { it.x to it.y }.toSet()
-        val free = cells.firstOrNull { it !in taken } ?: return aisles
-        return aisles + StoreAisle(categoryId = categoryId, x = free.first, y = free.second)
-    }
-
-    fun remove(aisles: List<StoreAisle>, categoryId: Long): List<StoreAisle> =
-        aisles.filterNot { it.categoryId == categoryId }
 }
 
 /** The map a new store starts with, laid out like a typical supermarket walk. */
@@ -83,7 +60,25 @@ object DefaultStoreLayout {
         val ordered = categories.sortedWith(
             compareBy<Category>({ walkOrder.indexOf(it.name).let { i -> if (i < 0) Int.MAX_VALUE else i } }, { it.name.lowercase() })
         )
-        val slots = (spacedSlots + StoreGrid.cells.filterNot { it in spacedSlots })
+        // The entrance and checkout keep their default cells.
+        val reserved = setOf(StoreLayout.DEFAULT_ENTRANCE, StoreLayout.DEFAULT_CHECKOUT).map { it.x to it.y }
+        val slots = (spacedSlots + StoreGrid.cells.filterNot { it in spacedSlots }).filterNot { it in reserved }
         return ordered.zip(slots) { category, (x, y) -> StoreAisle(categoryId = category.id, x = x, y = y) }
     }
 }
+
+/** Which way an arrow points on the map, with its rotation from "right". */
+enum class Direction(val degrees: Float) {
+    RIGHT(0f), DOWN(90f), LEFT(180f), UP(270f)
+}
+
+/**
+ * The way into the store from an entrance on [cell]: away from the nearest
+ * wall. In a corner the side wall wins.
+ */
+fun entranceDirection(cell: GridCell): Direction = listOf(
+    cell.x to Direction.RIGHT,
+    StoreGrid.COLUMNS - 1 - cell.x to Direction.LEFT,
+    cell.y to Direction.DOWN,
+    StoreGrid.ROWS - 1 - cell.y to Direction.UP
+).minBy { (distance, _) -> distance }.second

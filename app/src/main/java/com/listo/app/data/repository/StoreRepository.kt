@@ -6,6 +6,7 @@ import com.listo.app.data.database.entities.toDomain
 import com.listo.app.data.database.entities.toEntity
 import com.listo.app.data.models.Store
 import com.listo.app.data.models.StoreAisle
+import com.listo.app.data.models.StoreLayout
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -35,8 +36,13 @@ class StoreRepository @Inject constructor(private val storeDao: StoreDao) {
 
     suspend fun setColor(id: Long, color: String) = storeDao.setColor(id, color)
 
-    suspend fun saveAisles(storeId: Long, aisles: List<StoreAisle>) =
-        storeDao.replaceAisles(storeId, aisles.map { it.toEntity(storeId) })
+    /** Saves a whole map at once: aisles, entrance and checkout. */
+    suspend fun saveLayout(storeId: Long, layout: StoreLayout) = storeDao.saveLayout(
+        storeId,
+        layout.aisles.map { it.toEntity(storeId) },
+        layout.entrance,
+        layout.checkout
+    )
 
     suspend fun delete(id: Long) = storeDao.deleteStore(id)
 }

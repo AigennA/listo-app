@@ -64,8 +64,18 @@ object DatabaseMigrations {
         }
     }
 
-    const val LATEST = 7
+    /** v7 -> v8 gives every store map an entrance and a checkout, at their default cells. */
+    val MIGRATION_7_8 = object : Migration(7, 8) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE stores ADD COLUMN entranceX INTEGER NOT NULL DEFAULT 0")
+            db.execSQL("ALTER TABLE stores ADD COLUMN entranceY INTEGER NOT NULL DEFAULT 0")
+            db.execSQL("ALTER TABLE stores ADD COLUMN checkoutX INTEGER NOT NULL DEFAULT 5")
+            db.execSQL("ALTER TABLE stores ADD COLUMN checkoutY INTEGER NOT NULL DEFAULT 8")
+        }
+    }
+
+    const val LATEST = 8
 
     val ALL: Array<Migration> =
-        arrayOf(MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
+        arrayOf(MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8)
 }

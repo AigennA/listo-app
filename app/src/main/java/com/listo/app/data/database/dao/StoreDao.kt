@@ -6,6 +6,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.listo.app.data.database.entities.StoreAisleEntity
 import com.listo.app.data.database.entities.StoreEntity
+import com.listo.app.data.models.GridCell
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -28,6 +29,12 @@ interface StoreDao {
 
     @Query("UPDATE stores SET color = :color WHERE id = :id")
     suspend fun setColor(id: Long, color: String)
+
+    @Query(
+        "UPDATE stores SET entranceX = :entranceX, entranceY = :entranceY, " +
+            "checkoutX = :checkoutX, checkoutY = :checkoutY WHERE id = :id"
+    )
+    suspend fun setLandmarks(id: Long, entranceX: Int, entranceY: Int, checkoutX: Int, checkoutY: Int)
 
     @Query("DELETE FROM stores WHERE id = :id")
     suspend fun deleteStoreRow(id: Long)
@@ -56,5 +63,12 @@ interface StoreDao {
     suspend fun replaceAisles(storeId: Long, aisles: List<StoreAisleEntity>) {
         deleteAisles(storeId)
         insertAisles(aisles.map { it.copy(id = 0L, storeId = storeId) })
+    }
+
+    /** Saves a whole map, aisles plus entrance and checkout, in one go. */
+    @Transaction
+    suspend fun saveLayout(storeId: Long, aisles: List<StoreAisleEntity>, entrance: GridCell, checkout: GridCell) {
+        replaceAisles(storeId, aisles)
+        setLandmarks(storeId, entrance.x, entrance.y, checkout.x, checkout.y)
     }
 }
