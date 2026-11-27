@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Listo</string>
-    <string name="app_tagline">Alışverişin düzene girsin.</string>
+    <string name="app_tagline">Listeni yap, gerisi kolay.</string>
 
     <!-- Common actions -->
     <string name="action_save">Kaydet</string>

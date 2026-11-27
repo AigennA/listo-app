@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Listo</string>
-    <string name="app_tagline">Din shopping, organiserad.</string>
+    <string name="app_tagline">Gör din lista. Resten är enkelt.</string>
 
     <!-- Common actions -->
     <string name="action_save">Spara</string>

@@ -40,6 +40,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -65,7 +66,7 @@ import com.listo.app.utils.ItemCatalog
 import com.listo.app.utils.ListReminderScheduler
 import com.listo.app.utils.categoryLabel
 import com.listo.app.utils.formatPrice
-import com.listo.app.utils.iconForItem
+import com.listo.app.utils.emojiForItem
 import com.listo.app.utils.rememberItemCatalog
 import com.listo.app.utils.shareList
 import com.listo.app.utils.toComposeColor
@@ -580,12 +581,7 @@ private fun ShoppingItemRow(
                         .background(avatarColor.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        imageVector = iconForItem(iconKey, item.categoryName),
-                        contentDescription = null,
-                        tint = avatarColor,
-                        modifier = Modifier.size(20.dp)
-                    )
+                    Text(emojiForItem(iconKey, item.categoryName), fontSize = 20.sp)
                 }
                 Spacer(Modifier.width(12.dp))
                 Column(modifier = Modifier.weight(1f)) {

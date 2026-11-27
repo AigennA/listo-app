@@ -45,12 +45,20 @@ fun rememberItemCatalog(): ItemCatalog {
     return remember(configuration) { loadItemCatalog(context) }
 }
 
+/** Languages Listo ships item names in, besides English. */
+private val CATALOG_LANGUAGES = listOf("tr", "sv")
+
 private fun loadItemCatalog(context: Context): ItemCatalog {
-    val englishConfig = Configuration(context.resources.configuration).apply { setLocale(Locale.ENGLISH) }
-    val english = context.createConfigurationContext(englishConfig).resources
+    fun arraysIn(locale: Locale): Map<String, List<String>> {
+        val config = Configuration(context.resources.configuration).apply { setLocale(locale) }
+        val resources = context.createConfigurationContext(config).resources
+        return GroceryCatalog.itemArrays.mapValues { (_, res) -> resources.getStringArray(res).toList() }
+    }
     val current = context.resources
     return ItemCatalog.of(
-        english = GroceryCatalog.itemArrays.mapValues { (_, res) -> english.getStringArray(res).toList() },
-        localized = GroceryCatalog.itemArrays.mapValues { (_, res) -> current.getStringArray(res).toList() }
+        english = arraysIn(Locale.ENGLISH),
+        localized = GroceryCatalog.itemArrays.mapValues { (_, res) -> current.getStringArray(res).toList() },
+        // Names typed in any supported language are understood, whatever the app's language.
+        otherLanguages = CATALOG_LANGUAGES.map { arraysIn(Locale.forLanguageTag(it)) }
     )
 }

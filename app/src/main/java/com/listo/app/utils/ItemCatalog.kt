@@ -18,7 +18,7 @@ data class CatalogItem(val key: String, val name: String, val category: String)
  * (a name typed without its accents still matches) and small typos
  * ("pinaple" finds "Pineapple").
  */
-class ItemCatalog private constructor(items: List<CatalogItem>) {
+class ItemCatalog private constructor(items: List<CatalogItem>, aliases: List<CatalogItem>) {
 
     /** An item with its name and key prepared for matching. */
     private class Entry(val item: CatalogItem) {
@@ -31,6 +31,9 @@ class ItemCatalog private constructor(items: List<CatalogItem>) {
     }
 
     private val entries = items.map(::Entry)
+
+    /** Entries for matching typed names: the app's language plus the other supported ones. */
+    private val matchEntries = entries + aliases.map(::Entry)
 
     fun suggest(query: String, limit: Int = 6): List<CatalogItem> {
         val q = query.folded()
@@ -61,19 +64,19 @@ class ItemCatalog private constructor(items: List<CatalogItem>) {
     fun keyFor(name: String): String? = match(name)?.key
 
     /**
-     * The catalog item a typed name refers to, in the current language or in
+     * The catalog item a typed name refers to, in any supported language or in
      * English: an exact name first (spaces optional), then the longest known
      * name inside it (a longer name such as "honey melon" beats "honey"), then a close spelling.
      */
     private fun match(name: String): CatalogItem? {
         val q = name.folded()
         if (q.isEmpty()) return null
-        entries.firstOrNull { q == it.name || q == it.key }?.let { return it.item }
+        matchEntries.firstOrNull { q == it.name || q == it.key }?.let { return it.item }
         val compactQuery = q.compact()
-        entries.firstOrNull { compactQuery == it.compactName || compactQuery == it.compactKey }
+        matchEntries.firstOrNull { compactQuery == it.compactName || compactQuery == it.compactKey }
             ?.let { return it.item }
 
-        val longestInside = entries
+        val longestInside = matchEntries
             .mapNotNull { entry ->
                 listOf(entry.name, entry.key)
                     .filter { q.hasWordStartingWith(it) }
@@ -85,7 +88,7 @@ class ItemCatalog private constructor(items: List<CatalogItem>) {
 
         val typos = typoTolerance(q)
         if (typos == 0) return null
-        return entries
+        return matchEntries
             .map { it to minOf(editDistance(q, it.name), editDistance(q, it.key)) }
             .filter { (_, distance) -> distance <= typos }
             .minByOrNull { (_, distance) -> distance }
@@ -101,12 +104,18 @@ class ItemCatalog private constructor(items: List<CatalogItem>) {
          * A category whose translation has a different length is shown in English
          * rather than paired wrongly.
          */
-        fun of(english: Map<String, List<String>>, localized: Map<String, List<String>>): ItemCatalog {
-            val items = english.flatMap { (category, keys) ->
-                val names = localized[category]?.takeIf { it.size == keys.size } ?: keys
-                keys.zip(names) { key, name -> CatalogItem(key, name, category) }
+        fun of(
+            english: Map<String, List<String>>,
+            localized: Map<String, List<String>>,
+            otherLanguages: List<Map<String, List<String>>> = emptyList()
+        ): ItemCatalog {
+            fun paired(names: Map<String, List<String>>, fallback: Boolean) = english.flatMap { (category, keys) ->
+                val translated = names[category]?.takeIf { it.size == keys.size }
+                    ?: if (fallback) keys else emptyList()
+                keys.zip(translated) { key, name -> CatalogItem(key, name, category) }
             }
-            return ItemCatalog(items)
+            // Other languages only help recognise typed names; suggestions stay in [localized].
+            return ItemCatalog(paired(localized, fallback = true), otherLanguages.flatMap { paired(it, fallback = false) })
         }
 
         /** Letters people often type without their accent, mapped to the plain letter. */
@@ -155,10 +164,20 @@ class ItemCatalog private constructor(items: List<CatalogItem>) {
             return previous[b.length]
         }
 
+        /** Names this short must be a whole word, so "un" (flour) never claims "unicorn". */
+        private const val WHOLE_WORD_MAX_LENGTH = 3
+
+        /**
+         * True when a word of this text starts with [word] ("tomatoes" has "tomato").
+         * A very short [word] has to be the whole word.
+         */
         private fun String.hasWordStartingWith(word: String): Boolean {
             var index = indexOf(word)
             while (index >= 0) {
-                if (index == 0 || this[index - 1].isWhitespace()) return true
+                val startsWord = index == 0 || this[index - 1].isWhitespace()
+                val end = index + word.length
+                val endsWord = end == length || this[end].isWhitespace()
+                if (startsWord && (word.length > WHOLE_WORD_MAX_LENGTH || endsWord)) return true
                 index = indexOf(word, index + 1)
             }
             return false

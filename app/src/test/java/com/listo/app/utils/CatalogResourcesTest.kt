@@ -84,6 +84,28 @@ class CatalogResourcesTest {
     }
 
     @Test
+    fun `an english app still understands turkish and swedish names`() {
+        val english = ItemCatalog.of(
+            catalogArrays("values"),
+            catalogArrays("values"),
+            otherLanguages = listOf(catalogArrays("values-tr"), catalogArrays("values-sv"))
+        )
+        assertEquals(GroceryCatalog.MEAT, english.categoryFor("Et"))
+        assertEquals(GroceryCatalog.MEAT, english.categoryFor("Tavuk"))
+        assertEquals(GroceryCatalog.MEAT, english.categoryFor("Kött"))
+        assertEquals("Chicken", english.keyFor("Tavuk"))
+    }
+
+    @Test
+    fun `plain meat and chicken land in the meat aisle in every language`() {
+        listOf("Et", "et", "Tavuk", "Kuzu eti").forEach {
+            assertEquals(it, GroceryCatalog.MEAT, catalog("values-tr").categoryFor(it))
+        }
+        assertEquals(GroceryCatalog.MEAT, catalog("values-sv").categoryFor("Kött"))
+        assertEquals(GroceryCatalog.MEAT, catalog("values").categoryFor("Meat"))
+    }
+
+    @Test
     fun `turkish tester items land in produce`() {
         val tr = catalog("values-tr")
         listOf("Bal kabağı", "Beyaz lahana", "Yeşil soğan", "Ananas", "annas").forEach {
