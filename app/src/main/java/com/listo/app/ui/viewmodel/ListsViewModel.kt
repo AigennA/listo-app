@@ -4,7 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.listo.app.data.models.ShoppingItem
 import com.listo.app.data.models.ShoppingList
+import com.listo.app.data.models.Store
+import com.listo.app.data.repository.StoreRepository
 import com.listo.app.domain.usecases.CreateShoppingListUseCase
+import com.listo.app.domain.usecases.ResolveStoreUseCase
 import com.listo.app.domain.usecases.DeleteShoppingListUseCase
 import com.listo.app.domain.usecases.DuplicateShoppingListUseCase
 import com.listo.app.domain.usecases.GetShoppingItemsUseCase
@@ -21,8 +24,15 @@ data class ListsUiState(
     val lists: List<ShoppingList> = emptyList(),
     val isLoading: Boolean = true,
     val showCreateDialog: Boolean = false,
-    val newListName: String = ""
-)
+    val newListName: String = "",
+    /** Store typed or picked in the new-list dialog; blank means none. */
+    val newStoreName: String = "",
+    val stores: List<Store> = emptyList()
+) {
+    private val storesById: Map<Long, Store> get() = stores.associateBy { it.id }
+
+    fun storeOf(list: ShoppingList): Store? = list.storeId?.let { storesById[it] }
+}
 
 @HiltViewModel
 class ListsViewModel @Inject constructor(
@@ -33,11 +43,14 @@ class ListsViewModel @Inject constructor(
     private val duplicateListUseCase: DuplicateShoppingListUseCase,
     private val getShoppingItemsUseCase: GetShoppingItemsUseCase,
     private val seedCategoriesUseCase: SeedCategoriesUseCase,
+    private val resolveStore: ResolveStoreUseCase,
+    storeRepository: StoreRepository,
     private val prefs: PreferencesManager
 ) : ViewModel() {
 
     private val _showDialog = MutableStateFlow(false)
     private val _newName = MutableStateFlow("")
+    private val _newStore = MutableStateFlow("")
 
     init {
         viewModelScope.launch {
@@ -51,13 +64,17 @@ class ListsViewModel @Inject constructor(
     val uiState: StateFlow<ListsUiState> = combine(
         getShoppingListsUseCase.active(),
         _showDialog,
-        _newName
-    ) { lists, showDialog, name ->
+        _newName,
+        _newStore,
+        storeRepository.observeStores()
+    ) { lists, showDialog, name, storeName, stores ->
         ListsUiState(
             lists = lists,
             isLoading = false,
             showCreateDialog = showDialog,
-            newListName = name
+            newListName = name,
+            newStoreName = storeName,
+            stores = stores
         )
     }.stateIn(
         scope = viewModelScope,
@@ -66,14 +83,17 @@ class ListsViewModel @Inject constructor(
     )
 
     fun showCreateDialog() { _showDialog.value = true }
-    fun hideCreateDialog() { _showDialog.value = false; _newName.value = "" }
+    fun hideCreateDialog() { _showDialog.value = false; _newName.value = ""; _newStore.value = "" }
     fun updateNewName(value: String) { _newName.value = value }
+    fun updateNewStore(value: String) { _newStore.value = value }
 
+    /** Creates the list; a store name not yet in My stores is added as a new store. */
     fun createList(onCreated: (Long) -> Unit) {
         val name = _newName.value.trim()
         if (name.isBlank()) return
+        val storeName = _newStore.value
         viewModelScope.launch {
-            val id = createListUseCase(name)
+            val id = createListUseCase(name, storeId = resolveStore(storeName))
             hideCreateDialog()
             onCreated(id)
         }

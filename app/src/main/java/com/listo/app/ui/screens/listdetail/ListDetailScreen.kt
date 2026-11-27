@@ -44,6 +44,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.listo.app.R
+import com.listo.app.ui.navigation.Screen
 import com.listo.app.data.models.Category
 import com.listo.app.data.models.ShoppingItem
 import com.listo.app.data.models.ShoppingList
@@ -97,6 +98,16 @@ fun ListDetailScreen(
                 navController = navController,
                 actions = {
                     if (list != null) {
+                        if (!list.isArchived) {
+                            IconButton(onClick = {
+                                // A list with a store goes straight to that store's map.
+                                val route = list.storeId?.let { Screen.StoreShopping.route(list.id, it) }
+                                    ?: Screen.Stores.route(list.id)
+                                navController.navigate(route)
+                            }) {
+                                Icon(Icons.Rounded.Storefront, contentDescription = stringResource(R.string.cd_in_store))
+                            }
+                        }
                         IconButton(onClick = { shareList(context, list, uiState.items) }) {
                             Icon(Icons.Rounded.Share, contentDescription = stringResource(R.string.cd_share))
                         }
@@ -115,6 +126,13 @@ fun ListDetailScreen(
                                     leadingIcon = { Icon(Icons.Rounded.Edit, contentDescription = null) },
                                     onClick = { showMenu = false; showRename = true }
                                 )
+                                if (!list.isArchived) {
+                                    DropdownMenuItem(
+                                        text = { Text(stringResource(R.string.detail_store)) },
+                                        leadingIcon = { Icon(Icons.Rounded.Storefront, contentDescription = null) },
+                                        onClick = { showMenu = false; navController.navigate(Screen.Stores.route(list.id)) }
+                                    )
+                                }
                                 DropdownMenuItem(
                                     text = { Text(stringResource(R.string.budget_title)) },
                                     leadingIcon = { Icon(Icons.Rounded.AccountBalanceWallet, contentDescription = null) },

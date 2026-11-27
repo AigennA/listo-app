@@ -168,4 +168,34 @@
     <string name="settings_feedback_sub">Questions, ideas or a bug? Write to us</string>
     <string name="feedback_subject">Listo feedback (%1$s)</string>
     <string name="feedback_body">\n\n—\nListo %1$s · Android %2$s</string>
+
+    <!-- Stores and store maps -->
+    <string name="stores_title">My stores</string>
+    <string name="stores_add">Add store</string>
+    <string name="stores_name_hint">e.g. Willys Tornby</string>
+    <string name="stores_empty_title">No stores yet</string>
+    <string name="stores_empty_subtitle">Add the stores you shop at and lay out their aisles once. Then shop aisle by aisle.</string>
+    <string name="stores_pick_subtitle">Which store are you in?</string>
+    <string name="store_edit_map">Edit map</string>
+    <string name="store_rename">Rename</string>
+    <string name="store_color">Color</string>
+    <string name="store_delete">Delete store</string>
+    <string name="store_delete_msg">\"%1$s\" and its map will be removed. Your lists stay.</string>
+    <string name="settings_stores_sub">Store maps for shopping aisle by aisle</string>
+    <string name="cd_in_store">Shop in a store</string>
+    <string name="map_edit_hint">Drag the aisles to where they are in the store. The top left is the entrance.</string>
+    <string name="map_add_aisle">Add an aisle</string>
+    <string name="map_all_placed">Every category is on the map.</string>
+    <string name="map_save">Done</string>
+    <string name="map_entrance">Entrance</string>
+    <string name="cd_remove_aisle">Remove %1$s</string>
+    <string name="shop_progress">%1$d / %2$d in the basket</string>
+    <string name="shop_hint">Tap an aisle to see what to get there.</string>
+    <string name="shop_other">Not on the map</string>
+    <string name="shop_aisle_empty">Nothing from this aisle on your list.</string>
+    <string name="shop_next_aisle">Done, next aisle</string>
+    <string name="lists_store_label">Store (optional)</string>
+    <string name="lists_store_new">Add \"%1$s\" as a new store</string>
+    <string name="detail_store">Store</string>
+    <string name="shop_add_hint">Forgot something? Add it here</string>
 </resources>

@@ -32,6 +32,12 @@ class ItemIconsTest {
     }
 
     @Test
+    fun `an aisle gets its category's icon, a custom one the basket`() {
+        assertEquals(Icons.Rounded.Grass, iconForCategory(GroceryCatalog.PRODUCE))
+        assertEquals(Icons.Rounded.ShoppingBasket, iconForCategory("Pet food"))
+    }
+
+    @Test
     fun `an unknown item without a category gets the basket`() {
         assertEquals(Icons.Rounded.ShoppingBasket, iconForItem("Something"))
     }

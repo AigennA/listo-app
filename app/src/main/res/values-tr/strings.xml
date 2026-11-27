@@ -163,4 +163,34 @@
     <string name="settings_feedback_sub">Soru, fikir ya da hata mı? Bize yaz</string>
     <string name="feedback_subject">Listo geri bildirim (%1$s)</string>
     <string name="feedback_body">\n\n—\nListo %1$s · Android %2$s</string>
+
+    <!-- Stores and store maps -->
+    <string name="stores_title">Marketlerim</string>
+    <string name="stores_add">Market ekle</string>
+    <string name="stores_name_hint">Örn. Willys Tornby</string>
+    <string name="stores_empty_title">Henüz market yok</string>
+    <string name="stores_empty_subtitle">Gittiğin marketleri ekle, reyonlarını bir kez diz. Sonra reyon reyon alışveriş yap.</string>
+    <string name="stores_pick_subtitle">Hangi marketteysin?</string>
+    <string name="store_edit_map">Haritayı düzenle</string>
+    <string name="store_rename">Yeniden adlandır</string>
+    <string name="store_color">Renk</string>
+    <string name="store_delete">Marketi sil</string>
+    <string name="store_delete_msg">\"%1$s\" ve haritası silinir. Listelerin kalır.</string>
+    <string name="settings_stores_sub">Reyon reyon alışveriş için market haritaları</string>
+    <string name="cd_in_store">Markette alışveriş</string>
+    <string name="map_edit_hint">Reyonları marketteki yerlerine sürükle. Sol üst köşe giriş.</string>
+    <string name="map_add_aisle">Reyon ekle</string>
+    <string name="map_all_placed">Bütün kategoriler haritada.</string>
+    <string name="map_save">Tamam</string>
+    <string name="map_entrance">Giriş</string>
+    <string name="cd_remove_aisle">%1$s kaldır</string>
+    <string name="shop_progress">%1$d / %2$d sepette</string>
+    <string name="shop_hint">Oradan ne alacağını görmek için reyona dokun.</string>
+    <string name="shop_other">Haritada olmayanlar</string>
+    <string name="shop_aisle_empty">Listende bu reyondan bir şey yok.</string>
+    <string name="shop_next_aisle">Tamam, sonraki reyon</string>
+    <string name="lists_store_label">Market (isteğe bağlı)</string>
+    <string name="lists_store_new">\"%1$s\" yeni market olarak eklensin</string>
+    <string name="detail_store">Market</string>
+    <string name="shop_add_hint">Unuttuğun bir şey mi var? Buraya ekle</string>
 </resources>

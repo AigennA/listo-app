@@ -20,6 +20,9 @@ private val categoryIcons: Map<String, ImageVector> by lazy {
     )
 }
 
+/** Icon for a whole aisle; categories the user made get the basket. */
+fun iconForCategory(category: String): ImageVector = categoryIcons[category] ?: Icons.Rounded.ShoppingBasket
+
 /**
  * Picks a small, relevant icon for a shopping item based on keywords in its
  * English [name]. An unknown item gets the icon of its [category], so items in

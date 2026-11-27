@@ -10,4 +10,5 @@ class UpdateShoppingListUseCase @Inject constructor(private val repo: ShoppingRe
     suspend fun setBudget(id: Long, budget: Double?) = repo.setBudget(id, budget)
     suspend fun setSchedule(id: Long, scheduledDate: Long?, reminderAt: Long?) =
         repo.setSchedule(id, scheduledDate, reminderAt)
+    suspend fun setStore(id: Long, storeId: Long?) = repo.setStore(id, storeId)
 }

@@ -23,12 +23,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.PopupProperties
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.listo.app.R
 import com.listo.app.data.models.ShoppingList
+import com.listo.app.data.models.Store
+import com.listo.app.ui.screens.stores.StoreBadge
+import com.listo.app.ui.screens.stores.StorePicker
 import com.listo.app.ui.components.AdBanner
 import com.listo.app.ui.components.DeleteListDialog
 import com.listo.app.ui.components.EmptyState
@@ -102,6 +106,7 @@ fun ListsScreen(
                         ) {
                             ShoppingListCard(
                                 list = list,
+                                store = uiState.storeOf(list),
                                 onClick = { navController.navigate(Screen.ListDetail.route(list.id)) },
                                 onMore = { actionTarget = list }
                             )
@@ -117,6 +122,9 @@ fun ListsScreen(
         CreateListDialog(
             name = uiState.newListName,
             onNameChange = viewModel::updateNewName,
+            stores = uiState.stores,
+            storeName = uiState.newStoreName,
+            onStoreChange = viewModel::updateNewStore,
             onConfirm = {
                 viewModel.createList { id ->
                     navController.navigate(Screen.ListDetail.route(id))
@@ -277,6 +285,7 @@ private fun ListsHeader() {
 @Composable
 private fun ShoppingListCard(
     list: ShoppingList,
+    store: Store?,
     onClick: () -> Unit,
     onMore: () -> Unit,
     modifier: Modifier = Modifier
@@ -326,6 +335,18 @@ private fun ShoppingListCard(
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
+                    if (store != null) {
+                        Spacer(Modifier.height(4.dp))
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            StoreBadge(store.color, size = 16)
+                            Spacer(Modifier.width(6.dp))
+                            Text(
+                                text = store.name,
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
                     if (list.scheduledDate != null) {
                         Spacer(Modifier.height(4.dp))
                         Row(
@@ -402,6 +423,9 @@ private fun ShoppingListCard(
 private fun CreateListDialog(
     name: String,
     onNameChange: (String) -> Unit,
+    stores: List<Store>,
+    storeName: String,
+    onStoreChange: (String) -> Unit,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -416,17 +440,21 @@ private fun CreateListDialog(
             )
         },
         text = {
-            OutlinedTextField(
-                value = name,
-                onValueChange = onNameChange,
-                placeholder = { Text(stringResource(R.string.lists_new_hint)) },
-                singleLine = true,
-                shape = RoundedCornerShape(14.dp),
-                modifier = Modifier.fillMaxWidth(),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MaterialTheme.colorScheme.primary
+            Column {
+                OutlinedTextField(
+                    value = name,
+                    onValueChange = onNameChange,
+                    placeholder = { Text(stringResource(R.string.lists_new_hint)) },
+                    singleLine = true,
+                    shape = RoundedCornerShape(14.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = MaterialTheme.colorScheme.primary
+                    )
                 )
-            )
+                Spacer(Modifier.height(12.dp))
+                StoreField(stores = stores, value = storeName, onValueChange = onStoreChange)
+            }
         },
         confirmButton = {
             Button(
@@ -438,4 +466,49 @@ private fun CreateListDialog(
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } }
     )
+}
+
+/**
+ * Optional store for a new list: pick one from My stores, or type a name that
+ * is not there yet and it becomes a new store.
+ */
+@Composable
+private fun StoreField(stores: List<Store>, value: String, onValueChange: (String) -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+    val matches = StorePicker.matches(stores, value)
+    val canAdd = StorePicker.canAdd(stores, value)
+    ExposedDropdownMenuBox(expanded = expanded && (matches.isNotEmpty() || canAdd), onExpandedChange = { expanded = it }) {
+        OutlinedTextField(
+            value = value,
+            onValueChange = { onValueChange(it); expanded = true },
+            label = { Text(stringResource(R.string.lists_store_label)) },
+            leadingIcon = { Icon(Icons.Rounded.Storefront, contentDescription = null) },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+            singleLine = true,
+            shape = RoundedCornerShape(14.dp),
+            modifier = Modifier.fillMaxWidth().menuAnchor()
+        )
+        // Not focusable, so the keyboard keeps typing into the field while suggestions show.
+        DropdownMenu(
+            expanded = expanded && (matches.isNotEmpty() || canAdd),
+            onDismissRequest = { expanded = false },
+            properties = PopupProperties(focusable = false),
+            modifier = Modifier.exposedDropdownSize()
+        ) {
+            matches.forEach { store ->
+                DropdownMenuItem(
+                    text = { Text(store.name) },
+                    leadingIcon = { StoreBadge(store.color, size = 24) },
+                    onClick = { onValueChange(store.name); expanded = false }
+                )
+            }
+            if (canAdd) {
+                DropdownMenuItem(
+                    text = { Text(stringResource(R.string.lists_store_new, value.trim())) },
+                    leadingIcon = { Icon(Icons.Rounded.Add, contentDescription = null) },
+                    onClick = { expanded = false }
+                )
+            }
+        }
+    }
 }

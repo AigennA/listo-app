@@ -33,13 +33,16 @@ class ShoppingRepository @Inject constructor(
 
     suspend fun getListById(id: Long): ShoppingList? = listDao.getById(id)?.toDomain()
 
-    suspend fun createList(name: String, scheduledDate: Long? = null): Long =
+    suspend fun createList(name: String, scheduledDate: Long? = null, storeId: Long? = null): Long =
         listDao.insert(
             com.listo.app.data.database.entities.ShoppingListEntity(
                 name = name,
-                scheduledDate = scheduledDate
+                scheduledDate = scheduledDate,
+                storeId = storeId
             )
         )
+
+    suspend fun setStore(id: Long, storeId: Long?) = listDao.setStore(id, storeId)
 
     suspend fun renameList(id: Long, name: String) = listDao.rename(id, name)
 

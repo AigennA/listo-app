@@ -15,7 +15,8 @@ data class CatalogItem(val key: String, val name: String, val category: String)
  * [rememberItemCatalog].
  *
  * Matching forgives what people actually type on a phone: missing accents
- * ("sogan" finds "Soğan") and small typos ("annas" finds "Ananas").
+ * (a name typed without its accents still matches) and small typos
+ * ("pinaple" finds "Pineapple").
  */
 class ItemCatalog private constructor(items: List<CatalogItem>) {
 
@@ -24,7 +25,7 @@ class ItemCatalog private constructor(items: List<CatalogItem>) {
         val name = item.name.folded()
         val key = item.key.folded()
 
-        /** Name and key without spaces, for "balkabağı" typed as one word. */
+        /** Name and key without spaces, for a two-word name typed as one word. */
         val compactName = name.compact()
         val compactKey = key.compact()
     }
@@ -62,7 +63,7 @@ class ItemCatalog private constructor(items: List<CatalogItem>) {
     /**
      * The catalog item a typed name refers to, in the current language or in
      * English: an exact name first (spaces optional), then the longest known
-     * name inside it ("bal kabağı" is a pumpkin, not honey), then a close spelling.
+     * name inside it (a longer name such as "honey melon" beats "honey"), then a close spelling.
      */
     private fun match(name: String): CatalogItem? {
         val q = name.folded()
