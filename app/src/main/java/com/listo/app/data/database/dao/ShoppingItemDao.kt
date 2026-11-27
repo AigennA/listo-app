@@ -2,6 +2,7 @@ package com.listo.app.data.database.dao
 
 import androidx.room.*
 import com.listo.app.data.database.entities.BoughtItemRow
+import com.listo.app.domain.store.AisleTick
 import com.listo.app.data.database.entities.ShoppingItemEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -52,6 +53,17 @@ interface ShoppingItemDao {
         """
     )
     fun getBoughtItems(): Flow<List<BoughtItemRow>>
+
+    /** Ticked items with an aisle, from lists shopped in [storeId], to learn the walking order. */
+    @Query(
+        """
+        SELECT i.listId AS listId, i.categoryId AS categoryId, i.checkedAt AS checkedAt
+        FROM shopping_items i
+        JOIN shopping_lists l ON l.id = i.listId
+        WHERE l.storeId = :storeId AND i.checkedAt IS NOT NULL AND i.categoryId IS NOT NULL
+        """
+    )
+    fun getAisleTicks(storeId: Long): Flow<List<AisleTick>>
 
     @Query("DELETE FROM shopping_items WHERE id = :id")
     suspend fun deleteById(id: Long)

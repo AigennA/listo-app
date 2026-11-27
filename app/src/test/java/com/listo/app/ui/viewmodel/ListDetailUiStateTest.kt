@@ -96,6 +96,21 @@ class ListDetailUiStateTest {
         assertEquals(60.0, state.total, 0.001)
     }
 
+    @Test
+    fun `aisles follow the store's learned route, unknown ones after, Other last`() {
+        val state = ListDetailUiState(
+            items = listOf(
+                ShoppingItem(id = 1, listId = 1, name = "milk", categoryId = 3, categoryName = "Dairy"),
+                ShoppingItem(id = 2, listId = 1, name = "x", categoryName = null),
+                ShoppingItem(id = 3, listId = 1, name = "dog food", categoryId = 9, categoryName = "Pets"),
+                ShoppingItem(id = 4, listId = 1, name = "tomato", categoryId = 1, categoryName = "Produce")
+            ),
+            routeOrder = listOf(1L, 3L),
+            isLoading = false
+        )
+        assertEquals(listOf("Produce", "Dairy", "Pets", "Other"), state.grouped.map { it.first })
+    }
+
     private val activeList = ShoppingList(id = 1L, name = "Weekly")
 
     @Test

@@ -166,7 +166,7 @@
     <!-- Stores and store maps -->
     <string name="stores_title">Marketlerim</string>
     <string name="stores_add">Market ekle</string>
-    <string name="stores_name_hint">Örn. Willys Tornby</string>
+    <string name="stores_name_hint">Örn. Migros Kadıköy</string>
     <string name="stores_empty_title">Henüz market yok</string>
     <string name="stores_empty_subtitle">Gittiğin marketleri ekle, reyonlarını bir kez diz. Sonra reyon reyon alışveriş yap.</string>
     <string name="stores_pick_subtitle">Hangi marketteysin?</string>
@@ -236,4 +236,8 @@
     <string name="settings_currency">Para birimi</string>
     <string name="currency_auto">Otomatik (telefonun bölgesi)</string>
     <string name="currency_note">Sadece sembol değişir, tutarlar çevrilmez.</string>
+    <string name="route_learned_title">Listo yolunu öğrendi</string>
+    <string name="route_learned_text">Haritayı bu markette genelde dolaştığın sıraya göre dizeyim mi?</string>
+    <string name="route_apply">Haritayı diz</string>
+    <string name="route_not_now">Şimdi değil</string>
 </resources>
