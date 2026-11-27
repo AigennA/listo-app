@@ -89,6 +89,28 @@ class StoreMigrationTest {
     }
 
     @Test
+    fun migrating8To9_keepsTickedItemsWithoutATickTime() {
+        helper.createDatabase(dbName, 8).apply {
+            execSQL("INSERT INTO shopping_lists (id, name, createdAt, isArchived) VALUES (1, 'Weekly', 100, 0)")
+            execSQL(
+                "INSERT INTO shopping_items (id, listId, name, quantity, isChecked, createdAt) " +
+                    "VALUES (1, 1, 'Milk', '', 1, 100)"
+            )
+            close()
+        }
+
+        helper.runMigrationsAndValidate(dbName, 9, true, *DatabaseMigrations.ALL)
+
+        val db = openLatest()
+        runBlocking {
+            val item = db.shoppingItemDao().getItemsForList(1).first().single()
+            assertTrue(item.isChecked)
+            assertNull(item.checkedAt)
+        }
+        db.close()
+    }
+
+    @Test
     fun migrating7To8_givesExistingStoresTheDefaultEntranceAndCheckout() {
         helper.createDatabase(dbName, 7).apply {
             execSQL("INSERT INTO stores (id, name, color, createdAt) VALUES (1, 'Willys', '#E17055', 100)")

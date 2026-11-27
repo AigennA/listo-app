@@ -204,4 +204,36 @@
     <string name="action_undo">Ångra</string>
     <string name="history_restore">Flytta tillbaka till Mina listor</string>
     <string name="map_checkout">Kassa</string>
+    <!-- Spending -->
+    <string name="spending_title">Utgifter</string>
+    <string name="spending_week">Vecka</string>
+    <string name="spending_month">Månad</string>
+    <string name="spending_custom">Eget</string>
+    <string name="spending_total">Totalt</string>
+    <string name="spending_more">%1$s mer än perioden innan</string>
+    <string name="spending_less">%1$s mindre än perioden innan</string>
+    <string name="spending_same">Samma som perioden innan</string>
+    <string name="spending_bought">%1$d varor köpta</string>
+    <string name="spending_days">%1$d dagar</string>
+    <string name="spending_by_category">Per kategori</string>
+    <string name="spending_by_store">Per butik</string>
+    <string name="spending_no_store">Ingen butik</string>
+    <string name="spending_unpriced">%1$d varor saknar pris och räknas inte.</string>
+    <string name="spending_empty_title">Inga köp under perioden</string>
+    <string name="spending_empty_subtitle">Bocka av varor som köpta och lägg till priser för att se dina utgifter här.</string>
+    <string name="spending_share">Dela</string>
+    <string name="spending_share_text">Kopiera eller dela som text</string>
+    <string name="spending_share_csv">Kalkylark (CSV)</string>
+    <string name="spending_this_month">Utgifter den här månaden</string>
+    <string name="spending_pick_dates">Välj datum</string>
+    <string name="cd_previous_period">Föregående period</string>
+    <string name="cd_next_period">Nästa period</string>
+    <string name="csv_date">Datum</string>
+    <string name="csv_item">Vara</string>
+    <string name="csv_category">Kategori</string>
+    <string name="csv_store">Butik</string>
+    <string name="csv_amount">Belopp</string>
+    <string name="settings_currency">Valuta</string>
+    <string name="currency_auto">Automatisk (telefonens region)</string>
+    <string name="currency_note">Bara symbolen ändras, belopp räknas inte om.</string>
 </resources>

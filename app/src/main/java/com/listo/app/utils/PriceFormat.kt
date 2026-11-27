@@ -14,14 +14,26 @@ import java.util.Locale
  */
 object PriceLocale {
 
-    fun current(): Locale = resolve(Locale.getDefault().language, systemCountry())
+    /**
+     * Currency the user chose in Settings (ISO code like "SEK"), or null to
+     * follow the device region. Set at start-up and when the setting changes.
+     */
+    @Volatile
+    var chosenCurrency: String? = null
+
+    fun current(): Locale = resolve(Locale.getDefault().language, systemCountry(), chosenCurrency)
+
+    /** The locale prices would use with no currency chosen: the device region's. */
+    fun regional(): Locale = resolve(Locale.getDefault().language, systemCountry())
 
     /**
-     * Returns a locale for [country] whose currency symbol is a real symbol
-     * (e.g. "₺", "kr") rather than the ISO code ("TRY", "SEK"). A locale in
-     * [language] is preferred; otherwise one of the country's own locales is used.
+     * Returns a locale whose currency symbol is a real symbol (e.g. "₺", "kr")
+     * rather than the ISO code ("TRY", "SEK"). With [currencyCode] the locale
+     * shows that currency whatever the region; otherwise it is [country]'s
+     * currency. A locale in [language] is preferred.
      */
-    fun resolve(language: String, country: String): Locale {
+    fun resolve(language: String, country: String, currencyCode: String? = null): Locale {
+        chosen(currencyCode)?.let { currency -> forCurrency(currency, language)?.let { return it } }
         if (country.isBlank()) return Locale(language)
         val currency = currencyOf(Locale(language, country)) ?: return Locale(language, country)
 
@@ -46,6 +58,23 @@ object PriceLocale {
 
     internal fun currencyOf(locale: Locale): Currency? =
         runCatching { Currency.getInstance(locale) }.getOrNull()
+
+    private fun chosen(code: String?): Currency? =
+        code?.let { runCatching { Currency.getInstance(it) }.getOrNull() }
+
+    /** A locale that writes [currency] with its own symbol, in [language] if one exists. */
+    private fun forCurrency(currency: Currency, language: String): Locale? =
+        Locale.getAvailableLocales()
+            .filter { it.country.isNotEmpty() && it.variant.isEmpty() && it.script.isEmpty() && currencyOf(it) == currency }
+            .sortedByDescending { it.language == language }
+            .firstOrNull { currency.getSymbol(it) != currency.currencyCode }
+}
+
+/** Currencies offered in Settings; null means "follow the phone's region". */
+object CurrencyChoices {
+    val all: List<String?> = listOf(
+        null, "SEK", "TRY", "EUR", "USD", "GBP", "NOK", "DKK", "CHF", "PLN", "CAD", "AUD", "JPY"
+    )
 }
 
 /**

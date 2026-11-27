@@ -24,6 +24,7 @@ import com.listo.app.ui.screens.listdetail.ListDetailScreen
 import com.listo.app.ui.screens.lists.ListsScreen
 import com.listo.app.ui.screens.onboarding.OnboardingScreen
 import com.listo.app.ui.screens.settings.SettingsScreen
+import com.listo.app.ui.screens.spending.SpendingScreen
 import com.listo.app.ui.screens.splash.SplashScreen
 import com.listo.app.ui.screens.stores.StoreMapEditorScreen
 import com.listo.app.ui.screens.stores.StoreShoppingScreen
@@ -122,6 +123,10 @@ private fun LisToNavHost(navController: NavHostController, modifier: Modifier) {
 
         composable(Screen.Settings.route) {
             SettingsScreen(navController = navController)
+        }
+
+        composable(Screen.Spending.route) {
+            SpendingScreen(navController = navController)
         }
 
         composable(

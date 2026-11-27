@@ -14,6 +14,7 @@ sealed class Screen(val route: String) {
         fun route(categoryId: Long) = "category_items/$categoryId"
     }
     data object Settings    : Screen("settings")
+    data object Spending    : Screen("spending")
 
     /** My stores; with a list id it picks the store to shop that list in. */
     data object Stores : Screen("stores?listId={listId}") {

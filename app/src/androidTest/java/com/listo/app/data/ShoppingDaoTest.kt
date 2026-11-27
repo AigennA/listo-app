@@ -54,6 +54,39 @@ class ShoppingDaoTest {
     }
 
     @Test
+    fun tickingAnItem_remembersWhen_andUntickingForgets() = runBlocking {
+        val listId = listDao.insert(ShoppingListEntity(name = "Groceries"))
+        val id = itemDao.insert(ShoppingItemEntity(listId = listId, name = "Milk"))
+
+        itemDao.setChecked(id, checked = true, now = 1_000L)
+        assertEquals(1_000L, itemDao.getItemsForList(listId).first().single().checkedAt)
+
+        itemDao.setChecked(id, checked = false, now = 2_000L)
+        assertEquals(null, itemDao.getItemsForList(listId).first().single().checkedAt)
+    }
+
+    @Test
+    fun boughtItems_carryCategoryStoreAndWhen() = runBlocking {
+        val category = db.categoryDao().insertCategory(com.listo.app.data.database.entities.CategoryEntity(name = "Dairy", color = "#0984E3"))
+        val store = db.storeDao().insertStore(com.listo.app.data.database.entities.StoreEntity(name = "Willys", color = "#E17055"))
+        val listId = listDao.insert(ShoppingListEntity(name = "Weekly", storeId = store, isArchived = true, archivedAt = 5_000L))
+        val ticked = itemDao.insert(ShoppingItemEntity(listId = listId, name = "Milk", price = 15.0, amount = 2.0, unit = "pcs", categoryId = category))
+        itemDao.setChecked(ticked, checked = true, now = 3_000L)
+        // Ticked before checkedAt existed: falls back to when the list was finished.
+        itemDao.insert(ShoppingItemEntity(listId = listId, name = "Bread", price = 25.0, isChecked = true))
+        itemDao.insert(ShoppingItemEntity(listId = listId, name = "Not bought", price = 99.0))
+
+        val bought = itemDao.getBoughtItems().first().sortedBy { it.boughtAt }
+
+        assertEquals(2, bought.size)
+        assertEquals(3_000L, bought[0].boughtAt)
+        assertEquals("Dairy", bought[0].categoryName)
+        assertEquals(store, bought[0].storeId)
+        assertEquals(30.0, bought[0].toDomain().lineTotal!!, 0.001)
+        assertEquals(5_000L, bought[1].boughtAt)
+    }
+
+    @Test
     fun listTotal_multipliesPriceByAmount() = runBlocking {
         val listId = listDao.insert(ShoppingListEntity(name = "Groceries"))
         itemDao.insert(ShoppingItemEntity(listId = listId, name = "Milk", price = 15.0, amount = 2.0, unit = "pcs"))

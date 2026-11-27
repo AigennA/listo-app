@@ -204,4 +204,36 @@
     <string name="action_undo">Geri al</string>
     <string name="history_restore">Listelerime geri taşı</string>
     <string name="map_checkout">Kasa</string>
+    <!-- Spending -->
+    <string name="spending_title">Harcamalar</string>
+    <string name="spending_week">Hafta</string>
+    <string name="spending_month">Ay</string>
+    <string name="spending_custom">Özel</string>
+    <string name="spending_total">Toplam harcama</string>
+    <string name="spending_more">Önceki döneme göre %1$s fazla</string>
+    <string name="spending_less">Önceki döneme göre %1$s az</string>
+    <string name="spending_same">Önceki dönemle aynı</string>
+    <string name="spending_bought">%1$d ürün satın alındı</string>
+    <string name="spending_days">%1$d gün</string>
+    <string name="spending_by_category">Kategoriye göre</string>
+    <string name="spending_by_store">Markete göre</string>
+    <string name="spending_no_store">Marketsiz</string>
+    <string name="spending_unpriced">%1$d ürünün fiyatı yok, toplama katılmadı.</string>
+    <string name="spending_empty_title">Bu dönemde alışveriş yok</string>
+    <string name="spending_empty_subtitle">Harcamalarını burada görmek için ürünleri alındı olarak işaretle ve fiyatlarını gir.</string>
+    <string name="spending_share">Paylaş</string>
+    <string name="spending_share_text">Metin olarak kopyala ya da paylaş</string>
+    <string name="spending_share_csv">Tablo (CSV)</string>
+    <string name="spending_this_month">Bu ay harcanan</string>
+    <string name="spending_pick_dates">Tarih seç</string>
+    <string name="cd_previous_period">Önceki dönem</string>
+    <string name="cd_next_period">Sonraki dönem</string>
+    <string name="csv_date">Tarih</string>
+    <string name="csv_item">Ürün</string>
+    <string name="csv_category">Kategori</string>
+    <string name="csv_store">Market</string>
+    <string name="csv_amount">Tutar</string>
+    <string name="settings_currency">Para birimi</string>
+    <string name="currency_auto">Otomatik (telefonun bölgesi)</string>
+    <string name="currency_note">Sadece sembol değişir, tutarlar çevrilmez.</string>
 </resources>

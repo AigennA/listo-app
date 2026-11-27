@@ -209,4 +209,36 @@
     <string name="action_undo">Undo</string>
     <string name="history_restore">Move back to My Lists</string>
     <string name="map_checkout">Checkout</string>
+    <!-- Spending -->
+    <string name="spending_title">Spending</string>
+    <string name="spending_week">Week</string>
+    <string name="spending_month">Month</string>
+    <string name="spending_custom">Custom</string>
+    <string name="spending_total">Total spent</string>
+    <string name="spending_more">%1$s more than the period before</string>
+    <string name="spending_less">%1$s less than the period before</string>
+    <string name="spending_same">The same as the period before</string>
+    <string name="spending_bought">%1$d items bought</string>
+    <string name="spending_days">%1$d days</string>
+    <string name="spending_by_category">By category</string>
+    <string name="spending_by_store">By store</string>
+    <string name="spending_no_store">No store</string>
+    <string name="spending_unpriced">%1$d items have no price and are not counted.</string>
+    <string name="spending_empty_title">Nothing bought in this period</string>
+    <string name="spending_empty_subtitle">Tick items as bought and add their prices to see your spending here.</string>
+    <string name="spending_share">Share</string>
+    <string name="spending_share_text">Copy or share as text</string>
+    <string name="spending_share_csv">Spreadsheet (CSV)</string>
+    <string name="spending_this_month">Spent this month</string>
+    <string name="spending_pick_dates">Pick dates</string>
+    <string name="cd_previous_period">Previous period</string>
+    <string name="cd_next_period">Next period</string>
+    <string name="csv_date">Date</string>
+    <string name="csv_item">Item</string>
+    <string name="csv_category">Category</string>
+    <string name="csv_store">Store</string>
+    <string name="csv_amount">Amount</string>
+    <string name="settings_currency">Currency</string>
+    <string name="currency_auto">Automatic (phone region)</string>
+    <string name="currency_note">Only the symbol changes; amounts are not converted.</string>
 </resources>

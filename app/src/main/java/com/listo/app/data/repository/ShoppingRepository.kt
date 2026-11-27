@@ -73,7 +73,12 @@ class ShoppingRepository @Inject constructor(
 
     suspend fun updateItem(item: ShoppingItem) = itemDao.update(item.toEntity())
 
-    suspend fun toggleItem(id: Long, checked: Boolean) = itemDao.setChecked(id, checked)
+    suspend fun toggleItem(id: Long, checked: Boolean) =
+        itemDao.setChecked(id, checked, System.currentTimeMillis())
+
+    /** Every bought item, for spending over time. */
+    fun getBoughtItems(): Flow<List<com.listo.app.domain.spending.BoughtItem>> =
+        itemDao.getBoughtItems().map { rows -> rows.map { it.toDomain() } }
 
     suspend fun deleteItem(id: Long) = itemDao.deleteById(id)
 

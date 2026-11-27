@@ -74,8 +74,16 @@ object DatabaseMigrations {
         }
     }
 
-    const val LATEST = 8
+    /** v8 -> v9 remembers when an item was ticked, for spending over time. */
+    val MIGRATION_8_9 = object : Migration(8, 9) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE shopping_items ADD COLUMN checkedAt INTEGER")
+        }
+    }
 
-    val ALL: Array<Migration> =
-        arrayOf(MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8)
+    const val LATEST = 9
+
+    val ALL: Array<Migration> = arrayOf(
+        MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9
+    )
 }

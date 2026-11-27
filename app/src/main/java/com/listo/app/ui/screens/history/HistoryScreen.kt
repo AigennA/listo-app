@@ -26,6 +26,7 @@ import com.listo.app.ui.components.EmptyState
 import com.listo.app.ui.components.LisToTopBar
 import com.listo.app.ui.navigation.Screen
 import com.listo.app.ui.viewmodel.HistoryViewModel
+import com.listo.app.ui.viewmodel.SpendingViewModel
 import com.listo.app.utils.DateUtils
 import com.listo.app.utils.formatPrice
 
@@ -41,7 +42,11 @@ fun HistoryScreen(
         topBar = { LisToTopBar(title = stringResource(R.string.history_title)) },
         containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
+        val openSpending = { navController.navigate(Screen.Spending.route) }
         if (uiState.lists.isEmpty() && !uiState.isLoading) {
+            Column(Modifier.fillMaxSize().padding(padding).padding(20.dp)) {
+                SpendingEntryCard(onOpen = openSpending)
+            }
             Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
                 EmptyState(
                     title = stringResource(R.string.history_empty_title),
@@ -62,6 +67,7 @@ fun HistoryScreen(
                 contentPadding = PaddingValues(20.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
+                item(key = "spending") { SpendingEntryCard(onOpen = openSpending) }
                 items(uiState.lists, key = { it.id }) { list ->
                     HistoryCard(
                         list = list,
@@ -139,6 +145,41 @@ private fun HistoryCard(
             IconButton(onClick = onDelete) {
                 Icon(Icons.Rounded.Close, contentDescription = "Delete", tint = MaterialTheme.colorScheme.onSurfaceVariant)
             }
+        }
+    }
+}
+
+/** Doorway to Spending: this month's total, one tap from History. */
+@Composable
+private fun SpendingEntryCard(
+    onOpen: () -> Unit,
+    viewModel: SpendingViewModel = hiltViewModel()
+) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    Card(
+        onClick = onOpen,
+        shape = RoundedCornerShape(18.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+        elevation = CardDefaults.cardElevation(0.dp),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+            Icon(Icons.Rounded.QueryStats, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimaryContainer)
+            Spacer(Modifier.width(12.dp))
+            Column(Modifier.weight(1f)) {
+                Text(
+                    stringResource(R.string.spending_title),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                Text(
+                    "${stringResource(R.string.spending_this_month)}: ${formatPrice(state.summary.total)}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            }
+            Icon(Icons.Rounded.ChevronRight, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimaryContainer)
         }
     }
 }
