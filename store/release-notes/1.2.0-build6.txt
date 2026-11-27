@@ -1,0 +1,27 @@
+<en-US>
+• Store maps: shop aisle by aisle, with entrance and checkout
+• Listo learns the order you walk a store and sorts your list by it
+• Amounts and units (kg, g, l, pack) with price per unit
+• Spending: see totals by week, month or any days, and share them
+• Choose your currency symbol
+• Undo a tick, or bring a finished list back from History
+• Items shown with emoji, recognised in English, Turkish and Swedish
+</en-US>
+<tr-TR>
+• Mağaza haritaları: reyon reyon alışveriş, giriş ve kasayla
+• Listo mağazada hangi sırayla gezdiğini öğrenir, listeni o sıraya dizer
+• Miktar ve birim (kg, g, l, paket), birim fiyatla
+• Harcamalar: haftalık, aylık ya da seçtiğin günlere göre toplam, paylaşma
+• Para birimini seçebilme
+• Yanlış tiki geri alma, bitmiş listeyi Geçmiş'ten geri getirme
+• Ürünler emojiyle; Türkçe, İngilizce ve İsveççe isimler tanınır
+</tr-TR>
+<sv-SE>
+• Butikskartor: handla gång för gång, med ingång och kassa
+• Listo lär sig i vilken ordning du går i butiken och sorterar listan efter det
+• Mängd och enhet (kg, g, l, förp.) med pris per enhet
+• Utgifter: summor per vecka, månad eller valda dagar, och dela dem
+• Välj valutasymbol
+• Ångra en bock, eller ta tillbaka en avslutad lista från Historik
+• Varor visas med emoji och känns igen på svenska, engelska och turkiska
+</sv-SE>
