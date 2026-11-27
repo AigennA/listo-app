@@ -1,6 +1,7 @@
 package com.listo.app.data.database.dao
 
 import androidx.room.*
+import com.listo.app.data.database.entities.BoughtItemRow
 import com.listo.app.data.database.entities.ShoppingItemEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -28,8 +29,29 @@ interface ShoppingItemDao {
     @Update
     suspend fun update(item: ShoppingItemEntity)
 
-    @Query("UPDATE shopping_items SET isChecked = :checked WHERE id = :id")
-    suspend fun setChecked(id: Long, checked: Boolean)
+    /** Ticks or unticks an item; a tick remembers [now] as when it was bought. */
+    @Query(
+        "UPDATE shopping_items SET isChecked = :checked, " +
+            "checkedAt = CASE WHEN :checked THEN :now ELSE NULL END WHERE id = :id"
+    )
+    suspend fun setChecked(id: Long, checked: Boolean, now: Long)
+
+    /**
+     * Every bought item with its category and store. Items ticked before tick
+     * times were kept count from when their list was finished, else when added.
+     */
+    @Query(
+        """
+        SELECT i.name AS name, i.price AS price, i.amount AS amount, i.unit AS unit,
+            c.name AS categoryName, c.color AS categoryColor, l.storeId AS storeId,
+            COALESCE(i.checkedAt, l.archivedAt, i.createdAt) AS boughtAt
+        FROM shopping_items i
+        JOIN shopping_lists l ON l.id = i.listId
+        LEFT JOIN categories c ON c.id = i.categoryId
+        WHERE i.isChecked = 1
+        """
+    )
+    fun getBoughtItems(): Flow<List<BoughtItemRow>>
 
     @Query("DELETE FROM shopping_items WHERE id = :id")
     suspend fun deleteById(id: Long)

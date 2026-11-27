@@ -16,7 +16,9 @@ data class ShoppingItem(
     val isChecked: Boolean = false,
     val createdAt: Long = System.currentTimeMillis(),
     val amount: Double? = null,
-    val unit: QuantityUnit? = null
+    val unit: QuantityUnit? = null,
+    /** When it was ticked as bought, if known. */
+    val checkedAt: Long? = null
 ) {
     /** What this item adds to the list total: price times amount; once if no amount is set. */
     val lineTotal: Double
@@ -34,5 +36,5 @@ data class ShoppingItem(
 
     /** This item as a new, unticked row of list [listId] (used when copying a list). */
     fun copyTo(listId: Long, now: Long = System.currentTimeMillis()): ShoppingItem =
-        copy(id = 0L, listId = listId, isChecked = false, createdAt = now)
+        copy(id = 0L, listId = listId, isChecked = false, checkedAt = null, createdAt = now)
 }
